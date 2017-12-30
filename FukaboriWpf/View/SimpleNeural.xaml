@@ -1,0 +1,259 @@
+﻿<UserControl x:Class="CrossTableSilverlight.View.SimpleNeural"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:CrossTableSilverlight.Model"
+            xmlns:mouse="clr-namespace:Lovatts.MouseBehaviours;assembly=MySilverlightLibrary"
+     xmlns:MyControl="clr-namespace:MySilverlightLibrary.Control;assembly=MySilverlightLibrary"
+   xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
+    xmlns:tool="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit"
+      xmlns:toolInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+             xmlns:chart="clr-namespace:MySilverlightLibrary.DataVisualization;assembly=MySilverlightLibrary"
+             xmlns:command="clr-namespace:CrossTableSilverlight.Command"
+  xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" 
+
+             mc:Ignorable="d"
+    d:DesignHeight="600" d:DesignWidth="800">
+    
+    <UserControl.DataContext>
+        <local:SimpleNeural></local:SimpleNeural>
+    </UserControl.DataContext>
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid >
+            <sdk:TabControl SelectedIndex="{Binding TabPage.Value ,Mode=TwoWay}" >
+                <sdk:TabItem Header="モデル生成">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="250"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="250*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">
+                            入力に<LineBreak/>使う変数
+                                </TextBlock>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition Width="50"></ColumnDefinition>
+                                            <ColumnDefinition Width="30"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding SearchText,Mode=TwoWay}" ></TextBox>
+                                        <Button Content="Search" Grid.Column="1"  Command="{Binding SearchQuestionCommand}"></Button>
+                                        <Button Content="All"  Grid.Column="2" Click="Button_Click_6"></Button>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <ListBox MyControl:ListBoxBehaviour.SeletedItems="{Binding SelectedInputQuestion,Mode=TwoWay}" Name="inputQuestionListBox"  SelectionMode="Multiple"  ItemsSource="{Binding  InputQuestion}" DisplayMemberPath="ViewText" Grid.Column="1">
+                                        </ListBox>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">
+                            出力に<LineBreak/>使う変数
+                                </TextBlock>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="1">
+                                        <ListBox SelectedItem="{Binding SelectedOutputQuesttion,Mode=TwoWay}"  ItemsSource="{Binding OutputQuestion}" DisplayMemberPath="ViewText" Grid.Column="1">
+                                        </ListBox>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Column="3">
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="隠れ層の数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding  ElementName=clusterSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                                        <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding HiddenNeuronCount.Value,Mode=TwoWay}" Minimum="1" Maximum="20" Name="clusterSlider2" ></Slider>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="訓練回数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding  ElementName=clusterTryCountSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">回</TextBlock>
+                                                                            </StackPanel>
+                                    <Slider Width="200" Height="30" HorizontalAlignment="Left" Value="{Binding LoopCount.Value ,Mode=TwoWay}" Minimum="1" Maximum="100000" Name="clusterTryCountSlider2" ></Slider>
+
+                                    <Button Content="作成開始"   Width="100" Height="40" HorizontalAlignment="Left" Command="{Binding RunCommand}" />
+                                    <Button Content="CreateData" Command="{Binding CreateDataCommand}"></Button> 
+                                    <ContentControl >
+                                        <ProgressBar  Height="20" HorizontalAlignment="Left"   VerticalAlignment="Top" Width="200" Value="{Binding CurrentResult.Progress.Value,Mode=TwoWay}" />
+                                    </ContentControl>
+                                    <Button Height="20" Content="Load" Width="100" HorizontalAlignment="Left" Command="{Binding LoadCommand}"></Button>
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="作成したモデル"></TextBlock>
+                                <Grid Grid.Row="1">
+                                    <ItemsControl ItemsSource="{Binding ResultList}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel></StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding ResultName.Value,Mode=TwoWay}"></TextBlock>
+                                                    <Button Content="View" Command="{Binding SelectResultCommand}"></Button>
+                                                    <Button Content="Save" Command="{Binding SaveCommand}"></Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+             
+                            </Grid>
+                
+                        </Grid>
+                        
+                    </Grid>
+             
+                </sdk:TabItem>
+                <sdk:TabItem Header="View" DataContext="{Binding CurrentResult,Mode=TwoWay}" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="表示のOn/Off" VerticalAlignment="Center" Margin="2"></TextBlock>
+                                <MyControl:ChangeVisibilityButton Content="入力層" Name="inputViewButton" Width="50"></MyControl:ChangeVisibilityButton>
+                                <MyControl:ChangeVisibilityButton Content="隠れ層" Name="hiddenViewButton" Width="50"></MyControl:ChangeVisibilityButton>
+                                <MyControl:ChangeVisibilityButton Content="出力層" Name="outputViewButton" Width="50"></MyControl:ChangeVisibilityButton>
+                                <Grid Width="5"></Grid>
+                                <MyControl:ChangeVisibilityButton Content="隠れ層の重み" Name="hiddenWeightViewButton" Width="80"></MyControl:ChangeVisibilityButton>
+                                <MyControl:ChangeVisibilityButton Content="出力層の重み" Name="outputWeightViewButton" Width="80"></MyControl:ChangeVisibilityButton>
+                                <Grid Width="5"></Grid>
+                                <Button Content="Save" Command="{Binding SaveCommand}"></Button>
+                                <Button Content="SaveToJson" Command="{Binding SaveJsonCommand}"></Button>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  >
+                                <TextBlock Text="Neuronの幅:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                <Slider Name="keyClusteringWidthSilder" Maximum="600" Minimum="20" Width="100" Value="150"></Slider>
+                            </StackPanel>
+                        </Grid>
+                      
+                        <Grid Grid.Row="1" >
+                            <ScrollViewer>
+                                <StackPanel>
+                                    <ItemsControl Visibility="{Binding ElementName=inputViewButton,Path=VisibilityState}" ItemsSource="{Binding InputView }">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <toolkit:WrapPanel></toolkit:WrapPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Command="{Binding ClickCommand}"  >
+                                                    <StackPanel Background="{Binding BackBrush.Value,Mode=TwoWay}">
+                                                        <Image Source="{Binding ImageUrl}" Width="{Binding ElementName=keyClusteringWidthSilder,Path=Value}"></Image>
+                                                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Width="{Binding ElementName=keyClusteringWidthSilder,Path=Value}"></TextBlock>
+                                                    </StackPanel>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <ItemsControl Visibility="{Binding ElementName=hiddenViewButton,Path=VisibilityState}" ItemsSource="{Binding MiddelView }">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <toolkit:WrapPanel></toolkit:WrapPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="3" Background="{Binding BackBrush.Value,Mode=TwoWay}" Opacity="{Binding Opacity.Value,Mode=TwoWay}">
+                                                    <StackPanel>
+                                                        <ListBox ItemsSource="{Binding inputWeightView}" Height="200" Visibility="{Binding ElementName=hiddenWeightViewButton,Path=VisibilityState,Mode=TwoWay}">
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="{Binding BackBrush.Value,Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray">
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock Text="{Binding Text}" Width="50" TextWrapping="Wrap"></TextBlock>
+                                                                        <TextBlock Text="{Binding Value}" Width="50" ></TextBlock>
+                                                                    </StackPanel>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                        <TextBox Text="{Binding Text,Mode=TwoWay}" Width="100"></TextBox>
+                                                        <ListBox ItemsSource="{Binding outputWeightView}" Height="200"  Visibility="{Binding ElementName=hiddenWeightViewButton,Path=VisibilityState,Mode=TwoWay}">
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="{Binding BackBrush.Value,Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray">
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <TextBlock Text="{Binding Text}" Width="50" TextWrapping="Wrap"></TextBlock>
+                                                                            <TextBlock Text="{Binding Value}" Width="50" ></TextBlock>
+                                                                        </StackPanel>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <ItemsControl Visibility="{Binding ElementName=inputViewButton,Path=VisibilityState}" ItemsSource="{Binding OutputView}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <toolkit:WrapPanel ></toolkit:WrapPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Opacity="{Binding Opacity.Value,Mode=TwoWay}" Background="{Binding BackBrush.Value,Mode=TwoWay}">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Text,Mode=TwoWay}" FontSize="20"></TextBlock>
+                                                        <TextBlock Text="{Binding Value.Value,Mode=TwoWay,StringFormat=F4}"  Visibility="{Binding ElementName=outputWeightViewButton,Path=VisibilityState,Mode=TwoWay}"></TextBlock>
+                                                    </StackPanel>
+                                                    
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                </StackPanel>
+                                
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
+
+                </sdk:TabItem>
+            </sdk:TabControl>
+         
+        </Grid>
+    </Grid>
+</UserControl>
