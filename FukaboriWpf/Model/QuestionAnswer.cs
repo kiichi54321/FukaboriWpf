@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     [DataContract]
     public class QuestionAnswer : System.ComponentModel.INotifyPropertyChanged

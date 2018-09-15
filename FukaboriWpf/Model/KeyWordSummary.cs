@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RawlerLib.MyExtend;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
 
     public class KeyWordSummary : GalaSoft.MvvmLight.ViewModelBase,MyLib.Interface.ITsv

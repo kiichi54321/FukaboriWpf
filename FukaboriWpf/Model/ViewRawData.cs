@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Command;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     public class ViewRawData:GalaSoft.MvvmLight.ViewModelBase
     {

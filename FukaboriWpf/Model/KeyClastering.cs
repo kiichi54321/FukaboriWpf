@@ -13,7 +13,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
 using System.Runtime.Serialization;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     [DataContract]
     public class KeyClustering : GalaSoft.MvvmLight.ViewModelBase2

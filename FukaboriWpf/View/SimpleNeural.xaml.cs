@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace CrossTableSilverlight.View
+namespace FukaboriWpf.View
 {
     public partial class SimpleNeural : UserControl
     {

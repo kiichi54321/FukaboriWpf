@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     public class SimpleSummary:MyLib.Interface.ITsv
     {

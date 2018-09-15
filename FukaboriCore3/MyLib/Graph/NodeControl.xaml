@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="MyWpfLib.Graph.NodeControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:conveter="clr-namespace:MyWpfLib.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" d:DesignWidth="110" Visibility="{Binding Path=Visibility,Mode=TwoWay}">
+    <UserControl.Resources>
+        <conveter:ColorBrushConveter x:Key="colorBrushConveter"></conveter:ColorBrushConveter>
+    </UserControl.Resources>
+    <Grid Opacity="{Binding Path=Opacity,Mode=TwoWay}" x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <!--     <RowDefinition Height="{Binding Path= NodeHeight}" /> -->
+            <RowDefinition x:Name="nodeRow" Height="{Binding Path= NodeHeight,Mode=TwoWay}" />
+            <RowDefinition x:Name="NameRow" Height="{Binding ElementName=NameGrid, Path= Height,Mode=TwoWay}" />
+        </Grid.RowDefinitions>
+        <Grid Name="NodeDraw" Height="{Binding Path= NodeHeight,Mode=TwoWay}" Width="{Binding Path= NodeWidth,Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="NodeDraw_MouseDown" MouseMove="NodeDraw_MouseMove" MouseLeftButtonUp="NodeDraw_MouseUp" MouseWheel="NodeDraw_MouseWheel" MouseEnter="NodeDraw_MouseEnter" MouseLeave="NodeDraw_MouseLeave" >
+            <Ellipse Name="NodeEllipse" Height="{Binding Path= NodeHeight,Mode=TwoWay}" Width="{Binding Path= NodeWidth,Mode=TwoWay}" Fill="{Binding Path=NodeFillColor, Converter={StaticResource ResourceKey=colorBrushConveter},Mode=TwoWay}" Stroke="{Binding Path=NodeStrokeColor, Converter={StaticResource ResourceKey=colorBrushConveter},Mode=TwoWay}" StrokeThickness="2" />
+
+            <Border BorderBrush="{Binding Path=NodeStrokeColor, Converter={StaticResource ResourceKey=colorBrushConveter},Mode=TwoWay}" BorderThickness="2" Name="imageBorder" Visibility="Collapsed">
+                <Image Name="image" Source="{Binding ImageUrl,Mode=TwoWay}" Stretch="Fill" Height="{Binding Path= NodeHeight,Mode=TwoWay}" Width="{Binding Path= NodeWidth,Mode=TwoWay}"></Image>
+            </Border>
+            <Button Content="" Height="8" HorizontalAlignment="Right" Name="button1" VerticalAlignment="Top" Width="8"  Click="button1_Click" Visibility="Collapsed" />
+        </Grid>
+        <Grid  Grid.Row="1" >
+            <StackPanel Name="NameGrid" Background="#A2FFFFFF" Orientation="Vertical" HorizontalAlignment="Center" MaxWidth="{Binding TextMaxWidth,Mode=TwoWay}">
+                    <TextBlock Name="textBox1" Text="{Binding Path=NodeName,Mode=TwoWay}"  TextWrapping="Wrap" Visibility="{Binding LabelVisibility,Mode=TwoWay}" />
+                <TextBlock Text="aaaaa"></TextBlock>
+                    <TextBlock Name="textBlock2" Text="{Binding Path=NodeSubText,Mode=TwoWay}" MaxWidth="{Binding TextMaxWidth,Mode=TwoWay}" TextWrapping="Wrap" Visibility="{Binding SubLabelVisibility,Mode=TwoWay}"></TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

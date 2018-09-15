@@ -14,7 +14,7 @@ using System.Collections;
 using System.Runtime.Serialization;
 using MyWpfLib.Extend;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     public class DataMarge:GalaSoft.MvvmLight.ViewModelBase
     {

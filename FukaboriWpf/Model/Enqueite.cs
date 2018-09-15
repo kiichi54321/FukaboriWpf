@@ -14,7 +14,7 @@ using System.Runtime.Serialization;
 using MyWpfLib.Extend;
 using Newtonsoft.Json;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     [DataContract]    
     public class Enqueite :GalaSoft.MvvmLight.ViewModelBase2

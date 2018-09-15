@@ -17,7 +17,7 @@ using System.Collections;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
 
     public class SimpleNeural : GalaSoft.MvvmLight.ViewModelBase2,IDisposableContainer

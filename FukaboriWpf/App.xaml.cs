@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FukaboriCore.Service;
+using GalaSoft.MvvmLight.Ioc;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,26 @@ namespace FukaboriWpf
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            Register();
+            base.OnStartup(e);
+
+        }
+
+        private void Register()
+        {
+            SimpleIoc.Default.Register<System.Net.Http.HttpClient>(() => {
+                var client = new System.Net.Http.HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "marketkamo-windows");
+                return client;
+            });
+//            SimpleIoc.Default.Register<IShowMessageService, ShowMessageService>();
+//            SimpleIoc.Default.Register<IFileSaveService, FileSaveService>();
+            SimpleIoc.Default.Register<ISetClipBoardService, SetClipBoardService>();
+//            SimpleIoc.Default.Register<IShowFolderService, ShowFolderService>();
+
+            SimpleIoc.Default.Register<FukaboriCore.Model.Enqueite>();
+        }
     }
 }

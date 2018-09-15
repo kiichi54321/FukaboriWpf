@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Windows.Data;
 
-namespace CrossTableSilverlight
+namespace FukaboriWpf
 {
     public static class State
     {

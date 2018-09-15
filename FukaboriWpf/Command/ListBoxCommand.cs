@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Command;
 
-namespace CrossTableSilverlight.Command
+namespace FukaboriWpf.Command
 {
     public static class ListBoxCommand
     {

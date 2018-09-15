@@ -1,16 +1,17 @@
-﻿<UserControl x:Class="CrossTableSilverlight.View.GroupSummaryView"
+﻿<UserControl x:Class="FukaboriWpf.View.GroupSummaryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mouse="clr-namespace:Lovatts.MouseBehaviours;assembly=MySilverlightLibrary"
-     xmlns:MyControl="clr-namespace:MySilverlightLibrary.Control;assembly=MySilverlightLibrary"
+        xmlns:mouse="clr-namespace:Lovatts.MouseBehaviours"
+             xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
     xmlns:tool="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit"
       xmlns:toolInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              xmlns:chart="clr-namespace:MySilverlightLibrary.DataVisualization;assembly=MySilverlightLibrary"
-             xmlns:command="clr-namespace:CrossTableSilverlight.Command"
+             xmlns:command="clr-namespace:FukaboriWpf.Command"
  xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" 
+             xmlns:Behaviour="clr-namespace:FukaboriCore.Behaviour;assembly=FukaboriCore"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="800">
 
@@ -31,17 +32,17 @@
                 <TextBlock   Text="グループ化変数" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="2"  Text="集計変数" VerticalAlignment="Center" />
                 <ListBox Grid.Column="1" Name="grouplistBox1"  SelectionMode="Multiple" ItemsSource="{Binding QuestionList}" DisplayMemberPath="ViewText"/>
-                <ListBox Grid.Column="3" Name="grouplistBox2"  ItemsSource="{Binding QuestionList}" DisplayMemberPath="ViewText"/>
+                <ListBox Grid.Column="3" Name="grouplistBox2"  ItemsSource="{Binding QuestionList}" SelectedItem="{Binding GroupKeyQuestion,Mode=TwoWay}" DisplayMemberPath="ViewText"/>
                 <StackPanel Grid.Column="4" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel>
-                            <Button Content="集計"  Name="groupbutton3"   Width="100" Height="30" HorizontalAlignment="Left" Click="groupbutton3_Click" />
-                            <Button Content="リセット" Width="100" Name="groupResetButton" Click="groupResetButton_Click"></Button>
+                            <Button Content="集計"  Name="groupbutton3"   Width="100" Height="30" HorizontalAlignment="Left" Command="{Binding SubmitCommand}" />
+                            <Button Content="リセット" Width="100" Name="groupResetButton" Command="{Binding ResetCommand}"></Button>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Name="GroupCountSumViewControlSlider">
                         <TextBlock Text="最小値"></TextBlock>
-                        <toolInput:NumericUpDown Value="{Binding MinCount,Mode=TwoWay}" Maximum="1000" Increment="5"/>
+                        <control:NumericUpDown Value="{Binding MinCount,Mode=TwoWay}" Maximum="1000" />
 
                         <Slider Value="{Binding MinCount,Mode=TwoWay}" Width="120" Name="GroupSumMinCountSilder" Maximum="1000"></Slider>
 
@@ -84,7 +85,8 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="Silver" BorderThickness="1" Width="{StaticResource ResourceKey=groupWidth}">
+                                            <Border BorderBrush="Silver" BorderThickness="1" >
+                                                <!--="{StaticResource ResourceKey=groupWidth}">-->
                                                 <TextBlock Text="{Binding ViewText}"></TextBlock>
                                             </Border>
                                         </DataTemplate>
@@ -92,16 +94,16 @@
                                 </ItemsControl>
 
                                 <Border BorderBrush="Silver" BorderThickness="1" Width="50">
-                                    <Button Content="カウント" Tag="カウント"  Click="GroupSumSortButton_Click"></Button>
+                                    <Button Content="カウント" CommandParameter="カウント"   Command="{Binding SortCommand}"></Button>
                                 </Border>
                                 <Border BorderBrush="Silver" BorderThickness="1" Width="50">
-                                    <Button Content="平均" Tag="平均"  Click="GroupSumSortButton_Click"></Button>
+                                    <Button Content="平均" CommandParameter="平均"   Command="{Binding SortCommand}"></Button>
                                 </Border>
                                 <Border BorderBrush="Silver" BorderThickness="1" Width="50">
-                                    <Button Content="分散" Tag="分散"  Click="GroupSumSortButton_Click"></Button>
+                                    <Button Content="分散" CommandParameter="分散"  Command="{Binding SortCommand}"></Button>
                                 </Border>
                                 <Border BorderBrush="Silver" BorderThickness="1" Width="50">
-                                    <Button Content="偏差値" Tag="平均"  Click="GroupSumSortButton_Click"></Button>
+                                    <Button Content="偏差値" CommandParameter="平均"  Command="{Binding SortCommand}"></Button>
                                 </Border>
                                 <Border BorderBrush="Silver" BorderThickness="1" Width="10"></Border>
                                 <ItemsControl ItemsSource="{Binding TargetAnswer}">
@@ -185,7 +187,7 @@
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
-                                    <Button Content="Clip" HorizontalAlignment="Left" Click="ClipTsvButton_Click" Tag="{Binding}"></Button>
+                                    <Button Content="Clip" HorizontalAlignment="Left" Command="{Binding ClipCommand}"></Button>
                                 </StackPanel>
                             </ScrollViewer>
                         </Grid>

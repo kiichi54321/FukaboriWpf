@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FukaboriCore</RootNamespace>
+    <AssemblyName>FukaboriCore</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net45\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReactiveProperty, Version=5.2.0.0, Culture=neutral, PublicKeyToken=910d1732782c71cb, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveProperty.5.2.0\lib\net461\ReactiveProperty.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveProperty.NET46, Version=5.2.6788.26146, Culture=neutral, PublicKeyToken=3d1fed915120cbde, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveProperty.5.2.0\lib\net461\ReactiveProperty.NET46.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.4.0.0\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Model\Answer.cs" />
+    <Compile Include="Model\CellBase.cs" />
+    <Compile Include="Model\Clustering.cs" />
+    <Compile Include="Model\ColorType.cs" />
+    <Compile Include="Service\SetClipBoardService.cs" />
+    <Compile Include="ViewModel\CrossData.cs" />
+    <Compile Include="ViewModel\DataCoordinator.cs" />
+    <Compile Include="Model\DataMarge.cs" />
+    <Compile Include="Model\Data\DataBase.cs" />
+    <Compile Include="Model\Enqueite.cs" />
+    <Compile Include="ViewModel\GroupQuestionSum.cs" />
+    <Compile Include="Model\KeyClastering.cs" />
+    <Compile Include="Model\KeyWordSummary.cs" />
+    <Compile Include="Model\Person.cs" />
+    <Compile Include="Model\Question.cs" />
+    <Compile Include="Model\QuestionAnswer.cs" />
+    <Compile Include="Model\QuestionAnswerGroup.cs" />
+    <Compile Include="ViewModel\GroupQuestionSumViewModel.cs" />
+    <Compile Include="ViewModel\SimpleSummary.cs" />
+    <Compile Include="MyLib\Analyze\AvgStd.cs" />
+    <Compile Include="MyLib\Analyze\ChiSquareTest.cs" />
+    <Compile Include="MyLib\Analyze\Correlation.cs" />
+    <Compile Include="MyLib\Analyze\K_Means.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MyLib\Analyze\K_MeansForTask.cs" />
+    <Compile Include="MyLib\Analyze\Math.cs" />
+    <Compile Include="MyLib\Analyze\WardMethod.cs" />
+    <Compile Include="MyLib\Collections\ArrayListLib.cs" />
+    <Compile Include="MyLib\Collections\CountDictionary.cs" />
+    <Compile Include="MyLib\Collections\CycleList.cs" />
+    <Compile Include="MyLib\Collections\HierarchicalList.cs" />
+    <Compile Include="MyLib\Collections\LinkedList.cs" />
+    <Compile Include="MyLib\Collections\LinkedListWithSortKey.cs" />
+    <Compile Include="MyLib\Collections\List.cs" />
+    <Compile Include="MyLib\Collections\ListDictionary.cs" />
+    <Compile Include="MyLib\Collections\ListWithSortKey.cs" />
+    <Compile Include="MyLib\Collections\Pair.cs" />
+    <Compile Include="MyLib\Collections\StringSearchList.cs" />
+    <Compile Include="MyLib\Color\KnownColor.cs" />
+    <Compile Include="MyLib\DataSeries.cs" />
+    <Compile Include="MyLib\Extend\MyExnted.cs" />
+    <Compile Include="MyLib\Extend\MyExtend.cs" />
+    <Compile Include="MyLib\Extend\MyExtend2.cs" />
+    <Compile Include="MyLib\Extend\MyRxExtend.cs" />
+    <Compile Include="MyLib\Extend\MyWpfExtend.cs" />
+    <Compile Include="MyLib\Graph\BaseLink.cs" />
+    <Compile Include="MyLib\Graph\GraphData.cs" />
+    <Compile Include="MyLib\Graph\GraphManage.cs" />
+    <Compile Include="MyLib\Graph\ILink.cs" />
+    <Compile Include="MyLib\Graph\INode.cs" />
+    <Compile Include="MyLib\Graph\Link.cs" />
+    <Compile Include="MyLib\Graph\LinkData.cs" />
+    <Compile Include="MyLib\Graph\Node.cs" />
+    <Compile Include="MyLib\Graph\NodeControl.xaml.cs">
+      <DependentUpon>NodeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyLib\Graph\Sort.cs" />
+    <Compile Include="MyLib\Graph\Spring.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MyLib\Graph\TriangleChartControl.xaml.cs">
+      <DependentUpon>TriangleChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyLib\Interface\ITsv.cs" />
+    <Compile Include="MyLib\Message\Message.cs" />
+    <Compile Include="MyLib\MyLib\BackgroundWorker.cs" />
+    <Compile Include="MyLib\MyLib\CountClass.cs" />
+    <Compile Include="MyLib\MyLib\EventStringArgs.cs" />
+    <Compile Include="MyLib\MyLib\Geometry.cs" />
+    <Compile Include="MyLib\MyLib\ReplaceText.cs" />
+    <Compile Include="MyLib\MyLib\Text.cs" />
+    <Compile Include="MyLib\MyLib\TsvBuilder.cs" />
+    <Compile Include="MyLib\MyLib\TSVRead.cs" />
+    <Compile Include="MyLib\MyLib\Utility.cs" />
+    <Compile Include="MyLib\MyWpf\Area.cs" />
+    <Compile Include="MyLib\MyWpf\Bool2VisibilityConverter.cs" />
+    <Compile Include="MyLib\MyWpf\ColorBrushConveter.cs" />
+    <Compile Include="MyLib\MyWpf\EnumLib.cs" />
+    <Compile Include="MyLib\MyWpf\Geometry.cs" />
+    <Compile Include="MyLib\MyWpf\ListBoxBehaviour.cs" />
+    <Compile Include="MyLib\MyWpf\LogManage.cs" />
+    <Compile Include="MyLib\MyWpf\MouseBehaviour.cs" />
+    <Compile Include="MyLib\MyWpf\TextOnLine.cs" />
+    <Compile Include="MyLib\MyWpf\Utility.cs" />
+    <Compile Include="MyLib\MyWpf\VisibilityOpacityConverter.cs" />
+    <Compile Include="MyLib\Neural\SimpleNeural.cs" />
+    <Compile Include="MyLib\NPL\kanaxs-1.0.0.cs" />
+    <Compile Include="MyLib\NPL\TinySegmenter.cs" />
+    <Compile Include="MyLib\NPL\TinySegmenterExtend.cs" />
+    <Compile Include="MyLib\Task\Parallel.cs" />
+    <Compile Include="MyLib\UI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="State\State.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MyLib\Graph\NodeControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyLib\Graph\TriangleChartControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MyLib\Neural\ArtificialNeuralNetwork\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

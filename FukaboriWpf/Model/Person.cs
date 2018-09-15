@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     public class Person
     {

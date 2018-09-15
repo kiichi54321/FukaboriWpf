@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Analyze\MultiDimensionalScaling.cs" />
     <Compile Include="Analyze\MultiDimensionalScaling2.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Controls\ImageData.cs" />
     <Compile Include="Controls\ProcessStartButton.cs" />
     <Compile Include="Controls\TreeNode.cs" />

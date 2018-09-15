@@ -10,13 +10,15 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
+using FukaboriCore.ViewModel;
+using FukaboriCore.Model;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     public class K_means
     {
         MyLib.Analyze.K_MeansForTask kMeans = new MyLib.Analyze.K_MeansForTask();
-        IEnumerable<Model.Question> question;
+        IEnumerable<Question> question;
         bool isBusy = false;
 
         public bool IsBusy
@@ -35,7 +37,7 @@ namespace CrossTableSilverlight.Model
         public event EventHandler<MyLib.Event.Args<int>> ReportProgress;
 
 
-        public void Run(IEnumerable<MyLib.IO.TSVLine> dataLine, IEnumerable<Model.Question> question, int clusterCount, int tryCount, Action<List<MyLib.Analyze.K_MeansForTask.Cluster>> Completed)
+        public void Run(IEnumerable<MyLib.IO.TSVLine> dataLine, IEnumerable<Question> question, int clusterCount, int tryCount, Action<List<MyLib.Analyze.K_MeansForTask.Cluster>> Completed)
         {
             isBusy = true;
             haveResult = false;
@@ -60,8 +62,8 @@ namespace CrossTableSilverlight.Model
                 ClusterNum = clusterCount,
                 TryCount = tryCount, UsedQuestion = new List<string>(question.Select(n=>n.ViewText))
             };
-
-
+            
+            
             kMeans.Run(clusterCount, tryCount, (n) =>
             {
                 isBusy = false;
@@ -80,7 +82,7 @@ namespace CrossTableSilverlight.Model
             }
         }
 
-        public IEnumerable<ClusterViewData> GetClusterView(IEnumerable<Model.Question> question)
+        public IEnumerable<ClusterViewData> GetClusterView(IEnumerable<Question> question)
         {
             List<ClusterViewData> list = new List<ClusterViewData>();
             int order = 1;
@@ -117,9 +119,9 @@ namespace CrossTableSilverlight.Model
 
    
 
-        private Model.Question newQuestion;
+        private Question newQuestion;
 
-        public Model.Question NewQuestion
+        public Question NewQuestion
         {
             get
             {
@@ -130,7 +132,7 @@ namespace CrossTableSilverlight.Model
 
         public void CreateNewQuestion(string name)
         {           
-            newQuestion = Model.Question.Create(this.kMeans.ClusterDataList.Count,"C_");
+            newQuestion = Question.Create(this.kMeans.ClusterDataList.Count,"C_");
             newQuestion.Key = name;
             clusteringData.Key = newQuestion.Key;
             int i = 0;
@@ -145,7 +147,7 @@ namespace CrossTableSilverlight.Model
         {
             foreach (var item in kMeans.ClusterDataList.OrderBy(n => MyLib.MathLib.GetDistance(n.clusterData)))
             {
-                var q = item.Tag as Model.QuestionAnswer;
+                var q = item.Tag as QuestionAnswer;
                 foreach (var item2 in item.DataList)
                 {
                     var line = item2.Tag as MyLib.IO.TSVLine;

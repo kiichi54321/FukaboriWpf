@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Command;
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     [DataContract]
     public class Question : System.ComponentModel.INotifyPropertyChanged

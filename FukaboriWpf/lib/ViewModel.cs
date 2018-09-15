@@ -83,7 +83,7 @@ namespace GalaSoft.MvvmLight
             {
                 if (!_isInDesignMode.HasValue)
                 {
-                    _isInDesignMode = DesignerProperties.IsInDesignTool;
+                    _isInDesignMode = DesignerProperties.IsInDesignModeProperty;
                 }
 
                 return _isInDesignMode.Value;

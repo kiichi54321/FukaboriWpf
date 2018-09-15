@@ -9,9 +9,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using CrossTableSilverlight.Model;
+using FukaboriCore.Model;
+using FukaboriCore.ViewModel;
+using FukaboriWpf.Model;
 
-namespace CrossTableSilverlight.View
+namespace FukaboriWpf.View
 {
     public partial class KeyClusteringGraphView : UserControl
     {
@@ -128,7 +130,7 @@ namespace CrossTableSilverlight.View
     
         public double Min
         {
-            get { return minLinkValue.Value; }
+            get { return minLinkValue.Value.HasValue ? minLinkValue.Value.Value : 0; }
         }
 
         void ChangeLinkVisibility(MyWpfLib.Graph.Link link)
@@ -143,7 +145,7 @@ namespace CrossTableSilverlight.View
             }
         }
 
-        private void minLinkValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void minLinkValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
         {
             foreach (var item in linkList)
             {

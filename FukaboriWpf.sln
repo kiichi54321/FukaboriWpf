@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FukaboriWpf", "FukaboriWpf\FukaboriWpf.csproj", "{E87821E1-7596-4CB7-9EAE-47D3B38025D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib", "MyLib\MyLib.csproj", "{36EF56DB-34E7-4209-B9B3-9AECA489ECEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FukaboriCore", "FukaboriCore\FukaboriCore.csproj", "{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{E87821E1-7596-4CB7-9EAE-47D3B38025D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E87821E1-7596-4CB7-9EAE-47D3B38025D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E87821E1-7596-4CB7-9EAE-47D3B38025D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36EF56DB-34E7-4209-B9B3-9AECA489ECEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36EF56DB-34E7-4209-B9B3-9AECA489ECEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36EF56DB-34E7-4209-B9B3-9AECA489ECEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36EF56DB-34E7-4209-B9B3-9AECA489ECEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

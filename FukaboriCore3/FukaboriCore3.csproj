@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0BC8E376-2B23-40E2-9B1A-62D3FF34C3D5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FukaboriCore</RootNamespace>
+    <AssemblyName>FukaboriCore</AssemblyName>
+    <DefaultLanguage>ja-JP</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\Answer.cs" />
+    <Compile Include="Model\CellBase.cs" />
+    <Compile Include="Model\Clustering.cs" />
+    <Compile Include="Model\ColorType.cs" />
+    <Compile Include="Model\CrossData.cs" />
+    <Compile Include="Model\DataCoordinator.cs" />
+    <Compile Include="Model\DataMarge.cs" />
+    <Compile Include="Model\Data\DataBase.cs" />
+    <Compile Include="Model\Enqueite.cs" />
+    <Compile Include="Model\GroupQuestionSum.cs" />
+    <Compile Include="Model\KeyClastering.cs" />
+    <Compile Include="Model\KeyWordSummary.cs" />
+    <Compile Include="Model\Person.cs" />
+    <Compile Include="Model\Question.cs" />
+    <Compile Include="Model\QuestionAnswer.cs" />
+    <Compile Include="Model\QuestionAnswerGroup.cs" />
+    <Compile Include="Model\SimpleSummary.cs" />
+    <Compile Include="Model\ViewRawData.cs" />
+    <Compile Include="MyLib\Analyze\AvgStd.cs" />
+    <Compile Include="MyLib\Analyze\ChiSquareTest.cs" />
+    <Compile Include="MyLib\Analyze\Correlation.cs" />
+    <Compile Include="MyLib\Analyze\K_MeansForTask.cs" />
+    <Compile Include="MyLib\Analyze\Math.cs" />
+    <Compile Include="MyLib\Analyze\WardMethod.cs" />
+    <Compile Include="MyLib\Collections\CycleList.cs" />
+    <Compile Include="MyLib\Collections\HierarchicalList.cs" />
+    <Compile Include="MyLib\Collections\LinkedList.cs" />
+    <Compile Include="MyLib\Collections\LinkedListWithSortKey.cs" />
+    <Compile Include="MyLib\Collections\Pair.cs" />
+    <Compile Include="MyLib\Color\KnownColor.cs" />
+    <Compile Include="MyLib\DataSeries.cs" />
+    <Compile Include="MyLib\Extend\MyExtend.cs" />
+    <Compile Include="MyLib\Extend\MyExtend2.cs" />
+    <Compile Include="MyLib\Extend\MyRxExtend.cs" />
+    <Compile Include="MyLib\Extend\MyWpfExtend.cs" />
+    <Compile Include="MyLib\Interface\ITsv.cs" />
+    <Compile Include="MyLib\Message\Message.cs" />
+    <Compile Include="MyLib\MyLib\CountClass.cs" />
+    <Compile Include="MyLib\MyLib\EventStringArgs.cs" />
+    <Compile Include="MyLib\MyLib\Geometry.cs" />
+    <Compile Include="MyLib\MyLib\ReplaceText.cs" />
+    <Compile Include="MyLib\MyLib\Text.cs" />
+    <Compile Include="MyLib\MyLib\TsvBuilder.cs" />
+    <Compile Include="MyLib\MyLib\TSVRead.cs" />
+    <Compile Include="MyLib\MyWpf\EnumLib.cs" />
+    <Compile Include="MyLib\NPL\kanaxs-1.0.0.cs" />
+    <Compile Include="MyLib\NPL\TinySegmenterExtend.cs" />
+    <Compile Include="MyLib\Task\Parallel.cs" />
+    <Compile Include="MyLib\UI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="State\State.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\portable-net45+wp8+wpa81+netcore45+monoandroid1+xamarin.ios10\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\portable-net45+wp8+wpa81+netcore45+monoandroid1+xamarin.ios10\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\portable-windows8+net45+wp8\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\portable-windows8+net45+wp8\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\portable-windows8+net45+wp8\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\portable-windows8+net45+wp8\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

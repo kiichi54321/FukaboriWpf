@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-namespace CrossTableSilverlight.Model
+namespace FukaboriWpf.Model
 {
     /// <summary>
     /// データ調整のViewModel
