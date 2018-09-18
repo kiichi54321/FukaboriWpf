@@ -26,7 +26,7 @@ namespace FukaboriCore.ViewModel
         {
             DataList.Clear();
             imageVisibility = false;
-            foreach (var item in PropertyData.CreatePropertyData(question, EnqueiteData.Current.Value.AnswerLines))
+            foreach (var item in PropertyData.CreatePropertyData(question, Enqueite.Current.AnswerLines))
             {
                 if (item.Question.ImageVisibility == true)
                 {

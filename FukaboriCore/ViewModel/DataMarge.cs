@@ -10,8 +10,9 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
 using System.Runtime.Serialization;
 using Reactive.Bindings;
+using FukaboriCore.Model;
 
-namespace FukaboriCore.Model
+namespace FukaboriCore.ViewModel
 {
     public class DataMarge:GalaSoft.MvvmLight.ViewModelBase
     {
@@ -34,7 +35,8 @@ namespace FukaboriCore.Model
             SelectedHeader = new ReactiveCollection<string>();
             
         }
-  
+
+        [Newtonsoft.Json.JsonIgnore]
         public Enqueite Enqueite { get; set; }
 
 

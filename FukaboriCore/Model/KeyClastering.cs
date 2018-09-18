@@ -92,18 +92,20 @@ namespace FukaboriCore.Model
 
         int clusterNum = 4;
 
+        [Newtonsoft.Json.JsonIgnore]
         public IList SelectedQuestion { get; set; } = new ObservableCollection<Question>();
-
+        [Newtonsoft.Json.JsonIgnore]
         public Enqueite Enqueite { get; set; }
 
         
         public int TryCount { get; set; } = 20;
-
+        [Newtonsoft.Json.JsonIgnore]
         public ObservableCollection<Question> QuestionList { get; set; } = new ObservableCollection<Question>();
 
         int connectNum = 5;
 
         RelayCommand searchQuestionCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand SearchQuestionCommand
         {
             get { if (searchQuestionCommand == null) {
@@ -114,7 +116,7 @@ namespace FukaboriCore.Model
         }
 
         public string SearchText { get; set; }
-
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand RunCommand
         {
             get
@@ -266,6 +268,7 @@ namespace FukaboriCore.Model
 
 
         public List<KeyClusteringData> DataList { get; set; } = new List<KeyClusteringData>();
+        [Newtonsoft.Json.JsonIgnore]
         public KeyClustering Parent { get; set; }
         Dictionary<string, QuestionClusterItem> ClusterItemDic = new Dictionary<string, QuestionClusterItem>();
         
@@ -288,7 +291,7 @@ namespace FukaboriCore.Model
         }
 
         bool canMove = false;
-
+        [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<QuestionClusterItem> AllItems
         {
             get { return ClusterItemDic.Values; }
@@ -394,7 +397,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand deleteCommand;
-
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand DeleteCommand
         {
             get
@@ -416,6 +419,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand selectCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand SelectCommand
         {
             get
@@ -495,6 +499,7 @@ namespace FukaboriCore.Model
             selectedClusterItem = null;
         }
         MyWpf.ComboBoxEnumItem<質問追加の手法>[] questionAddMethod = MyWpf.EnumLib.MakeComboBoxEnum<質問追加の手法>().ToArray();
+        [Newtonsoft.Json.JsonIgnore]
         public MyWpf.ComboBoxEnumItem<質問追加の手法>[] QuestionAddMethod { get {
                 if(questionAddMethod == null)questionAddMethod = MyWpf.EnumLib.MakeComboBoxEnum<質問追加の手法>().ToArray();
                 return questionAddMethod; } }
@@ -504,7 +509,7 @@ namespace FukaboriCore.Model
             get { return selected質問追加の手法; }
             set { selected質問追加の手法 = value; }
         }
-
+       
         TaskScheduler ui
         {
             get {
@@ -513,6 +518,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand addQuestionCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand AddQuestionCommand
         {
             get
@@ -804,6 +810,7 @@ namespace FukaboriCore.Model
 
         //}
         RelayCommand upMouseCommand;
+        [Newtonsoft.Json.JsonIgnore]
         RelayCommand UpMouseCommand
         {
             get { if(upMouseCommand == null)
@@ -827,6 +834,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand updateImageCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand UpdateImageCommand
         {
             get
@@ -909,9 +917,11 @@ namespace FukaboriCore.Model
 
         
         public ObservableCollection<QuestionClusterItem> Items { get; set; } = new ObservableCollection<QuestionClusterItem>();
+        [Newtonsoft.Json.JsonIgnore]
         public QuestionClusterManage Manage { get; set; }
         ColorType lineColor = ColorType.PrimaryColor;
 
+        [Newtonsoft.Json.JsonIgnore]
         public List<double> UserVec
         {
             get
@@ -961,6 +971,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand rightMoveCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand RightMoveCommand
         {
             get
@@ -974,6 +985,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand leftMoveCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand LeftMoveCommand
         {
             get
@@ -985,7 +997,7 @@ namespace FukaboriCore.Model
                 return leftMoveCommand;
             }
         }
-
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand MouseEnterCommand
         {
             get
@@ -1009,7 +1021,7 @@ namespace FukaboriCore.Model
                 mouseEnterCommand = value;
             }
         }
-
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand MouseUpCommand
         {
             get
@@ -1029,7 +1041,7 @@ namespace FukaboriCore.Model
                 mouseUpCommand = value;
             }
         }
-
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand MouseLeaveCommand
         {
             get
@@ -1085,6 +1097,7 @@ namespace FukaboriCore.Model
         public string Name { get; set; }
         
         public string QuestionKey { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public Question Question { get; set; }
         
         public double[] Vector { get; set; }
@@ -1096,7 +1109,7 @@ namespace FukaboriCore.Model
         {
             get { return this.Question.ImageUrl; }
         }
-            public void Init()
+        public void Init()
         {
             Question = Manage.Parent.Enqueite.QuestionManage.GetQuestion(this.QuestionKey);
             //ImageUrl = this.Question.ImageUrl;
@@ -1112,7 +1125,6 @@ namespace FukaboriCore.Model
             return new QuestionClusterItem() { Question = q, QuestionKey = q.Key,Vector = vecter,Name = q.ViewText };
         }
 
-        //        Color backColor = Colors.Purple;
         ColorType backColor = ColorType.BackColor;
         public ColorType BackColor
         {
@@ -1128,6 +1140,7 @@ namespace FukaboriCore.Model
    //     Image Image { get; set; }
 
         RelayCommand clickCommand;
+        [Newtonsoft.Json.JsonIgnore]
         public RelayCommand Click
         {
             get
@@ -1157,56 +1170,5 @@ namespace FukaboriCore.Model
             set { y = value;RaisePropertyChanged(nameof(Y)); }
         }
 
-//        double oldX, oldY;
-        //Point oldPoint;
-        
-        //RelayCommand<MouseEventArgs> onMouseCommand;
-        //public RelayCommand<MouseEventArgs> OnMouseCommand
-        //{
-        //    get
-        //    {
-        //        if (onMouseCommand == null)
-        //        {
-        //            onMouseCommand = new RelayCommand<MouseEventArgs>((n) => {
-        //                 oldPoint= n.GetSafePosition(null);
-        //                this.Manage.IsDrag = true;
-        //                Manage.SetCurrntItem(this);
-        //            });
-        //        }
-        //        return onMouseCommand;
-
-        //    }
-        //}
-
-        ////RelayCommand upMouseCommand;
-        ////public RelayCommand UpMouseCommand
-        ////{
-        ////    get
-        ////    {
-        ////        if (upMouseCommand == null)
-        ////        {
-        ////            upMouseCommand = new RelayCommand(() => { Manage.IsDrag = false; });
-
-        ////        }
-        ////        return upMouseCommand;
-        ////    }
-        ////}
-
-        //public void MouseMove(Point o)
-        //{           
-        //    if (o.X != oldPoint.X)
-        //    {
-        //        this.X = this.X - (oldPoint.X - o.X);
-        //    }
-        //    if (o.Y != oldPoint.Y)
-        //    {
-        //        this.Y = this.Y - (oldPoint.Y - o.Y);
-        //    }
-        //    oldPoint = o;
-        //}
-
-     
-        
-             
     }
 }

@@ -38,7 +38,7 @@ namespace FukaboriCore.Model
                 groupValue = value;
             }
         }
-
+        [Newtonsoft.Json.JsonIgnore]
         public Question Question { get; set; }
         
         public int Order { get; set; }
@@ -46,6 +46,7 @@ namespace FukaboriCore.Model
         /// <summary>
         /// 辞書作成時キーにする文字列
         /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
         public string KeyValue
         {
             get
@@ -68,6 +69,7 @@ namespace FukaboriCore.Model
         //    get { return children; }
         //    set { children = value; }
         //}
+        [Newtonsoft.Json.JsonIgnore]
         public string GroupKey
         {
             get
@@ -76,6 +78,7 @@ namespace FukaboriCore.Model
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public string ViewText
         {
             get
@@ -84,6 +87,7 @@ namespace FukaboriCore.Model
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public string QuestionText
         {
             get
@@ -92,6 +96,7 @@ namespace FukaboriCore.Model
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public string ViewText2
         {
             get

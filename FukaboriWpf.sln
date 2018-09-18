@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FukaboriWpf", "FukaboriWpf\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FukaboriCore", "FukaboriCore\FukaboriCore.csproj", "{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{EDBD6397-709E-4C2D-A8C2-8925B9159971}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78F57C5C-CAD1-4159-8C3D-64A0C678A76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

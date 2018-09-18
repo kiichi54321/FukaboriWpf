@@ -11,18 +11,35 @@ using FukaboriCore.Lib;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Ioc;
 using FukaboriCore.ViewModel;
+using System.Collections.ObjectModel;
 
 namespace FukaboriCore.Model
 {
-    
+    public interface IEnqueite
+    {
+        Enqueite Enqueite { get; }
+        event EventHandler ChangeEnqueite;
+    }
+
     public class Enqueite : GalaSoft.MvvmLight.ObservableObject
     {
         public Enqueite()
         {
-            // drawInData.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(drawInData_CollectionChanged);
-            // drawOutData.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(drawInData_CollectionChanged);
             Init();
         }
+        public KeyClustering KeyClastering { get; set; }
+        public DataCoordinator DataCoordinator { get; set; }
+        public static Enqueite Current
+        {
+            get {
+                if (current == null)
+                {
+                    return new Enqueite();
+                }
+                return current;
+            }
+        }
+        static Enqueite current;
 
         void drawInData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -49,30 +66,31 @@ namespace FukaboriCore.Model
             }
         }
 
-        System.Collections.ObjectModel.ObservableCollection<ClusteringData> clusteringDataList = new System.Collections.ObjectModel.ObservableCollection<ClusteringData>();
+        ObservableCollection<ClusteringData> clusteringDataList = new ObservableCollection<ClusteringData>();
         
-        public System.Collections.ObjectModel.ObservableCollection<ClusteringData> ClusteringDataList
+        public ObservableCollection<ClusteringData> ClusteringDataList
         {
             get { return clusteringDataList; }
             set { clusteringDataList = value; }
         }
 
-        DataMarge _dataMarge;
+        //DataMarge _dataMarge;
 
-        public DataMarge DataMarge
-        {
-            get
-            {
-                if (_dataMarge == null)
-                {
-                    _dataMarge = new DataMarge();
-                    _dataMarge.Enqueite = this;
-                    _dataMarge.Init();
-                }
-                return _dataMarge;
-            }
-        }
+        //public DataMarge DataMarge
+        //{
+        //    get
+        //    {
+        //        if (_dataMarge == null)
+        //        {
+        //            _dataMarge = new DataMarge();
+        //            _dataMarge.Enqueite = this;
+        //            _dataMarge.Init();
+        //        }
+        //        return _dataMarge;
+        //    }
+        //}
 
+        [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<MyLib.IO.TSVLine> AllAnswerLine
         {
             get
@@ -81,6 +99,7 @@ namespace FukaboriCore.Model
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<MyLib.IO.TSVLine> AnswerLines
         {
             get
@@ -155,6 +174,7 @@ namespace FukaboriCore.Model
                 questionManage.Add(q.Key, q);
             }
             file.Dispose();
+            RaisePropertyChanged();
         }
 
         public CrossData CreateData(IEnumerable<MyLib.IO.TSVLine> lines, string targetKey, string groupKey)
@@ -200,15 +220,15 @@ namespace FukaboriCore.Model
         }
 
 
-
-        public System.Collections.ObjectModel.ObservableCollection<Question> QuestionList
+        [Newtonsoft.Json.JsonIgnore]
+        public ObservableCollection<Question> QuestionList
         {
             get
             {
                 return questionManage.List;
             }
         }
-
+        [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<Question> FreeTextQuestionList
         {
             get
@@ -222,16 +242,17 @@ namespace FukaboriCore.Model
             return CreateData(this.AnswerLines, targetKey, groupKey);
         }
 
-        System.Collections.ObjectModel.ObservableCollection<AnswerGroup> drawInData = new System.Collections.ObjectModel.ObservableCollection<AnswerGroup>();
-        System.Collections.ObjectModel.ObservableCollection<AnswerGroup> drawOutData = new System.Collections.ObjectModel.ObservableCollection<AnswerGroup>();
+        ObservableCollection<AnswerGroup> drawInData = new ObservableCollection<AnswerGroup>();
+        ObservableCollection<AnswerGroup> drawOutData = new ObservableCollection<AnswerGroup>();
 
-        public System.Collections.ObjectModel.ObservableCollection<AnswerGroup> DrawOutData
+        [Newtonsoft.Json.JsonIgnore]
+        public ObservableCollection<AnswerGroup> DrawOutData
         {
             get { return drawOutData; }
             set { drawOutData = value; }
         }
-
-        public System.Collections.ObjectModel.ObservableCollection<AnswerGroup> DrawInData
+        [Newtonsoft.Json.JsonIgnore]
+        public ObservableCollection<AnswerGroup> DrawInData
         {
             get { return drawInData; }
             set { drawInData = value; }
@@ -332,7 +353,7 @@ namespace FukaboriCore.Model
         {
             this.questionManage.Init(this);
             if (DataFile != null) DataFile.Init();
-            EnqueiteData.Current.Value = this;
+            current = this;
             drawInData = new System.Collections.ObjectModel.ObservableCollection<AnswerGroup>();
             drawInData.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(drawInData_CollectionChanged);
             drawOutData = new System.Collections.ObjectModel.ObservableCollection<AnswerGroup>();
@@ -350,9 +371,6 @@ namespace FukaboriCore.Model
             }
         }
 
-        public KeyClustering KeyClastering { get; set; }
-
-        public DataCoordinator DataCoordinator { get; set; }
 
 
         public void CreateQuestion(System.IO.StreamReader stream)
@@ -382,50 +400,10 @@ namespace FukaboriCore.Model
             stream.BaseStream.Position = 0;
         }
 
-        public static Enqueite Current
-        {
-            get {
-                return SimpleIoc.Default.GetInstance<Enqueite>();
-            }
-        }
+
     }
 
-    public class EnqueiteDataContainer : GalaSoft.MvvmLight.ObservableObject
-    {
-        Enqueite enquite = new Enqueite();
 
-        public Enqueite Enqueite
-        {
-            get { return enquite; }
-            set
-            {
-                Set(ref enquite, value);
-            }
-        }
-    }
-
-    public static class EnqueiteData
-    {
-        public static ObservableObject<Enqueite> Current { get; private set; }
-
-        public static void Init()
-        {
-            Current = new ObservableObject<Enqueite>();
-
-        }
-
-        public static IEnumerable<Question> QuestionSearch(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return EnqueiteData.Current.Value?.QuestionList;
-            }
-            else
-            {
-                return EnqueiteData.Current.Value?.QuestionList.Where(n => n.ViewText.Contains(text));
-            }
-        }
-    }
 
 }
 namespace FukaboriCore.Lib

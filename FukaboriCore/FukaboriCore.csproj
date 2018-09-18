@@ -85,10 +85,11 @@
     <Compile Include="Model\CellBase.cs" />
     <Compile Include="Model\Clustering.cs" />
     <Compile Include="Model\ColorType.cs" />
+    <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\SetClipBoardService.cs" />
     <Compile Include="ViewModel\CrossData.cs" />
     <Compile Include="ViewModel\DataCoordinator.cs" />
-    <Compile Include="Model\DataMarge.cs" />
+    <Compile Include="ViewModel\DataMarge.cs" />
     <Compile Include="Model\Data\DataBase.cs" />
     <Compile Include="Model\Enqueite.cs" />
     <Compile Include="ViewModel\GroupQuestionSum.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Model\QuestionAnswer.cs" />
     <Compile Include="Model\QuestionAnswerGroup.cs" />
     <Compile Include="ViewModel\GroupQuestionSumViewModel.cs" />
-    <Compile Include="ViewModel\SimpleSummary.cs" />
     <Compile Include="MyLib\Analyze\AvgStd.cs" />
     <Compile Include="MyLib\Analyze\ChiSquareTest.cs" />
     <Compile Include="MyLib\Analyze\Correlation.cs" />
@@ -175,6 +175,7 @@
     <Compile Include="MyLib\UI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="State\State.cs" />
+    <Compile Include="ViewModel\SimpleSummaryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MyLib\Graph\NodeControl.xaml">

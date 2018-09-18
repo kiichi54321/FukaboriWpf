@@ -45,6 +45,7 @@ namespace FukaboriWpf.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<IEnqueite>(() => this.Main);
         }
 
         public MainViewModel Main

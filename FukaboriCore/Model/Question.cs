@@ -103,19 +103,9 @@ namespace FukaboriCore.Model
         
         public string ImageUrl { get; set; }
 
-        public string ImageXaml
-        {
-            get
-            {
-                return "<Image xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Source=\"" + ImageUrl + "\" MaxHeight=\"100\" MaxWidth=\"100\" ></Image>";
-            }
-        }
-
-
-
         private List<string> children = new List<string>();
         public List<string> Children { get { return children; } set { children = value; } }
-
+        [Newtonsoft.Json.JsonIgnore]
         public QuestionManage QuestionManage { get; set; }
 
         /// <summary>
@@ -182,6 +172,7 @@ namespace FukaboriCore.Model
             set { answerGroup = value; }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<AnswerGroup> AnswerGroupIsActive
         {
             get
@@ -757,7 +748,7 @@ namespace FukaboriCore.Model
             this.dic.Clear();
             this.list.Clear();
         }
-
+        [Newtonsoft.Json.JsonIgnore]
         Enqueite enqueite;
 
         public void Init( Enqueite e)

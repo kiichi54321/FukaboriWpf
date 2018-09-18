@@ -3,10 +3,87 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:control="clr-namespace:FukaboriWpf.Control"
         xmlns:local="clr-namespace:FukaboriWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        DataContext="{Binding Main,Source={StaticResource Locator}}"
+        Title="MainWindow" Height="650" Width="1025" >
     <Grid>
-        
+        <Grid x:Name="LayoutRoot" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="480*" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="423*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="92*" />
+            </Grid.RowDefinitions>
+            <StackPanel Name="stackPanel1" Orientation="Horizontal" >
+                <TextBlock  Name="textBlock1" Text="データ入力" VerticalAlignment="Center" />
+                <Button Content="質問票" Height="23" Name="button1" Width="75" Command="{Binding LoadQuestionsCommand}" />
+                <Button Content="回答データ" Height="23" Name="button2" Width="75" Command="{Binding DataLoadCommand}" />
+                <Button Content="Load" Height="23" Name="LoadButton" Width="75" Command="{Binding LoadCommand}" />
+                <Button Content="Save" Height="23" Name="SaveButton" Width="75" Command="{Binding SaveCommand}" />
+
+                <TextBlock Text="データ総数:" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Enqueite.Count,Mode=OneWay}" Name="countText" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="件" VerticalAlignment="Center"></TextBlock>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <TextBlock Text="Color" VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
+                <Button Background="White" Width="30" Height="20" CommandParameter="White"  Command="{Binding SetColorCommand}" Content="白"></Button>
+                <Button Background="Pink"  Width="30" Height="20" CommandParameter="Pink"  Command="{Binding SetColorCommand}"  Content="赤"></Button>
+                <Button Background="SkyBlue"  Width="30" Height="20" Name="BlueButton" Content="青" CommandParameter="SkyBlue"  Command="{Binding SetColorCommand}"></Button>
+                <Button Background="Yellow"  Width="30" Height="20" Name="YellowRedButton" Content="黄" CommandParameter="Yellow"  Command="{Binding SetColorCommand}"></Button>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Name="VersionBlock" Grid.Column="2">
+                <TextBlock Text="Ver."></TextBlock>
+                <TextBlock Text="{Binding Version}"></TextBlock>
+            </StackPanel>
+
+            <TabControl Grid.Row="1" Name="tabControl1" Grid.ColumnSpan="3" >
+                <TabItem Header="単純集計">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <control:QuestionListControl x:Name="q_list" Grid.Column="0" SelectionMode="Multiple" ></control:QuestionListControl>
+                        <ListBox Grid.Column="1" ItemsSource="{Binding SelectedQuestions,ElementName=q_list}" DisplayMemberPath="ViewText"></ListBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <ToggleButton Content="絞り込み条件" Name="conditonButton" Grid.Column="1" Margin="5" IsChecked="False" />
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Name="siborikomiPanel" Visibility="{Binding ElementName=conditonButton,Path=IsChecked,Converter={StaticResource BoolToVisibility}}">
+                <Border Background="White">
+                    <ScrollViewer MaxHeight="300">
+                        <ItemsControl   ItemsSource="{Binding DrawInData}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Tag="{Binding}" Name="removeButton" Command="{Binding RemoveCommand}" Width="20"  Content="×"></Button>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding ViewText2}" VerticalAlignment="Center" FontSize="10"></TextBlock>
+                                            <TextBlock Text="{Binding QuestionText}" VerticalAlignment="Center" FontSize="10"></TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </ScrollViewer>
+                </Border>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>

@@ -13,6 +13,7 @@ namespace FukaboriCore.ViewModel
     /// </summary>
     public class DataCoordinator:GalaSoft.MvvmLight.ViewModelBase
     {
+        [Newtonsoft.Json.JsonIgnore]
         public Enqueite Enqueite { get; set; }
         public string ExtendAttributeName { get; set; } 
         public string ExtendValueName { get; set; }
