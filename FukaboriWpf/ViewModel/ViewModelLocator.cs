@@ -45,33 +45,20 @@ namespace FukaboriWpf.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<IEnqueite>(() => this.Main);
+//            SimpleIoc.Default.Register<IEnqueite>(() => this.Main);
+            SimpleIoc.Default.Register<SimpleSummaryViewModel>();
+
+            
         }
 
-        public MainViewModel Main
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
-        }
+        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
 
-        public Enqueite Enqueite
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<Enqueite>();
-            }
-        }
+        public Enqueite Enqueite => ServiceLocator.Current.GetInstance<Enqueite>();
 
-        public KeyWordSummary KeyWordSummary
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<KeyWordSummary>();
-            }
-        }
-        
+        public SimpleSummaryViewModel SimpleSummary => ServiceLocator.Current.GetInstance<SimpleSummaryViewModel>();
+
+        public KeyWordSummary KeyWordSummary => ServiceLocator.Current.GetInstance<KeyWordSummary>();
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

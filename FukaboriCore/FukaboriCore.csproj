@@ -80,7 +80,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Model\Answer.cs" />
     <Compile Include="Model\CellBase.cs" />
     <Compile Include="Model\Clustering.cs" />

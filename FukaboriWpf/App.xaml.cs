@@ -30,12 +30,11 @@ namespace FukaboriWpf
                 client.DefaultRequestHeaders.Add("User-Agent", "fukabori-windows");
                 return client;
             });
-            //            SimpleIoc.Default.Register<IShowMessageService, ShowMessageService>();
+          //  SimpleIoc.Default.Register<IShowMessageService, ShowMessageService>();
             SimpleIoc.Default.Register<IFileService, FileService>();
             SimpleIoc.Default.Register<ISetClipBoardService, SetClipBoardService>();
 //            SimpleIoc.Default.Register<IShowFolderService, ShowFolderService>();
 
-            SimpleIoc.Default.Register<Enqueite>();
         }
     }
 }

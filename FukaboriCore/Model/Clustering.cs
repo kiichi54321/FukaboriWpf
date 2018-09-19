@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using GalaSoft.MvvmLight;
 using FukaboriCore.ViewModel;
+using GalaSoft.MvvmLight.Command;
 
 namespace FukaboriCore.Model
 {
@@ -276,7 +277,7 @@ namespace FukaboriCore.Model
         public double? MaxValue2 { get; set; }
 
 
-        
+
         public string ImageUrl { get; set; }
         public IEnumerable<ImageData> ImageDataList
         {
@@ -462,7 +463,7 @@ namespace FukaboriCore.Model
 
         #endregion
 
-        internal void ToTsv(MyLib.IO.TsvBuilder tsv)
+        public void ToTsv(MyLib.IO.TsvBuilder tsv)
         {
             tsv.Add("Name", this.Name);
             tsv.Add("Value", this.Value);
@@ -490,22 +491,6 @@ namespace FukaboriCore.Model
         public int Count { get; set; }
         
         public double Rate { get; set; }
-        //
-        //public string ImageUrl { get; set; }
-        //public Visibility ImageVisibility
-        //{
-        //    get
-        //    {
-        //        if (string.IsNullOrEmpty(ImageUrl))
-        //        {
-        //            return Visibility.Collapsed;
-        //        }
-        //        else
-        //        {
-        //            return Visibility.Visible;
-        //        }
-        //    }
-        //}
 
 
         #region IData メンバー

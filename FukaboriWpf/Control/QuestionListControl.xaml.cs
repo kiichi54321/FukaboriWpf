@@ -1,4 +1,5 @@
 ﻿using FukaboriCore.Model;
+using FukaboriWpf.ViewModel;
 using GalaSoft.MvvmLight.Ioc;
 using System;
 using System.Collections.Generic;
@@ -33,9 +34,9 @@ namespace FukaboriWpf.Control
 
         private void QuestionListControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (SimpleIoc.Default.IsRegistered<IEnqueite>())
+            if (SimpleIoc.Default.IsRegistered<MainViewModel>())
             {
-                SimpleIoc.Default.GetInstance<IEnqueite>().ChangeEnqueite += QuestionListControl_ChangeEnqueite;
+                SimpleIoc.Default.GetInstance<MainViewModel>().ChangeEnqueite += QuestionListControl_ChangeEnqueite;
             }
         }
 

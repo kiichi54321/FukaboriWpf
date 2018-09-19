@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FukaboriWpf
+namespace FukaboriWpf.View
 {
     /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
+    /// SimpleSummaryView.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SimpleSummaryView : UserControl
     {
-        public MainWindow()
+        public SimpleSummaryView()
         {
             InitializeComponent();
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
