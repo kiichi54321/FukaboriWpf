@@ -6,6 +6,7 @@
         xmlns:control="clr-namespace:FukaboriWpf.Control"
         xmlns:local="clr-namespace:FukaboriWpf"
         xmlns:view="clr-namespace:FukaboriWpf.View"
+        xmlns:media="clr-namespace:System.Media;assembly=System"
         mc:Ignorable="d"
         DataContext="{Binding Main,Source={StaticResource Locator}}"
         Title="MainWindow" Height="650" Width="1025" >
@@ -34,10 +35,10 @@
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <TextBlock Text="Color" VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
-                <Button Background="White" Width="30" Height="20" CommandParameter="White"  Command="{Binding SetColorCommand}" Content="白"></Button>
-                <Button Background="Pink"  Width="30" Height="20" CommandParameter="Pink"  Command="{Binding SetColorCommand}"  Content="赤"></Button>
-                <Button Background="SkyBlue"  Width="30" Height="20" Name="BlueButton" Content="青" CommandParameter="SkyBlue"  Command="{Binding SetColorCommand}"></Button>
-                <Button Background="Yellow"  Width="30" Height="20" Name="YellowRedButton" Content="黄" CommandParameter="Yellow"  Command="{Binding SetColorCommand}"></Button>
+                <Button Background="White" Width="30" Height="20" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=Background}"  Command="{Binding SetColorCommand}" Content="白"></Button>
+                <Button Background="Pink"  Width="30" Height="20" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=Background}"  Command="{Binding SetColorCommand}"  Content="赤"></Button>
+                <Button Background="SkyBlue"  Width="30" Height="20" Name="BlueButton" Content="青" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=Background}"  Command="{Binding SetColorCommand}"></Button>
+                <Button Background="Yellow"  Width="30" Height="20" Name="YellowRedButton" Content="黄" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=Background}"  Command="{Binding SetColorCommand}"></Button>
 
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Name="VersionBlock" Grid.Column="2">
@@ -49,7 +50,11 @@
                 <TabItem Header="単純集計">
                     <view:SimpleSummaryView/>
                 </TabItem>
+                <TabItem Header="データの調整">
+                    <view:DataCoordinateView></view:DataCoordinateView>
+                </TabItem>
             </TabControl>
+            
             <ToggleButton Content="絞り込み条件" Name="conditonButton" Grid.Column="1" Margin="5" IsChecked="False" />
 
             <StackPanel Grid.Column="1" Grid.Row="1" Name="siborikomiPanel" Visibility="{Binding ElementName=conditonButton,Path=IsChecked,Converter={StaticResource BoolToVisibility}}">

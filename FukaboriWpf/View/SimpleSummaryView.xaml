@@ -16,7 +16,9 @@
         <ContentControl  Visibility="{Binding IsChecked, ElementName=contorlToggleButton,Mode=OneWay,Converter={StaticResource  BoolToVisibility}}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="変数の選択" VerticalAlignment="Center" Margin="5"></TextBlock>
-                <contorl:QuestionListControl Height="300" Width="200" x:Name="questionListControl" SelectionMode="Multiple"></contorl:QuestionListControl>
+                <Border BorderBrush="Gray" BorderThickness="1">
+                    <contorl:QuestionListControl Height="200" Width="300" x:Name="questionListControl" SelectionMode="Multiple"></contorl:QuestionListControl>
+                </Border>
                 <StackPanel VerticalAlignment="Center" Margin="5">
                     <Button Content="作成" Height="30" Width="200" CommandParameter="{Binding ElementName=questionListControl,Path=SelectedQuestions}" Command="{Binding SubmitCommand}"></Button>
                     <TextBlock Text="表示幅"></TextBlock>

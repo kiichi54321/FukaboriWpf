@@ -20,7 +20,7 @@ namespace FukaboriCore.ViewModel
         public System.Collections.ObjectModel.ObservableCollection<GroupQuestionSum> DataList { get; set; }
         public System.Collections.ObjectModel.ObservableCollection<AnswerGroup> TargetAnswer { get; set; }
 
-        public ObservableCollection<Question> QuestionList => Enqueite.Current.QuestionList;
+        public List<Question> QuestionList => Enqueite.Current.QuestionList;
 
         public IList TargetQusetions { get { return _TargetQusetions; } set { Set(ref _TargetQusetions, value); } }
         private IList _TargetQusetions = default(IList);

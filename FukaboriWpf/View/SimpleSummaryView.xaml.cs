@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FukaboriWpf.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,16 @@ namespace FukaboriWpf.View
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            var border = (Border)sender;
+            var brush = GalaSoft.MvvmLight.Ioc.SimpleIoc.Default.GetInstance<MainViewModel>().CurrentBrush;
+            if(brush != border.Background)
+            {
+                border.Background = brush;
+            }
+            else
+            {
+                border.Background = MainViewModel.DefaultBrush;
+            }
         }
     }
 }

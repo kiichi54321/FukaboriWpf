@@ -1,0 +1,172 @@
+﻿<UserControl x:Class="FukaboriWpf.View.DataCoordinateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FukaboriWpf.View"
+             mc:Ignorable="d" 
+             DataContext="{Binding Source={StaticResource Locator},Path=Main.Enqueite,Mode=OneWay}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="200*" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="20*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+                <ColumnDefinition Width="250*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="質問項目" VerticalAlignment="Center"></TextBlock>
+            <TextBox Text="{Binding Text,Mode=TwoWay}" Grid.Column="1"  Name="questionNameTextBox" Margin="3,0" HorizontalAlignment="Stretch"></TextBox>
+            <ListBox Name="listBox5" Margin="5"  Grid.Row="1" SelectionChanged="listBox5_SelectionChanged"  ItemsSource="{Binding QuestionList}" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="☓" Command="{Binding DeleteCommand}" Visibility="{Binding CanDelete,Converter={StaticResource BoolToVisibility}}" Margin="1"></Button>
+                            <TextBlock Text="{Binding ViewText}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ScrollViewer Grid.Column="1"  Margin="5"  Grid.Row="1" Grid.ColumnSpan="2">
+                <ItemsControl Name="AnswerGroupControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Name="AnswerGroupBorder" Background="White" MouseEnter="AnswerGroupBorder_MouseEnter" MouseLeave="AnswerGroupBorder_MouseLeave" MouseLeftButtonUp="AnswerGroupBorder_MouseLeftButtonUp" Tag="{Binding}">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="+" Tag="{Binding}" Click="Button_Click_2"></Button>
+                                        <Button Content="-" Tag="{Binding}" Name = "AddOutAnswerBuntton" Click="AddOutAnswerBuntton_Click"></Button>
+                                        <TextBox Text="{Binding Value, Mode=TwoWay}" Width="30">
+                                            <TextBox.Background>
+                                                <SolidColorBrush Color="White" Opacity="0"></SolidColorBrush>
+                                            </TextBox.Background>
+                                        </TextBox>
+                                        <TextBox Text="{Binding TextValue, Mode=TwoWay}" Width="100">
+                                            <TextBox.Background>
+                                                <SolidColorBrush Color="White" Opacity="0"></SolidColorBrush>
+                                            </TextBox.Background>
+                                        </TextBox>
+
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding Answeres}" Margin="50,0,0,0">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel></StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border  BorderThickness="1" BorderBrush="Silver" MouseLeftButtonDown="Border_MouseLeftButtonDown_1" Tag="{Binding}">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="White" Opacity="0"></SolidColorBrush>
+                                                    </Border.Background>
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <TextBlock Text="・"></TextBlock>
+                                                        <TextBlock Text="{Binding ViewText2}"></TextBlock>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300*"></ColumnDefinition>
+                <ColumnDefinition Width="300*"></ColumnDefinition>
+                <ColumnDefinition Width="300*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="30*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Text="絞り込み内容" VerticalAlignment="Center"></TextBlock>
+            <Button HorizontalAlignment="Right" Content="Clear" Margin="2" Click="Button_Click_7"></Button>
+            <Border Grid.Row="2"  Margin="5" BorderThickness="1" BorderBrush="Silver">
+                <ScrollViewer>
+                    <ItemsControl  Name="listBox7" ItemsSource="{Binding DrawInData}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Tag="{Binding}" Name="removeButton" Click="removeButton_Click" Width="20" Height="20" Content="×"></Button>
+                                    <TextBlock Text="{Binding ViewText}" VerticalAlignment="Center"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </ScrollViewer>
+            </Border>
+            <TextBlock Text="削除内容"  VerticalAlignment="Center" Grid.Column="1"></TextBlock>
+            <Border Grid.Row="2"  Margin="5" BorderThickness="1" BorderBrush="Silver" Grid.Column="1">
+                <ScrollViewer>
+                    <ItemsControl   ItemsSource="{Binding DrawOutData}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Tag="{Binding}" Name="removeOutDataButton" Click="removeOutDataButton_Click" Width="20" Height="20" Content="×"></Button>
+                                    <TextBlock Text="{Binding ViewText}" VerticalAlignment="Center"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </ScrollViewer>
+            </Border>
+            <StackPanel Grid.Column="2" Grid.Row="2" Name="stackPanel2" >
+                <Button Content="クリヤー" Height="23" Name="button5" Click="button5_Click" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Height="23" Text="人数：" />
+                    <TextBlock Height="23" Name="textBlock4" Text="{Binding Count}" />
+                </StackPanel>
+                <TextBlock Height="10"></TextBlock>
+                <TextBlock Text="変数の追加"></TextBlock>
+                <Border BorderBrush="Black" BorderThickness="1" Margin="1" DataContext="{Binding DataCoordinator}">
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="変数名" Width="60"></TextBlock>
+                            <TextBox Text="{Binding ExtendAttributeName,Mode=TwoWay}" Width="200" ></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="ラベル" Width="60"></TextBlock>
+                            <TextBox Text="{Binding ExtendValueName,Mode=TwoWay}" Width="200"></TextBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="追加" Width="100" Command="{Binding AddExtendValueCommand}"></Button>
+                            <Button Content="" Width="100"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</UserControl>

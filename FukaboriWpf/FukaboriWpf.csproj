@@ -134,6 +134,9 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SimpleSummaryViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\DataCoordinateView.xaml.cs">
+      <DependentUpon>DataCoordinateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\GroupSummaryView.xaml.cs">
       <DependentUpon>GroupSummaryView.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\QuestionListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DataCoordinateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

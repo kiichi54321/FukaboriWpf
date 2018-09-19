@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace FukaboriWpf.ViewModel
 {
@@ -116,6 +117,23 @@ namespace FukaboriWpf.ViewModel
 
         public Enqueite Enqueite { get { return _Enqueite; } set { Set(ref _Enqueite, value); } }
         private Enqueite _Enqueite = default(Enqueite);
+
+        public readonly static Brush DefaultBrush = new SolidColorBrush(Colors.White);
+        public Brush CurrentBrush{ get; set; } = new SolidColorBrush( Colors.White);
+        private void SetColor(Brush color)
+        {
+            CurrentBrush = color;
+        }
+        #region SetColor Command
+        /// <summary>
+        /// Gets the SetColor.
+        /// </summary>
+        public RelayCommand<Brush> SetColorCommand
+        {
+            get { return _SetColorCommand ?? (_SetColorCommand = new RelayCommand<Brush>((n) => { SetColor(n); })); }
+        }
+        private RelayCommand<Brush> _SetColorCommand;
+        #endregion
 
 
     }

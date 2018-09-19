@@ -104,14 +104,13 @@ namespace FukaboriCore.Model
         {
             get
             {
+                if (dataFile == null) yield break; 
+
                 if (drawInData.Count == 0 && drawOutData.Count == 0)
                 {
-                    if (dataFile != null)
+                    foreach (var item in dataFile.Lines)
                     {
-                        foreach (var item in dataFile.Lines)
-                        {
-                            yield return item;
-                        }
+                        yield return item;
                     }
                 }
                 else
@@ -140,27 +139,19 @@ namespace FukaboriCore.Model
                                 break;
                             }
                         }
-
-
                         if (flag) yield return item;
                     }
-
                 }
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                return AnswerLines.Count();
-            }
-        }
+        public int Count => AnswerLines.Count();
 
 
         public void QuestionLoad(System.IO.StreamReader stream)
         {
             questionManage.Clear();
+            stopQuestionListChanged = true;
             MyLib.IO.TSVFile file = new MyLib.IO.TSVFile(stream);
             foreach (var item in file.Lines.Where(n => n.Line.Length > 0))
             {
@@ -174,6 +165,8 @@ namespace FukaboriCore.Model
                 questionManage.Add(q.Key, q);
             }
             file.Dispose();
+            stopQuestionListChanged = false;
+            RaiseQuestionListChanged();
             RaisePropertyChanged();
         }
 
@@ -221,13 +214,26 @@ namespace FukaboriCore.Model
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public ObservableCollection<Question> QuestionList
+        public List<Question> QuestionList
         {
             get
             {
-                return questionManage.List;
+                return questionManage.List.ToList();
             }
         }
+
+        public event EventHandler QuestionListChanged;
+        bool stopQuestionListChanged = false;
+        internal void RaiseQuestionListChanged()
+        {
+            if (!stopQuestionListChanged)
+            {
+                QuestionListChanged?.Invoke(this, EventArgs.Empty);
+                RaisePropertyChanged("QuestionList");
+            }
+        }
+
+
         [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<Question> FreeTextQuestionList
         {

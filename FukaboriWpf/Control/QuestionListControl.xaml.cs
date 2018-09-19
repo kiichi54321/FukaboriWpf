@@ -49,10 +49,10 @@ namespace FukaboriWpf.Control
         {
             this.ListBox.ItemsSource = FilterQuestions(this.SearchTextBox.Text);
             ((Enqueite)DataContext).PropertyChanged += QuestionListControl_PropertyChanged;
-            ((Enqueite)DataContext).QuestionList.CollectionChanged += QuestionList_CollectionChanged;
+            ((Enqueite)DataContext).QuestionListChanged += QuestionList_CollectionChanged;
         }
 
-        private void QuestionList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void QuestionList_CollectionChanged(object sender, EventArgs e)
         {
             this.ListBox.ItemsSource = FilterQuestions(this.SearchTextBox.Text);
         }

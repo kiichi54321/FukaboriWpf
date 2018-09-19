@@ -9,6 +9,8 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using MyLib.UI;
 using MyLib.Message;
+using FukaboriCore.Service;
+using GalaSoft.MvvmLight.Ioc;
 
 namespace FukaboriCore.Model
 {
@@ -96,10 +98,8 @@ namespace FukaboriCore.Model
         }
 
         
-        public AnswerType AnswerType { get; set; }
-        
+        public AnswerType AnswerType { get; set; }        
         public AnswerType2 AnswerType2 { get; set; }
-
         
         public string ImageUrl { get; set; }
 
@@ -123,8 +123,7 @@ namespace FukaboriCore.Model
 
         async void Delete()
         {
-            var result = await Messenger.Default.SendAsync<bool, NotificationMessage<string>>(
-       new NotificationMessage<string>("本当に消しますか？", "注意"));
+            var result = await SimpleIoc.Default.GetInstance<IShowMessageService>().ShowAsync("本当に消しますか？", "注意");
             if (result)
             {
                 this.QuestionManage.Delete(this);
@@ -767,6 +766,7 @@ namespace FukaboriCore.Model
         private void List_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Messenger.Default.Send(new QuestionChangeMessage());
+            enqueite.RaiseQuestionListChanged();
         }
 
         public void Add(string key, Question q)
