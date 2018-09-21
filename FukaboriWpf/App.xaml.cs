@@ -25,6 +25,7 @@ namespace FukaboriWpf
 
         private void Register()
         {
+            MyLib.Task.Utility.UISyncContext = TaskScheduler.FromCurrentSynchronizationContext();
             SimpleIoc.Default.Register<System.Net.Http.HttpClient>(() => {
                 var client = new System.Net.Http.HttpClient();
                 client.DefaultRequestHeaders.Add("User-Agent", "fukabori-windows");

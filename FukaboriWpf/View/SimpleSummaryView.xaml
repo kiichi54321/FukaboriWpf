@@ -54,15 +54,15 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Border Width="{Binding ElementName=simpleSumNameSilder,Path=Value}" BorderBrush="Black" BorderThickness="1" MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                            <TextBlock Text="{Binding Name}" Margin="3"></TextBlock>
                                         </Border>
                                         <Border Width="50" BorderBrush="Black" BorderThickness="1"  MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                                            <TextBlock Text="{Binding Average,StringFormat=F3}" HorizontalAlignment="Right"></TextBlock>
+                                        <TextBlock Text="{Binding Average,StringFormat=F3}"  Margin="3" HorizontalAlignment="Right"></TextBlock>
                                         </Border>
                                         <Border Width="50" BorderBrush="Black" BorderThickness="1"  MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                                            <TextBlock Text="{Binding Std,StringFormat=F3}" HorizontalAlignment="Right"></TextBlock>
+                                        <TextBlock Text="{Binding Std,StringFormat=F3}"  Margin="3" HorizontalAlignment="Right"></TextBlock>
                                         </Border>
-                                        <Border Visibility="{Binding ImageVisibility}">
+                                        <Border Visibility="{Binding ImageVisibility,Converter={StaticResource BoolToVisibility}}">
                                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                                 <ItemsControl ItemsSource="{Binding ImageDataList}">
                                                     <ItemsControl.ItemsPanel>
@@ -76,7 +76,7 @@
                                                                 <Image Source="{Binding Source}" MaxHeight="200" HorizontalAlignment="Center" Width="100" >
 
                                                                 </Image>
-                                                                <Border Background="White" VerticalAlignment="Bottom" Visibility="{Binding ValueVisibilty}">
+                                                            <Border Background="White" VerticalAlignment="Bottom" Visibility="{Binding ValueVisibilty,Converter={StaticResource BoolToVisibility}}">
                                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                                         <TextBlock Text="{Binding Value,StringFormat=F2}"></TextBlock>
                                                                         <TextBlock Text="%"></TextBlock>
@@ -107,7 +107,7 @@
                         <DataTemplate>
                             <Border Margin="5" BorderBrush="Silver" BorderThickness="1">
                                 <StackPanel Margin="2">
-                                    <TextBlock Text="{Binding Name}" Width="250" TextWrapping="Wrap" Height="34"></TextBlock>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Height="34"></TextBlock>
                                     <Border  MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="平均:"></TextBlock>
@@ -129,16 +129,16 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal" >
-                                                    <Border BorderThickness="1" BorderBrush="Black" Width="{Binding ElementName=simpleSumNameSilder,Path=Value}"  MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                                                        <TextBlock Text="{Binding Key}"></TextBlock>
+                                                    <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="{Binding ElementName=simpleSumNameSilder,Path=Value}"  MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                        <TextBlock Text="{Binding Key}" Margin="3"></TextBlock>
                                                     </Border>
-                                                    <Border BorderThickness="1" BorderBrush="Black" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                                                        <TextBlock Text="{Binding Count}" HorizontalAlignment="Right"></TextBlock>
+                                                    <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="60" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                        <TextBlock Text="{Binding Count}"  Margin="3" HorizontalAlignment="Right"></TextBlock>
                                                     </Border>
-                                                    <Border BorderThickness="1" BorderBrush="Black" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                                                        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right">
-                                                            <TextBlock Text="{Binding Rate,StringFormat=F2}"></TextBlock>
-                                                            <TextBlock Text="%"></TextBlock>
+                                                    <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="60" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Margin="3">
+                                                            <TextBlock Text="{Binding Rate,StringFormat=F2}" ></TextBlock>
+                                                            <TextBlock Text="%" ></TextBlock>
                                                         </StackPanel>
                                                     </Border>
 

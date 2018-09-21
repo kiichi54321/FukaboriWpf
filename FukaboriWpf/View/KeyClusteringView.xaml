@@ -1,0 +1,231 @@
+﻿<UserControl x:Class="FukaboriWpf.View.KeyClusteringView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FukaboriWpf.View"
+             xmlns:View="clr-namespace:FukaboriWpf.View"
+             xmlns:mouse="clr-namespace:Lovatts.MouseBehaviours;assembly=FukaboriCore"
+             xmlns:MyControl="clr-namespace:FukaboriWpf.Control"
+             xmlns:myBehaviour="clr-namespace:FukaboriCore.Behaviour;assembly=FukaboriCore"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Height="300" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="400" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="250*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">
+                            クラスタリングに<LineBreak/> 使う変数
+                        </TextBlock>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding SearchText,Mode=TwoWay}" ></TextBox>
+                                <Button Content="Search" Grid.Column="1"  Command="{Binding SearchQuestionCommand}"></Button>
+                                <Button Content="All"  Grid.Column="2" Click="Button_Click_6"></Button>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <ListBox myBehaviour:ListBoxBehaviour.SeletedItems="{Binding SelectedQuestion,Mode=TwoWay}" Name="KeyClusteringQuestionListBox"  SelectionMode="Multiple"  ItemsSource="{Binding QuestionList}" DisplayMemberPath="ViewText" Grid.Column="1">
+                                </ListBox>
+                            </Grid>
+                        </Grid>
+
+
+                    </Grid>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="クラスタ数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Text="{Binding  ElementName=clusterSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                            <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding ClusterNum,Mode=TwoWay}" Minimum="1" Maximum="20" Name="clusterSlider2" ></Slider>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="試行回数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Text="{Binding  ElementName=clusterTryCountSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                            <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding TryCount,Mode=TwoWay}" Minimum="1" Maximum="50" Name="clusterTryCountSlider2" ></Slider>
+                        </StackPanel>
+
+                <Button Content="作成開始"   Width="100" Height="40" HorizontalAlignment="Left" Command="{Binding RunCommand}" />
+                <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="接続数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Text="{Binding  ElementName=ConnectNumCountSlider,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                            <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding ConnectNum,Mode=TwoWay}" Minimum="1" Maximum="50" Name="ConnectNumCountSlider" ></Slider>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Clusterの幅:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <Slider Name="keyClusteringWidthSilder" Maximum="600" Minimum="20" Width="100" Value="150"></Slider>
+
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="作成したクラスタ"></TextBlock>
+                        <ListBox ItemsSource="{Binding Result}" SelectedItem="{Binding CurrentClusterResult,Mode=TwoWay}"  Grid.Row="1">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="160"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="-" Command="{Binding DeleteCommand}"></Button>
+                                            <TextBlock Text="{Binding Title,Mode=TwoWay}" ></TextBlock>
+                                            <TextBlock Text="("></TextBlock>
+                                            <TextBlock Text="{Binding ClusterNum}"></TextBlock>
+                                            <TextBlock Text=")"></TextBlock>
+                                        </StackPanel>
+                                        <Grid Grid.Column="1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ComboBox ItemsSource="{Binding QuestionAddMethod}" SelectedItem="{Binding Selected質問追加の手法,Mode=TwoWay}" DisplayMemberPath="Name" Width="120"></ComboBox>
+                                                <Button Content="Add" Width="35" Command="{Binding AddQuestionCommand}"></Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+         
+        <MyControl:ChangeVisibilityButton HorizontalAlignment="Right" VerticalAlignment="Top" Content="-" Width="20" Height="20" TargetElement="{Binding ElementName=hensuClusteringMainPanel}" ></MyControl:ChangeVisibilityButton>
+
+        <Grid Grid.Row="1" DataContext="{Binding CurrentClusterResult,Mode=TwoWay}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="クラスタリングの名前"></TextBlock>
+                    <TextBox Text="{Binding Title,Mode=TwoWay}" Width="300"></TextBox>
+                    <CheckBox IsChecked="{Binding CanMove,Mode=TwoWay}">移動可能</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=keyClusteringChangeVisibilityButton,Path= ReverseVisibilityState,Mode=TwoWay}">
+                        <TextBlock Text="画像の幅"></TextBlock>
+                        <Slider Width="100" Value="100" Minimum="10" Maximum="400" Name="keyClusteringImageWidthSlider"></Slider>
+                    </StackPanel>
+                    <MyControl:ChangeVisibilityButton x:Name="keyClusteringChangeVisibilityButton" Content="表示変更" Command="{Binding UpdateImageCommand}"></MyControl:ChangeVisibilityButton>
+                    <Button Content="結果をClip" Command="{Binding ClipCommand}"></Button>
+                </StackPanel>
+                <TabControl Grid.Row="1"  TabStripPlacement="Right" >
+                    <TabItem >
+                        <TabItem.Header>
+                            <TextBlock>メ<LineBreak/>イ<LineBreak/>ン</TextBlock>
+                        </TabItem.Header>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ItemsControl  ItemsSource="{Binding Clusters}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="{Binding  ElementName=keyClusteringWidthSilder,Path=Value}" >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="30"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="20"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="15"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="15"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Button Content="＜" Command="{Binding LeftMoveCommand}" ></Button>
+                                                <TextBox Text="{Binding Name ,Mode=TwoWay}" Grid.Column="1"></TextBox>
+                                                <Button Content="＞" Command="{Binding RightMoveCommand}"  Grid.Column="2"></Button>
+                                            </Grid>
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Visibility="{Binding ElementName=keyClusteringChangeVisibilityButton,Path= VisibilityState,Mode=TwoWay}">
+                                                <Border BorderBrush="{Binding LineColor,Converter={StaticResource ColorTypeConverter}}" BorderThickness="1" Background="White" mouse:MouseBehaviour.MouseEnterCommand="{Binding MouseEnterCommand}" mouse:MouseBehaviour.MouseLeaveCommand="{Binding MouseLeaveCommand}" mouse:MouseBehaviour.MouseLeftButtonUpCommand="{Binding MouseUpCommand}">
+                                                    <ItemsControl ItemsSource="{Binding Items}" >
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel></StackPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Background="{Binding BackColor,Converter={StaticResource ColorTypeConverter},Mode=TwoWay}" mouse:MouseBehaviour.MouseLeftButtonDownCommand="{Binding Click}" >
+                                                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+
+                                                </Border>
+                                            </ScrollViewer>
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"  Visibility="{Binding ElementName=keyClusteringChangeVisibilityButton,Path= ReverseVisibilityState,Mode=TwoWay}">
+                                                <Border BorderBrush="{Binding LineColor,Converter={StaticResource ColorTypeConverter}}" BorderThickness="1" Background="White" mouse:MouseBehaviour.MouseEnterCommand="{Binding MouseEnterCommand}" mouse:MouseBehaviour.MouseLeaveCommand="{Binding MouseLeaveCommand}" mouse:MouseBehaviour.MouseLeftButtonUpCommand="{Binding MouseUpCommand}">
+                                                    <ItemsControl ItemsSource="{Binding Items}" >
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel></WrapPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Background="{Binding BackColor,Converter={StaticResource ColorTypeConverter},Mode=TwoWay}" mouse:MouseBehaviour.MouseLeftButtonDownCommand="{Binding Click}" >
+                                                                    <StackPanel Width="{Binding ElementName=keyClusteringImageWidthSlider,Path=Value,Mode=TwoWay}">
+                                                                        <Image Source="{Binding ImageUrl,Mode=TwoWay}"></Image>
+                                                                        <TextBlock Text="{Binding Name}"></TextBlock>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+
+                                                </Border>
+                                            </ScrollViewer>
+                                            <TextBlock Grid.Row="2" Text="{Binding CountStr,Mode=TwoWay}" HorizontalAlignment="Center"></TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem >
+                        <TabItem.Header>
+                            <TextBlock>グ<LineBreak/>ラ<LineBreak/>フ</TextBlock>
+                        </TabItem.Header>
+                        <View:KeyClusteringGraphView QuestionClusterManage="{Binding}" ></View:KeyClusteringGraphView>
+                    </TabItem>
+
+                </TabControl>
+
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

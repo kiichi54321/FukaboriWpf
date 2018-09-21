@@ -53,7 +53,7 @@ namespace FukaboriWpf.ViewModel
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
 
-        public Enqueite Enqueite => ServiceLocator.Current.GetInstance<Enqueite>();
+        public Enqueite Enqueite => ServiceLocator.Current.GetInstance<MainViewModel>().Enqueite;
 
         public SimpleSummaryViewModel SimpleSummary => ServiceLocator.Current.GetInstance<SimpleSummaryViewModel>();
 

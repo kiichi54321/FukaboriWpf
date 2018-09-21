@@ -702,10 +702,19 @@ namespace MyLib.Analyze
             {
                 Task<List<Cluster>>.Factory.StartNew(() => { K_Means_DoWork(); return this.ClusterDataList; }).ContinueWith((n) => Completed(n.Result));
             }
-
         }
 
-
+        public List<Cluster> Run(int clusterCount, int tryCount)
+        {
+            clusterDataList.Clear();
+            this.clusterCount = clusterCount;
+            this.tryCount = tryCount;
+            if (this.InputDataList.Count > 0)
+            {
+                K_Means_DoWork();
+            }
+            return ClusterDataList;
+        }
 
 
     }

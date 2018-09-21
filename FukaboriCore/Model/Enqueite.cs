@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Ioc;
 using FukaboriCore.ViewModel;
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.Command;
 
 namespace FukaboriCore.Model
 {
@@ -311,7 +312,7 @@ namespace FukaboriCore.Model
         {
             using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
             {
-                sw.Write(JsonConvert.SerializeObject(this));
+                 sw.Write(JsonConvert.SerializeObject(this));
             }
         }
 
@@ -406,7 +407,21 @@ namespace FukaboriCore.Model
             stream.BaseStream.Position = 0;
         }
 
-
+        private void RemoveDrawInData(AnswerGroup answerGroup)
+        {
+            DrawInData.Remove(answerGroup);
+        }
+        #region RemoveDrawInData Command
+        /// <summary>
+        /// Gets the RemoveDrawInData.
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public RelayCommand<AnswerGroup> RemoveDrawInDataCommand
+        {
+            get { return _RemoveDrawInDataCommand ?? (_RemoveDrawInDataCommand = new RelayCommand<AnswerGroup>((n) => { RemoveDrawInData(n); })); }
+        }
+        private RelayCommand<AnswerGroup> _RemoveDrawInDataCommand;
+        #endregion
     }
 
 

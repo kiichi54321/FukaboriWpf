@@ -290,9 +290,13 @@ namespace FukaboriCore.Model
                     ss.CreatePropertyData(qlist);
                     return ss.DataList.Select(n => new ImageData() { Source = n.ImageUrl, Value = n.Value*100, ValueVisibilty =true }).OrderByDescending(n=>n.Value).Take((int)State.MaxImageViewNum.Value);
                 }
-                else
+                else if(Question.ImageUrl !=null)
                 {
                     return new List<ImageData>(){ new ImageData(){ Source = Question.ImageUrl, ValueVisibilty = false}};
+                }
+                else
+                {
+                    return Enumerable.Empty<ImageData>();
                 }
             }
 

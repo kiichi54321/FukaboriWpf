@@ -12,46 +12,8 @@ using System.Runtime.Serialization;
 namespace FukaboriCore.Model
 {
     
-    public class KeyClustering : GalaSoft.MvvmLight.ObservableObject,IDisposable
+    public class KeyClustering : GalaSoft.MvvmLight.ObservableObject
     {
-
-        #region IDisposable Support
-        private bool disposedValue = false; // 重複する呼び出しを検出するには
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: マネージ状態を破棄します (マネージ オブジェクト)。
-                    Messenger.Default.Unregister<QuestionChangeMessage>(this);
-                }
-
-                // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
-                // TODO: 大きなフィールドを null に設定します。
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
-        // ~KeyClustering() {
-        //   // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-        //   Dispose(false);
-        // }
-
-        // このコードは、破棄可能なパターンを正しく実装できるように追加されました。
-        public void Dispose()
-        {
-            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-            Dispose(true);
-            // TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
-    
-
         public void Init(Enqueite e)
         {
             this.Enqueite = e;
@@ -60,11 +22,15 @@ namespace FukaboriCore.Model
                 item.Parent = this;
                 item.Init();
             }
-            Messenger.Default.Register<QuestionChangeMessage>(this, (n) => { QuestionList.Update(Enqueite.QuestionList ); });
-            QuestionList = new ObservableCollection<Question>();
-            QuestionList.SetList(Enqueite.QuestionList);
+            this.Enqueite.QuestionListChanged += Enqueite_QuestionListChanged;
+            QuestionList = this.Enqueite.QuestionList;
             SelectedQuestion = new ObservableCollection<Question>();
             ConnectNum = 5;
+        }
+
+        private void Enqueite_QuestionListChanged(object sender, EventArgs e)
+        {
+            QuestionList = this.Enqueite.QuestionList;
         }
 
         int idCount = 0;
@@ -73,7 +39,6 @@ namespace FukaboriCore.Model
         {
             get { return idCount; }set { idCount = value; }
         }
-
         
         public int ClusterNum
         {
@@ -89,18 +54,17 @@ namespace FukaboriCore.Model
             }
         }
 
-
         int clusterNum = 4;
 
         [Newtonsoft.Json.JsonIgnore]
         public IList SelectedQuestion { get; set; } = new ObservableCollection<Question>();
         [Newtonsoft.Json.JsonIgnore]
         public Enqueite Enqueite { get; set; }
-
-        
+ 
         public int TryCount { get; set; } = 20;
         [Newtonsoft.Json.JsonIgnore]
-        public ObservableCollection<Question> QuestionList { get; set; } = new ObservableCollection<Question>();
+        public List<Question> QuestionList { get { return _QuestionList; } set { Set(ref _QuestionList, value); } }
+        private List<Question> _QuestionList = default(List<Question>);
 
         int connectNum = 5;
 
@@ -109,7 +73,7 @@ namespace FukaboriCore.Model
         public RelayCommand SearchQuestionCommand
         {
             get { if (searchQuestionCommand == null) {
-                    searchQuestionCommand = new RelayCommand(() => QuestionList.Update(Enqueite.QuestionManage.SearchQuestion(SearchText)));
+                    searchQuestionCommand = new RelayCommand(() => QuestionList = Enqueite.QuestionManage.SearchQuestion(SearchText).ToList());
                 }
                 return searchQuestionCommand;
             }
@@ -123,10 +87,7 @@ namespace FukaboriCore.Model
             {
                 if(runCommand == null)
                 {
-                    runCommand = new RelayCommand(() => {
-                        Task.Factory.StartNew(()=>Analyze());
-
-                    });
+                    runCommand = new RelayCommand(async () => await Analyze());
                 }
                 return runCommand;
             }
@@ -138,8 +99,7 @@ namespace FukaboriCore.Model
         }
 
         RelayCommand runCommand;
-
-        
+    
         public ObservableCollection<QuestionClusterManage> Result { get; set; } = new ObservableCollection<QuestionClusterManage>();
         QuestionClusterManage currentClusterResult = new QuestionClusterManage();
         public QuestionClusterManage CurrentClusterResult
@@ -155,8 +115,6 @@ namespace FukaboriCore.Model
             }
         }
 
-       // public ObservableCollection<QuestionClusterManage> QuestionClusterResult { get; set; } = new ObservableCollection<QuestionClusterManage>();
-
         public int ConnectNum
         {
             get
@@ -171,48 +129,39 @@ namespace FukaboriCore.Model
             }
         }
 
-        bool isBusy = false;
-        public void Analyze()
+        private bool isBusy = false;
+        public async Task Analyze()
         {
-            //if (isBusy) return;
-            //isBusy = true;
             MyLib.Analyze.K_MeansForTask kMeans = new MyLib.Analyze.K_MeansForTask(SelectedQuestion.Count);
-            QuestionClusterManage questionClusterManage = new QuestionClusterManage() { Parent = this,Title = "無題クラスタ"+idCount };
+            QuestionClusterManage questionClusterManage = new QuestionClusterManage() { Parent = this, Title = "無題クラスタ" + idCount };
             questionClusterManage.CreateData(Enqueite, SelectedQuestion.OfType<Question>());
             idCount++;
             foreach (var item in questionClusterManage.DataList)
             {
-                kMeans.AddData(item.Soukan.Select(n=>n.Value).ToArray() , Enqueite.QuestionManage.GetQuestion( item.QuestionKey));
+                kMeans.AddData(item.Soukan.Select(n => n.Value).ToArray(), Enqueite.QuestionManage.GetQuestion(item.QuestionKey));
             }
+            isBusy = true;
+            var cluster_list = await Task.Run<List<MyLib.Analyze.K_MeansForTask.Cluster>>(() => kMeans.Run(ClusterNum, TryCount));
 
-
-
-            kMeans.Run(ClusterNum, TryCount, (n) => {
-                MyLib.Task.Utility.UITask(() =>
+            int i = 0;
+            foreach (var item in cluster_list)
+            {
+                QuestionCluster qc = new QuestionCluster() { Name = "c_" + i, Manage = questionClusterManage };
+                qc.Init();
+                foreach (var item1 in item.DataList)
                 {
-                   
-                    int i = 0;
-                    foreach (var item in n)
-                    {
-                        QuestionCluster qc = new QuestionCluster() { Name = "c_" + i,Manage = questionClusterManage };
-                        qc.Init();
-                        foreach (var item1 in item.DataList)
-                        {
-                            Question q = item1.Tag as Question;
-                            qc.Add(QuestionClusterItem.Create(q,item1.Data));
-                        }
-                        questionClusterManage.Clusters.Add(qc);
-                        i++;
-                    }
-                    questionClusterManage.CreateClusterItemDic();
-           //         QuestionClusterResult.Add(questionClusterManage);
-                    CurrentClusterResult = questionClusterManage;
-                    Result.Add(currentClusterResult);
-                    currentClusterResult.CountUser();
-                    isBusy = false;
-                });
-            });
-            
+                    Question q = item1.Tag as Question;
+                    qc.Add(QuestionClusterItem.Create(q, item1.Data));
+                }
+                questionClusterManage.Clusters.Add(qc);
+                i++;
+            }
+            questionClusterManage.CreateClusterItemDic();
+            CurrentClusterResult = questionClusterManage;
+            Result.Add(currentClusterResult);
+            await currentClusterResult.CountUser();
+            isBusy = false;
+
         }
 
         internal void DeleteResult(QuestionClusterManage questionClusterManage)
@@ -225,25 +174,14 @@ namespace FukaboriCore.Model
             CurrentClusterResult = questionClusterManage;
         }
 
-
     }
-
     
     public class KeyClusteringData
     {
-        
         public double[] Orignal { get; set; }
-        
         public double[] rinsetu { get; set; }
-//        public Question Question { get; set; }
-        
         public string QuestionKey { get; set; }
-
-        
         public List<KeyValuePair<string, double>> Soukan { get; set; } = new List<KeyValuePair<string, double>>();
-//        public List<KeyValuePair<Question, double>> soukan { get; set; } = new List<KeyValuePair<Question, double>>();
-
-        
     }
 
     
@@ -449,19 +387,6 @@ namespace FukaboriCore.Model
             return sb.ToString();
         }
 
-        //RelayCommand clipCommand;
-        //public RelayCommand ClipCommand
-        //{
-        //    get
-        //    {
-        //        if (clipCommand == null)
-        //        {
-        //            clipCommand = new RelayCommand(() => { Clipboard.SetText(this.ToString()); });
-        //        }
-        //        return clipCommand;
-        //    }
-        //}
-
         public bool CanMove
         {
             get
@@ -525,9 +450,9 @@ namespace FukaboriCore.Model
             {
                 if (addQuestionCommand == null)
                 {
-                    addQuestionCommand = new RelayCommand(() =>
+                    addQuestionCommand = new RelayCommand(async () =>
                     {
-                        Action action = null;
+                        Func<Task> action = null;
                         switch (Selected質問追加の手法.Code)
                         {
                             case (質問追加の手法.単純加算):
@@ -552,8 +477,7 @@ namespace FukaboriCore.Model
                             default:
                                 break;
                         }
-//                        action.Invoke();
-                       Task.Factory.StartNew(action);
+                       await action();
                     });
                 }
                 return addQuestionCommand;
@@ -564,158 +488,153 @@ namespace FukaboriCore.Model
             }
         }
 
-        public void AddQuestion単純加算()
+        public async Task AddQuestion単純加算()
         {
             foreach (var item in Clusters)
             {
-                Question q = new Question() { AnswerType = AnswerType.数値, AnswerType2 = AnswerType2.連続値, Key = "CQ_" + Title+"_"+item.Name, Text = "CQ単純加算" + Title + "_" + item.Name };
-                List<double> list = new List<double>();
+                Question q = new Question() { AnswerType = AnswerType.数値, AnswerType2 = AnswerType2.連続値, Key = "CQ_" + Title + "_" + item.Name, Text = "CQ単純加算" + Title + "_" + item.Name };
+                var data_list = await Task<List<double>>.Run(() =>
+                {
+                    List<double> list = new List<double>();
+                    foreach (var line in this.Parent.Enqueite.AnswerLines)
+                    {
+                        var v = item.Items.Select(n => n.Question.GetValue(line).GetValue()).Where(n => double.IsNaN(n) == false);
+                        if (v.Any())
+                        {
+                            var v2 = v.Sum();
+                            line.AddExtendColumn(q.Key, v2.ToString());
+                            list.Add(v2);
+                        }
+                    }
+                    return list;
+                });
+
+                this.Parent.Enqueite.QuestionManage.AddExtendQuestion(q);
+                q.CreateQuestionAnswer(data_list);
+            }
+        }
+
+        public async Task AddQuestion単純加算勝者()
+        {
+            Question q = new Question() { AnswerType = AnswerType.ラベル, AnswerType2 = AnswerType2.離散, Key = "CQ_" + Title, Text = "CQ単純加算判別_" + Title };
+
+            await Task.Run(() =>
+            {
                 foreach (var line in this.Parent.Enqueite.AnswerLines)
                 {
-                    var v = item.Items.Select(n => n.Question.GetValue(line).GetValue()).Where(n => double.IsNaN(n) == false);
-                    if (v.Any())
+                    Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
+                    foreach (var item in Clusters)
                     {
-                        var v2 = v.Sum();
-                        line.AddExtendColumn(q.Key, v2.ToString());
-                        list.Add(v2);
+                        var v = item.Items.Select(n => n.Question.GetValue(line).GetValue()).Where(n => double.IsNaN(n) == false);
+                        if (v.Any())
+                        {
+                            d.Add(item, v.Sum());
+                        }
                     }
+                    if (d.Any()) line.AddExtendColumn(q.Key, d.OrderByDescending(n => n.Value).First().Key.Name);
                 }
-                ui.TaskStart(() =>
-                {
-                    this.Parent.Enqueite.QuestionManage.AddExtendQuestion( q);
-                    q.CreateQuestionAnswer(list);
-                }).Wait();
+            });
+            this.Parent.Enqueite.QuestionManage.AddExtendQuestion(q);
+            q.Answers = Clusters.Select(n => n.Name).ToList();
+            q.Init();
+        }
+
+
+        public async Task CountUser()
+        {
+
+            var count_dic = await Task<Dictionary<QuestionCluster, int>>.Run(() =>
+           {
+               var dic = CreateQuestionStatisticsDic();
+               Dictionary<QuestionCluster, int> countDic = new Dictionary<QuestionCluster, int>();
+               foreach (var line in this.Parent.Enqueite.AnswerLines)
+               {
+                   Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
+                   foreach (var item in Clusters)
+                   {
+                       if (item.Items.Count > 0)
+                       {
+                           var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
+                           if (v.Any())
+                           {
+                               d.Add(item, v.Average());
+                           }
+                       }
+                   }
+                   if (d.Any()) countDic.AddCount(d.OrderByDescending(n => n.Value).First().Key);
+               }
+               return countDic;
+           });
+
+            foreach (var item in Clusters)
+            {
+                item.CountStr = string.Empty;
+            }
+            foreach (var item in count_dic)
+            {
+                item.Key.CountStr = item.Value.ToString();
             }
         }
 
-        public void AddQuestion単純加算勝者()
+        public async Task AddQuestion標準化加算判別()
         {
-            Question q = new Question() { AnswerType = AnswerType.ラベル, AnswerType2 = AnswerType2.離散, Key = "CQ_" + Title  , Text = "CQ単純加算判別_" + Title   };
+            var question = await Task<Question>.Run(() =>
+            {
+                Question q = new Question() { AnswerType = AnswerType.ラベル, AnswerType2 = AnswerType2.離散, Key = "CQ_" + Title, Text = "CQ標準化加算判別_" + Title };
+                Dictionary<Question, MyLib.Statistics.AvgStd> dic = CreateQuestionStatisticsDic();
 
-            foreach (var line in this.Parent.Enqueite.AnswerLines)
-            {
-                Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
-                foreach (var item in Clusters)
+                foreach (var line in this.Parent.Enqueite.AnswerLines)
                 {
-                    var v = item.Items.Select(n => n.Question.GetValue(line).GetValue()).Where(n => double.IsNaN(n) == false);
-                    if (v.Any())
-                    {
-                        d.Add(item, v.Sum());
-                    }
-                }
-                if(d.Any()) line.AddExtendColumn(q.Key, d.OrderByDescending(n => n.Value).First().Key.Name);
-            }
-            ui.TaskStart(() =>
-            {
-                this.Parent.Enqueite.QuestionManage.AddExtendQuestion( q);
-                q.Answers = Clusters.Select(n => n.Name).ToList();
-                q.Init();
-//                q.CreateQuestionAnswer(this.Parent.Enqueite.AllAnswerLine);
-            }).Wait();
-        }
-
-        public void CountUser()
-        {
-            var dic = CreateQuestionStatisticsDic();
-            Dictionary<QuestionCluster, int> countDic = new Dictionary<QuestionCluster, int>();
-            foreach (var line in this.Parent.Enqueite.AnswerLines)
-            {
-                Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
-                foreach (var item in Clusters)
-                {
-                    if (item.Items.Count > 0)
+                    Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
+                    foreach (var item in Clusters)
                     {
                         var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
-                        if(v.Any())
+                        if (v.Any())
+                        {
+                            d.Add(item, v.Sum());
+                        }
+                    }
+                    if (d.Any())
+                    {
+                        line.AddExtendColumn(q.Key, d.OrderByDescending(n => n.Value).First().Key.Name);
+                    }
+                }
+                return q;
+            });
+            this.Parent.Enqueite.QuestionManage.AddExtendQuestion(question);
+            question.Answers = Clusters.Select(n => n.Name).ToList();
+            question.Init();
+        }
+
+        public async Task AddQuestion標準化平均判別()
+        {
+            var question = await Task<Question>.Run(() =>
+            {
+                Question q = new Question() { AnswerType = AnswerType.ラベル, AnswerType2 = AnswerType2.離散, Key = "CQ_" + Title, Text = "CQ標準化平均判別_" + Title };
+
+                Dictionary<Question, MyLib.Statistics.AvgStd> dic = CreateQuestionStatisticsDic();
+                foreach (var line in this.Parent.Enqueite.AnswerLines)
+                {
+                    Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
+                    foreach (var item in Clusters)
+                    {
+                        var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
+                        if (v.Any())
                         {
                             d.Add(item, v.Average());
-                        }                       
+                        }
                     }
-                }
-                if( d.Any()) countDic.AddCount(d.OrderByDescending(n => n.Value).First().Key);
-            }
-            ui.TaskStart(() =>
-            {
-                foreach (var item in Clusters)
-                {
-                    item.CountStr = string.Empty;
-                }
-                foreach (var item in countDic)
-                {
-                    item.Key.CountStr = item.Value.ToString();
-                }
-            }).Wait();
-        }
-
-
-
-
-        public void AddQuestion標準化加算判別()
-        {
-
-            Question q = new Question() { AnswerType = AnswerType.ラベル, AnswerType2 = AnswerType2.離散, Key = "CQ_" + Title, Text = "CQ標準化加算判別_" + Title };
-
-            Dictionary<Question, MyLib.Statistics.AvgStd> dic = CreateQuestionStatisticsDic();
-
-        
-            foreach (var line in this.Parent.Enqueite.AnswerLines)
-            {
-                Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
-                foreach (var item in Clusters)
-                {
-                    var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
-                    if(v.Any())
+                    if (d.Any())
                     {
-                        d.Add(item, v.Sum());
+                        line.AddExtendColumn(q.Key, d.OrderByDescending(n => n.Value).First().Key.Name);
                     }
                 }
-                if (d.Any())
-                {
-                    line.AddExtendColumn(q.Key, d.OrderByDescending(n => n.Value).First().Key.Name);
-                }
-            }
-            ui.TaskStart(() =>
-            {
-                this.Parent.Enqueite.QuestionManage.AddExtendQuestion( q);
-                q.Answers = Clusters.Select(n => n.Name).ToList();
-                q.Init();
-            }).Wait();
+                return q;
+            });
 
-
-        }
-
-        public void AddQuestion標準化平均判別()
-        {
-
-            Question q = new Question() { AnswerType = AnswerType.ラベル, AnswerType2 = AnswerType2.離散, Key = "CQ_" + Title, Text = "CQ標準化平均判別_" + Title };
-
-            Dictionary<Question, MyLib.Statistics.AvgStd> dic = CreateQuestionStatisticsDic();
-
-
-            foreach (var line in this.Parent.Enqueite.AnswerLines)
-            {
-                Dictionary<QuestionCluster, double> d = new Dictionary<QuestionCluster, double>();
-                foreach (var item in Clusters)
-                {
-                    var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
-                    if (v.Any())
-                    {
-                        d.Add(item, v.Average());
-                    }
-                }
-                if (d.Any())
-                {
-                    line.AddExtendColumn(q.Key, d.OrderByDescending(n => n.Value).First().Key.Name);
-                }
-            }
-            ui.TaskStart(() =>
-            {
-                this.Parent.Enqueite.QuestionManage.AddExtendQuestion( q);
-                q.Answers = Clusters.Select(n => n.Name).ToList();
-                q.Init();
-            }).Wait();
-
-
+            this.Parent.Enqueite.QuestionManage.AddExtendQuestion(question);
+            question.Answers = Clusters.Select(n => n.Name).ToList();
+            question.Init();
         }
 
         Dictionary<Question, MyLib.Statistics.AvgStd> questionStatisticsDic = null;
@@ -741,74 +660,63 @@ namespace FukaboriCore.Model
             return dic;
         }
 
-        public void AddQuestion標準化加算()
+        public async Task AddQuestion標準化加算()
         {
             Dictionary<Question, MyLib.Statistics.AvgStd> dic = CreateQuestionStatisticsDic();
 
             foreach (var item in Clusters)
             {
-                Question q = new Question() { AnswerType = AnswerType.数値, AnswerType2 = AnswerType2.連続値, Key = "CQ_" + Title + "_" + item.Name, Text = "CQ標準化加算_" + Title + "_" + item.Name };
-                List<double> list = new List<double>();
-                foreach (var line in this.Parent.Enqueite.AnswerLines)
+                var (question,data_list) = await Task<(Question, List<double> )>.Run(() =>
                 {
-                    var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
-                    if (v.Any())
+                    Question q = new Question() { AnswerType = AnswerType.数値, AnswerType2 = AnswerType2.連続値, Key = "CQ_" + Title + "_" + item.Name, Text = "CQ標準化加算_" + Title + "_" + item.Name };
+                    List<double> list = new List<double>();
+                    foreach (var line in this.Parent.Enqueite.AnswerLines)
                     {
-                        line.AddExtendColumn(q.Key, v.Sum().ToString());
-                        list.Add(v.Sum());
+                        var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
+                        if (v.Any())
+                        {
+                            line.AddExtendColumn(q.Key, v.Sum().ToString());
+                            list.Add(v.Sum());
+                        }
                     }
-                }
-                ui.TaskStart(() => {
-                    this.Parent.Enqueite.QuestionManage.AddExtendQuestion( q);
-                    q.CreateQuestionAnswer(list);
+                    return (q,list);
                 });
+
+                this.Parent.Enqueite.QuestionManage.AddExtendQuestion(question);
+                question.CreateQuestionAnswer(data_list);
             }
         }
 
-        public void AddQuestion標準化平均()
+        public async Task AddQuestion標準化平均()
         {
             Dictionary<Question, MyLib.Statistics.AvgStd> dic = CreateQuestionStatisticsDic();
 
             foreach (var item in Clusters)
             {
-                List<double> list = new List<double>();
-                Question q = new Question() { AnswerType = AnswerType.数値, AnswerType2 = AnswerType2.連続値, Key = "CQ_" + Title + "_" + item.Name, Text = "CQ標準化平均_" + Title + "_" + item.Name };
-                foreach (var line in this.Parent.Enqueite.AnswerLines)
+                var (question, data_list) = await Task<(Question, List<double>)>.Run(() =>
                 {
-                    var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
-                    if (v.Any())
+                    List<double> list = new List<double>();
+                    Question q = new Question() { AnswerType = AnswerType.数値, AnswerType2 = AnswerType2.連続値, Key = "CQ_" + Title + "_" + item.Name, Text = "CQ標準化平均_" + Title + "_" + item.Name };
+                    foreach (var line in this.Parent.Enqueite.AnswerLines)
                     {
-                        var v1 = v.Average();
-                        line.AddExtendColumn(q.Key, v1.ToString());
-                        list.Add(v1);
+                        var v = item.Items.Select(n => dic[n.Question].標準化(n.Question.GetValue(line).GetValue())).Where(n => double.IsNaN(n) == false);
+                        if (v.Any())
+                        {
+                            var v1 = v.Average();
+                            line.AddExtendColumn(q.Key, v1.ToString());
+                            list.Add(v1);
+                        }
                     }
-                }
-                ui.TaskStart(() => {
-                    this.Parent.Enqueite.QuestionManage.AddExtendQuestion( q);
-                    q.CreateQuestionAnswer(list);
+                    return (q, list);
                 });
+                this.Parent.Enqueite.QuestionManage.AddExtendQuestion(question);
+                question.CreateQuestionAnswer(data_list);
+
             }
         }
 
         public bool IsDrag { get; set; } = false;
-        //public RelayCommand<MouseEventArgs> OnMouseMoveCommand
-        //{
-        //    get
-        //    {
-        //        if (onMouseMoveCommand == null)
-        //        {
-        //            onMouseMoveCommand = new RelayCommand<MouseEventArgs>((n) => {
-        //                if (IsDrag && selectedClusterItem != null)
-        //                {
-        //                    selectedClusterItem.MouseMove(n.GetSafePosition(null));
-                            
-        //                }
-        //            });
-        //        }
-        //        return onMouseMoveCommand;
-        //    }
 
-        //}
         RelayCommand upMouseCommand;
         [Newtonsoft.Json.JsonIgnore]
         RelayCommand UpMouseCommand
@@ -820,8 +728,6 @@ namespace FukaboriCore.Model
                 return upMouseCommand;
             }
         }
-
-        //RelayCommand<MouseEventArgs> onMouseMoveCommand;
 
         internal void RightMove(QuestionCluster questionCluster)
         {
@@ -914,7 +820,6 @@ namespace FukaboriCore.Model
                 item.Init();
             }
         }
-
         
         public ObservableCollection<QuestionClusterItem> Items { get; set; } = new ObservableCollection<QuestionClusterItem>();
         [Newtonsoft.Json.JsonIgnore]
@@ -1011,8 +916,6 @@ namespace FukaboriCore.Model
                         }
                     });
                 }
-
-
                 return mouseEnterCommand;
             }
 

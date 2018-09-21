@@ -1,12 +1,14 @@
 <Application x:Class="FukaboriWpf.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:local="clr-namespace:FukaboriWpf" StartupUri="View/MainWindow.xaml" 
+             xmlns:MyConverter="clr-namespace:FukaboriWpf.Converter"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
     <Application.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:FukaboriWpf.ViewModel" />
+            <MyConverter:ColorTypeConverter x:Key="ColorTypeConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
