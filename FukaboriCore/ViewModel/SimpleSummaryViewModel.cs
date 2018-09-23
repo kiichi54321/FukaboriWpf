@@ -6,6 +6,9 @@ using System.Linq;
 using MyLib.UI;
 using System.Collections.ObjectModel;
 using FukaboriCore.Model;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
+using FukaboriCore.Service;
 
 namespace FukaboriCore.ViewModel
 {
@@ -13,14 +16,25 @@ namespace FukaboriCore.ViewModel
     {
         public SimpleSummaryViewModel()
         {
-            DataList = new System.Collections.ObjectModel.ObservableCollection<PropertyData>();
         }
-        public System.Collections.ObjectModel.ObservableCollection<PropertyData> DataList { get; set; }
-        bool avgSort = false;
-        bool stdSort = false;
-        bool nameSort = false;
 
-        
+        public List<PropertyData> DataList { get { return _DataList; } set { Set(ref _DataList, value); } }
+        private List<PropertyData> _DataList = default(List<PropertyData>);
+
+        private void Submit(IEnumerable<Question> questions)
+        {
+            DataList = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines).ToList();
+        }
+        #region Submit Command
+        /// <summary>
+        /// Gets the Submit.
+        /// </summary>
+        public RelayCommand<IEnumerable<Question>> SubmitCommand
+        {
+            get { return _SubmitCommand ?? (_SubmitCommand = new RelayCommand<IEnumerable<Question>>((n) => { Submit(n); })); }
+        }
+        private RelayCommand<IEnumerable<Question>> _SubmitCommand;
+        #endregion
 
         public void CreatePropertyData(IEnumerable<Question> question)
         {
@@ -54,74 +68,88 @@ namespace FukaboriCore.ViewModel
             return tsv.ToString();
         }
 
-        public void SortName()
+        bool sortFlag = true;
+
+        List<PropertyData> SortDataList<T>(Func<PropertyData, T> func)
         {
-            if (nameSort)
+            List<PropertyData> list;
+            if (sortFlag)
             {
-                var tmp = DataList.ToList();
-                DataList.Clear();
-                foreach (var item in tmp.OrderBy(n => n.Name))
-                {
-                    DataList.Add(item);
-                }
+                list = DataList.OrderBy(func).ToList();
             }
             else
             {
-                var tmp = DataList.ToList();
-                DataList.Clear();
-                foreach (var item in tmp.OrderByDescending(n => n.Name))
-                {
-                    DataList.Add(item);
-                }
+                list = DataList.OrderByDescending(func).ToList();
             }
-            nameSort = !nameSort;
+            sortFlag = !sortFlag;
+            return list;
         }
 
-        public void SortAvg()
+        private void NameSort()
         {
-            if (avgSort)
-            {
-                var tmp = DataList.ToList();
-                DataList.Clear();
-                foreach (var item in tmp.OrderBy(n => n.Average))
-                {
-                    DataList.Add(item);
-                }
-            }
-            else
-            {
-                var tmp = DataList.ToList();
-                DataList.Clear();
-                foreach (var item in tmp.OrderByDescending(n => n.Average))
-                {
-                    DataList.Add(item);
-                }
-            }
-            avgSort = !avgSort;
+            DataList = SortDataList(n => n.Name);
         }
+        #region NameSort Command
+        /// <summary>
+        /// Gets the NameSort.
+        /// </summary>
+        public RelayCommand NameSortCommand
+        {
+            get { return _NameSortCommand ?? (_NameSortCommand = new RelayCommand(() => { NameSort(); })); }
+        }
+        private RelayCommand _NameSortCommand;
+        #endregion
 
-        public void SortStd()
+        private void AvgSort()
         {
-            if (stdSort)
-            {
-                var tmp = DataList.ToList();
-                DataList.Clear();
-                foreach (var item in tmp.OrderBy(n => n.Std))
-                {
-                    DataList.Add(item);
-                }
-            }
-            else
-            {
-                var tmp = DataList.ToList();
-                DataList.Clear();
-                foreach (var item in tmp.OrderByDescending(n => n.Std))
-                {
-                    DataList.Add(item);
-                }
-            }
-            stdSort= !stdSort;
+            DataList = SortDataList(n => n.Average);
         }
+        #region AvgSort Command
+        /// <summary>
+        /// Gets the AvgSort.
+        /// </summary>
+        public RelayCommand AvgSortCommand
+        {
+            get { return _AvgSortCommand ?? (_AvgSortCommand = new RelayCommand(() => { AvgSort(); })); }
+        }
+        private RelayCommand _AvgSortCommand;
+        #endregion
+
+        private void StdSort()
+        {
+            DataList = SortDataList(n => n.Std);
+        }
+        #region StdSort Command
+        /// <summary>
+        /// Gets the StdSort.
+        /// </summary>
+        public RelayCommand StdSortCommand
+        {
+            get { return _StdSortCommand ?? (_StdSortCommand = new RelayCommand(() => { StdSort(); })); }
+        }
+        private RelayCommand _StdSortCommand;
+        #endregion
+
+        private void ClipTsv()
+        {
+            MyLib.IO.TsvBuilder tsvBuilder = new MyLib.IO.TsvBuilder();
+            foreach (var item in DataList)
+            {
+                item.ToTsv(tsvBuilder);
+                tsvBuilder.NextLine();
+            }
+            SimpleIoc.Default.GetInstance<ISetClipBoardService>().SetTextWithMessage(tsvBuilder.ToString());
+        }
+        #region ClipTsv Command
+        /// <summary>
+        /// Gets the ClipTsv.
+        /// </summary>
+        public RelayCommand ClipTsvCommand
+        {
+            get { return _ClipTsvCommand ?? (_ClipTsvCommand = new RelayCommand(() => { ClipTsv(); })); }
+        }
+        private RelayCommand _ClipTsvCommand;
+        #endregion
 
         public int ImageCount { get; set; }
     }

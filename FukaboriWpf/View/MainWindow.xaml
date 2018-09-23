@@ -53,6 +53,9 @@
                 <TabItem Header="データの調整">
                     <view:DataCoordinateView></view:DataCoordinateView>
                 </TabItem>
+                <TabItem Header="グループ化集計">
+                    <view:GroupSummaryView/>
+                </TabItem>
                 <TabItem Header="変数のクラスタリング">
                     <view:KeyClusteringView DataContext="{Binding Enqueite.KeyClastering,Mode=OneWay}"/>
                 </TabItem>

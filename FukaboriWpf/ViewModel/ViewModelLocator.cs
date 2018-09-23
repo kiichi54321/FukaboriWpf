@@ -45,10 +45,9 @@ namespace FukaboriWpf.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
-//            SimpleIoc.Default.Register<IEnqueite>(() => this.Main);
             SimpleIoc.Default.Register<SimpleSummaryViewModel>();
+            SimpleIoc.Default.Register<GroupQuestionSumViewModel>();
 
-            
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
@@ -56,6 +55,8 @@ namespace FukaboriWpf.ViewModel
         public Enqueite Enqueite => ServiceLocator.Current.GetInstance<MainViewModel>().Enqueite;
 
         public SimpleSummaryViewModel SimpleSummary => ServiceLocator.Current.GetInstance<SimpleSummaryViewModel>();
+
+        public GroupQuestionSumViewModel GroupQuestionSum => ServiceLocator.Current.GetInstance<GroupQuestionSumViewModel>();
 
         public KeyWordSummary KeyWordSummary => ServiceLocator.Current.GetInstance<KeyWordSummary>();
 

@@ -15,117 +15,115 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Height="300" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="400" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="250*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Height="300" Name="MainContorlPanel" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="250*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">
+                            クラスタリングに<LineBreak/> 使う変数
+                </TextBlock>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">
-                            クラスタリングに<LineBreak/> 使う変数
-                        </TextBlock>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"></RowDefinition>
-                                <RowDefinition Height="*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-                                    <ColumnDefinition Width="30"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBox Text="{Binding SearchText,Mode=TwoWay}" ></TextBox>
-                                <Button Content="Search" Grid.Column="1"  Command="{Binding SearchQuestionCommand}"></Button>
-                                <Button Content="All"  Grid.Column="2" Click="Button_Click_6"></Button>
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <ListBox myBehaviour:ListBoxBehaviour.SeletedItems="{Binding SelectedQuestion,Mode=TwoWay}" Name="KeyClusteringQuestionListBox"  SelectionMode="Multiple"  ItemsSource="{Binding QuestionList}" DisplayMemberPath="ViewText" Grid.Column="1">
-                                </ListBox>
-                            </Grid>
-                        </Grid>
-
-
+                        <TextBox Text="{Binding SearchText,Mode=TwoWay}" ></TextBox>
+                        <Button Content="Search" Grid.Column="1"  Command="{Binding SearchQuestionCommand}"></Button>
+                        <Button Content="All"  Grid.Column="2" Click="Button_Click_6"></Button>
                     </Grid>
-                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="クラスタ数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                            <TextBlock Text="{Binding  ElementName=clusterSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
-                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
-                            <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding ClusterNum,Mode=TwoWay}" Minimum="1" Maximum="20" Name="clusterSlider2" ></Slider>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="試行回数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                            <TextBlock Text="{Binding  ElementName=clusterTryCountSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
-                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
-                            <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding TryCount,Mode=TwoWay}" Minimum="1" Maximum="50" Name="clusterTryCountSlider2" ></Slider>
-                        </StackPanel>
-
-                <Button Content="作成開始"   Width="100" Height="40" HorizontalAlignment="Left" Command="{Binding RunCommand}" />
-                <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="接続数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                            <TextBlock Text="{Binding  ElementName=ConnectNumCountSlider,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
-                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
-                            <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding ConnectNum,Mode=TwoWay}" Minimum="1" Maximum="50" Name="ConnectNumCountSlider" ></Slider>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Clusterの幅:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                            <Slider Name="keyClusteringWidthSilder" Maximum="600" Minimum="20" Width="100" Value="150"></Slider>
-
-                        </StackPanel>
-                    </StackPanel>
-                    <Grid Grid.Column="3">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20"></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="作成したクラスタ"></TextBlock>
-                        <ListBox ItemsSource="{Binding Result}" SelectedItem="{Binding CurrentClusterResult,Mode=TwoWay}"  Grid.Row="1">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                            <ColumnDefinition Width="160"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Content="-" Command="{Binding DeleteCommand}"></Button>
-                                            <TextBlock Text="{Binding Title,Mode=TwoWay}" ></TextBlock>
-                                            <TextBlock Text="("></TextBlock>
-                                            <TextBlock Text="{Binding ClusterNum}"></TextBlock>
-                                            <TextBlock Text=")"></TextBlock>
-                                        </StackPanel>
-                                        <Grid Grid.Column="1">
-                                            <StackPanel Orientation="Horizontal">
-                                                <ComboBox ItemsSource="{Binding QuestionAddMethod}" SelectedItem="{Binding Selected質問追加の手法,Mode=TwoWay}" DisplayMemberPath="Name" Width="120"></ComboBox>
-                                                <Button Content="Add" Width="35" Command="{Binding AddQuestionCommand}"></Button>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
+                    <Grid Grid.Row="1">
+                        <ListBox myBehaviour:ListBoxBehaviour.SeletedItems="{Binding SelectedQuestion,Mode=TwoWay}" Name="KeyClusteringQuestionListBox"  SelectionMode="Multiple"  ItemsSource="{Binding QuestionList}" DisplayMemberPath="ViewText" Grid.Column="1">
                         </ListBox>
                     </Grid>
                 </Grid>
-         
-        <MyControl:ChangeVisibilityButton HorizontalAlignment="Right" VerticalAlignment="Top" Content="-" Width="20" Height="20" TargetElement="{Binding ElementName=hensuClusteringMainPanel}" ></MyControl:ChangeVisibilityButton>
+            </Grid>
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="クラスタ数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding  ElementName=clusterSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                    <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding ClusterNum,Mode=TwoWay}" Minimum="1" Maximum="20" Name="clusterSlider2" ></Slider>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="試行回数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding  ElementName=clusterTryCountSlider2,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                    <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding TryCount,Mode=TwoWay}" Minimum="1" Maximum="50" Name="clusterTryCountSlider2" ></Slider>
+                </StackPanel>
+
+                <Button Content="作成開始"   Width="100" Height="40" HorizontalAlignment="Left" Command="{Binding RunCommand}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="接続数:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding  ElementName=ConnectNumCountSlider,Path=Value, StringFormat=F0}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="20"></TextBlock>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center">個</TextBlock>
+                    <Slider Width="100" Height="30" HorizontalAlignment="Left" Value="{Binding ConnectNum,Mode=TwoWay}" Minimum="1" Maximum="50" Name="ConnectNumCountSlider" ></Slider>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Clusterの幅:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <Slider Name="keyClusteringWidthSilder" Maximum="600" Minimum="20" Width="100" Value="150"></Slider>
+
+                </StackPanel>
+            </StackPanel>
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="作成したクラスタ"></TextBlock>
+                <ListBox ItemsSource="{Binding Result}" SelectedItem="{Binding CurrentClusterResult,Mode=TwoWay}"  Grid.Row="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="160"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="-" Command="{Binding DeleteCommand}"></Button>
+                                    <TextBlock Text="{Binding Title,Mode=TwoWay}" ></TextBlock>
+                                    <TextBlock Text="("></TextBlock>
+                                    <TextBlock Text="{Binding ClusterNum}"></TextBlock>
+                                    <TextBlock Text=")"></TextBlock>
+                                </StackPanel>
+                                <Grid Grid.Column="1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding QuestionAddMethod}" SelectedItem="{Binding Selected質問追加の手法,Mode=TwoWay}" DisplayMemberPath="Name" Width="120"></ComboBox>
+                                        <Button Content="Add" Width="35" Command="{Binding AddQuestionCommand}"></Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Grid>
+        <MyControl:ChangeVisibilityButton HorizontalAlignment="Right" VerticalAlignment="Top" Content="-" Width="20" Height="20" TargetElement="{Binding ElementName=MainContorlPanel}" ></MyControl:ChangeVisibilityButton>
 
         <Grid Grid.Row="1" DataContext="{Binding CurrentClusterResult,Mode=TwoWay}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="24"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="クラスタリングの名前"></TextBlock>
                     <TextBox Text="{Binding Title,Mode=TwoWay}" Width="300"></TextBox>
                     <CheckBox IsChecked="{Binding CanMove,Mode=TwoWay}">移動可能</CheckBox>
+                    <Button Command="{Binding ResetColorCommand}">彩色をリセット</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=keyClusteringChangeVisibilityButton,Path= ReverseVisibilityState,Mode=TwoWay}">

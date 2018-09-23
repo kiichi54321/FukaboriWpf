@@ -9,7 +9,7 @@ using FukaboriCore.ViewModel;
 namespace FukaboriCore.Model
 {
 
-    public class GroupQuestionSum : System.ComponentModel.INotifyPropertyChanged
+    public class GroupQuestionSum : GalaSoft.MvvmLight.ObservableObject
     {
         public List<AnswerGroup> QuestionAnswerList { get; set; }
         public double Avg { get; set; }
@@ -73,43 +73,14 @@ namespace FukaboriCore.Model
                 AnswerCell.Add(new Cell() { Count = item.Value, 横Rate = item.Value * 100 / (double)this.Count });
             }
         }
-        bool visibility = true;
 
-        public bool Visibility
-        {
-            get
-            {
-                bool tmpVisibility = true;
-                if (Parent.MinCount > this.Count)
-                {
-                    tmpVisibility = false;
-                }
-                visibility = tmpVisibility;
-                return tmpVisibility;
-            }
-            set
-            {
-                if (visibility != value)
-                {
-                    visibility = value;
-                    OnPropertyChanged("Visiblity");
-                }
-            }
-        }
+        public bool Visibility { get { return _Visibility; } set { Set(ref _Visibility, value); } }
+        private bool _Visibility = default(bool);
 
         public bool CheckVisibility()
         {
-            bool tmpVisibility = true;
-            if (Parent.MinCount > this.Count)
-            {
-                tmpVisibility = false;
-            }
-            if (visibility != tmpVisibility)
-            {
-                OnPropertyChanged("Visiblity");
-                return true;
-            }
-            return false;
+            Visibility = Parent.MinCount < this.Count;
+            return Visibility;
         }
 
         public int Count { get { return data.Count; } }
@@ -117,6 +88,8 @@ namespace FukaboriCore.Model
 
         public void ToTsv(MyLib.IO.TsvBuilder tsv)
         {
+            if (Visibility == false) return;
+
             foreach (var item in this.QuestionAnswerList)
             {
                 tsv.Add(item.QuestionText, item.ViewText2);
@@ -135,19 +108,6 @@ namespace FukaboriCore.Model
 
             tsv.NextLine();
         }
-
-
-        #region INotifyPropertyChanged メンバー
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string text)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(text));
-            }
-        }
-        #endregion
     }
 
 }

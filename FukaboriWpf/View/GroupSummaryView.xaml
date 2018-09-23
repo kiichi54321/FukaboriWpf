@@ -3,25 +3,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mouse="clr-namespace:Lovatts.MouseBehaviours"
-             xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
-   xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
-    xmlns:tool="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit"
-      xmlns:toolInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-             xmlns:chart="clr-namespace:MySilverlightLibrary.DataVisualization;assembly=MySilverlightLibrary"
-             xmlns:command="clr-namespace:FukaboriWpf.Command"
- xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" 
-             xmlns:Behaviour="clr-namespace:FukaboriCore.Behaviour;assembly=FukaboriCore"
-    mc:Ignorable="d"
+    xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:myContorol="clr-namespace:FukaboriWpf.Control"
+             mc:Ignorable="d"
+             DataContext="{Binding GroupQuestionSum, Source={StaticResource Locator}}"
     d:DesignHeight="300" d:DesignWidth="800">
 
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid >
             <Grid.RowDefinitions>
-                <RowDefinition Height="44*" />
-                <RowDefinition Height="139*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" >
+            <Grid Grid.Row="0"  Height="300" Name="contorolPanle">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80" />
                     <ColumnDefinition Width="250" />
@@ -31,12 +25,12 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock   Text="グループ化変数" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="2"  Text="集計変数" VerticalAlignment="Center" />
-                <ListBox Grid.Column="1" Name="grouplistBox1"  SelectionMode="Multiple" ItemsSource="{Binding QuestionList}" DisplayMemberPath="ViewText"/>
-                <ListBox Grid.Column="3" Name="grouplistBox2"  ItemsSource="{Binding QuestionList}" SelectedItem="{Binding GroupKeyQuestion,Mode=TwoWay}" DisplayMemberPath="ViewText"/>
+                <ListBox Grid.Column="1" Name="grouplistBox1" SelectionMode="Multiple" ItemsSource="{Binding Main.Enqueite.QuestionList,Source={StaticResource Locator},Mode=OneWay}" DisplayMemberPath="ViewText"/>
+                <ListBox Grid.Column="3" Name="grouplistBox2"  ItemsSource="{Binding Main.Enqueite.QuestionList,Source={StaticResource Locator},Mode=OneWay}" SelectedItem="{Binding GroupKeyQuestion,Mode=TwoWay}" DisplayMemberPath="ViewText"/>
                 <StackPanel Grid.Column="4" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel>
-                            <Button Content="集計"  Name="groupbutton3"   Width="100" Height="30" HorizontalAlignment="Left" Command="{Binding SubmitCommand}" />
+                            <Button Content="集計"  Name="groupbutton3"   Width="100" Height="30" HorizontalAlignment="Left" CommandParameter="{Binding ElementName=grouplistBox1,Path=SelectedItems}" Command="{Binding SubmitCommand}" />
                             <Button Content="リセット" Width="100" Name="groupResetButton" Command="{Binding ResetCommand}"></Button>
                         </StackPanel>
                     </StackPanel>
@@ -49,12 +43,12 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="幅" Width="50"></TextBlock>
-                        <Slider Grid.Column="1" Width="200" Minimum="40" Maximum="400" Name="groupColWidth"></Slider>
+                        <Slider Grid.Column="1" Width="200" Minimum="40" Maximum="400" Value="160" Name="groupColWidth"></Slider>
                     </StackPanel>
 
                 </StackPanel>
             </Grid>
-
+            <myContorol:ChangeVisibilityButton TargetElement="{Binding ElementName= contorolPanle}" HorizontalAlignment="Right" Content="-" VerticalAlignment="Top" Width="20" Height="20" />
 
             <ContentControl Name="GroupCountSumViewControl" Grid.Row="1">
                 <Grid >
@@ -85,7 +79,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="Silver" BorderThickness="1" >
+                                            <Border BorderBrush="Silver" BorderThickness="1" Width="{Binding ElementName=groupColWidth,Path=Value,Mode=OneWay}">
                                                 <!--="{StaticResource ResourceKey=groupWidth}">-->
                                                 <TextBlock Text="{Binding ViewText}"></TextBlock>
                                             </Border>
@@ -127,7 +121,7 @@
                                     <ItemsControl Name="GroupingDataList" ItemsSource="{Binding DataList}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal" Visibility="{Binding Visibility,Mode=TwoWay}">
+                                                <StackPanel Orientation="Horizontal" Visibility="{Binding Visibility,Converter={StaticResource BoolToVisibility},Mode=TwoWay}">
                                                     <ItemsControl ItemsSource="{Binding QuestionAnswerList}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -136,7 +130,7 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border BorderBrush="Silver" BorderThickness="1" Width="150" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                                <Border BorderBrush="Silver" BorderThickness="1" Width="{Binding ElementName=groupColWidth,Path=Value,Mode=OneWay}" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                                     <TextBlock Text="{Binding ViewText2}"></TextBlock>
                                                                 </Border>
                                                             </DataTemplate>

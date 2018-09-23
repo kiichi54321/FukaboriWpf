@@ -25,7 +25,22 @@ namespace FukaboriCore.ViewModel
         public IList TargetQusetions { get { return _TargetQusetions; } set { Set(ref _TargetQusetions, value); } }
         private IList _TargetQusetions = default(IList);
 
-        public Question GroupKeyQuestion { get { return _GroupKeyQuestion; } set { Set(ref _GroupKeyQuestion, value); } }
+        public Question GroupKeyQuestion
+        {
+            get { return _GroupKeyQuestion; }
+            set { if( Set(ref _GroupKeyQuestion, value))
+                {
+                    if (GroupKeyQuestion != null)
+                    {
+                        TargetText = GroupKeyQuestion.ViewText;
+                    }
+                    else
+                    {
+                        TargetText = string.Empty;
+                    }
+                }
+            }
+        }
         private Question _GroupKeyQuestion = default(Question);
 
         private void Reset()
@@ -45,41 +60,24 @@ namespace FukaboriCore.ViewModel
         #endregion
 
 
-        private void Submit()
+        private void Submit(IList list)
         {
-            Create(GroupKeyQuestion, TargetQusetions.Cast<Question>(), Enqueite.Current.AnswerLines);
+            Create(GroupKeyQuestion, list.Cast<Question>(), Enqueite.Current.AnswerLines);
         }
         #region Submit Command
         /// <summary>
         /// Gets the Submit.
         /// </summary>
-        public RelayCommand SubmitCommand
+        public RelayCommand<IList> SubmitCommand
         {
-            get { return _SubmitCommand ?? (_SubmitCommand = new RelayCommand(() => { Submit(); })); }
+            get { return _SubmitCommand ?? (_SubmitCommand = new RelayCommand<IList>((n) => { Submit(n); })); }
         }
-        private RelayCommand _SubmitCommand;
+        private RelayCommand<IList> _SubmitCommand;
         #endregion
 
 
- 
-
-
-
-        public string TargetText
-        {
-            get
-            {
-                if (GroupKeyQuestion != null)
-                {
-                    return GroupKeyQuestion.ViewText;
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
-        }
-
+        public string TargetText { get { return _TargetText; } set { Set(ref _TargetText, value); } }
+        private string _TargetText = default(string);
 
         private void Clip()
         {
@@ -120,28 +118,42 @@ namespace FukaboriCore.ViewModel
 
         public void Sort(object obj)
         {
+            var list = DataList.ToList();
             if (obj is AnswerGroup)
             {
                 var answer = obj as AnswerGroup;
-                var list = DataList.ToList();
-                SortData(list.OrderByDescending(n => n.GetRate(answer)));
+                SortData(SortBy(list, n => n.GetRate(answer)));
             }
             else
             {
                 if (obj.ToString() == "平均")
                 {
-                    var list = DataList.ToList();
-                    SortData(list.OrderByDescending(n => n.Avg));
+                    SortData(SortBy(list, n => n.Avg));
                 }
                 else if (obj.ToString() == "分散")
                 {
-                    SortData(DataList.ToList().OrderByDescending(n => n.Std));
+                    SortData(SortBy(list, n => n.Std));
                 }
                 else if (obj.ToString() == "カウント")
                 {
-                    SortData(DataList.ToList().OrderByDescending(n => n.Count));
+                    SortData(SortBy(list, n => n.Count));
                 }
             }
+        }
+
+        bool sortFlag = true;
+        private IEnumerable<GroupQuestionSum> SortBy<T>(IEnumerable<GroupQuestionSum> list,System.Func<GroupQuestionSum,T> func )
+        {
+            if(sortFlag)
+            {
+                list = list.OrderBy(func);
+            }
+            else
+            {
+                list = list.OrderByDescending(func);
+            }
+            sortFlag = !sortFlag;
+            return list;
         }
 
         private void SortData(IEnumerable<GroupQuestionSum> list)
@@ -165,8 +177,7 @@ namespace FukaboriCore.ViewModel
                 TargetAnswer.Add(item);
             }
 
-
-            OnPropertyChanged("TargetText");
+            RaisePropertyChanged("TargetText");
             Dictionary<string, GroupQuestionSum> dic = new Dictionary<string, GroupQuestionSum>();
             List<double> targetValueList = new List<double>();
             foreach (var line in lines)
@@ -222,9 +233,9 @@ namespace FukaboriCore.ViewModel
             foreach (var item in dic.Values.OrderByDescending(n => n.Avg))
             {
                 item.偏差値 = avg.Get偏差値(item.Avg);
+                item.CheckVisibility();
                 DataList.Add(item);
             }
-
         }
         int minCount = 10;
         public int MinCount
@@ -246,33 +257,11 @@ namespace FukaboriCore.ViewModel
                     {
                         flag = item.CheckVisibility() || flag;
                     }
-                    if (flag)
-                    {
-                        var tmp = DataList.ToArray();
-                        DataList.Clear();
-                        foreach (var item in tmp)
-                        {
-                            DataList.Add(item);
-                        }
-                    }
-                    OnPropertyChanged("MinCount");
-                    OnPropertyChanged("DataList");
+                    RaisePropertyChanged("MinCount");
+                    RaisePropertyChanged("DataList");
                 }
             }
         }
-
-        #region INotifyPropertyChanged メンバー
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string text)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(text));
-            }
-        }
-        #endregion
-
 
     }
 

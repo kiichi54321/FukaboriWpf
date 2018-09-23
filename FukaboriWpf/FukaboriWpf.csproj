@@ -145,7 +145,6 @@
     <Compile Include="Converter\ColorTypeConverter.cs" />
     <Compile Include="State\State.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\SimpleSummaryViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\DataCoordinateView.xaml.cs">
       <DependentUpon>DataCoordinateView.xaml</DependentUpon>

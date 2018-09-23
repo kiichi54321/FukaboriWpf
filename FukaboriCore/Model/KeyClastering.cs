@@ -401,6 +401,26 @@ namespace FukaboriCore.Model
             }
         }
 
+
+        private void ResetColor()
+        {
+            foreach(var item in this.Clusters.SelectMany(n=>n.Items))
+            {
+                item.BackColor = ColorType.BackColor;
+            }
+        }
+        #region ResetColor Command
+        /// <summary>
+        /// Gets the ResetColor.
+        /// </summary>
+        public RelayCommand ResetColorCommand
+        {
+            get { return _ResetColorCommand ?? (_ResetColorCommand = new RelayCommand(() => { ResetColor(); })); }
+        }
+        private RelayCommand _ResetColorCommand;
+        #endregion
+
+
         internal QuestionClusterItem selectedClusterItem;
         internal void SetCurrntItem(QuestionClusterItem questionClusterItem)
         {

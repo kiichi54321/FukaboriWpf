@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:contorl="clr-namespace:FukaboriWpf.Control"
              xmlns:local="clr-namespace:FukaboriWpf.View"
+             xmlns:MyControl="clr-namespace:FukaboriWpf.Control"
              DataContext="{Binding SimpleSummary,Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -13,7 +14,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ContentControl  Visibility="{Binding IsChecked, ElementName=contorlToggleButton,Mode=OneWay,Converter={StaticResource  BoolToVisibility}}">
+        <ContentControl  Name="MainContorlPanel">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="変数の選択" VerticalAlignment="Center" Margin="5"></TextBlock>
                 <Border BorderBrush="Gray" BorderThickness="1">
@@ -26,7 +27,8 @@
                 </StackPanel>
             </StackPanel>
         </ContentControl>
-        <ToggleButton Name="contorlToggleButton" IsChecked="True" Content="-" Width="20" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right"></ToggleButton>
+        <MyControl:ChangeVisibilityButton HorizontalAlignment="Right" VerticalAlignment="Top" Content="-" Width="20" Height="20" TargetElement="{Binding ElementName=MainContorlPanel}" ></MyControl:ChangeVisibilityButton>
+
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" >
                 <StackPanel>
                     <StackPanel Margin="5">
