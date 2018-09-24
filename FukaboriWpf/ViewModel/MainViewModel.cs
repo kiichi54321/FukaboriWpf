@@ -43,10 +43,18 @@ namespace FukaboriWpf.ViewModel
 
         private async Task Save()
         {
-            await SimpleIoc.Default.GetInstance<IFileService>().Save("", ".fukabori", 
-                n => {
+            try
+            {
+                await SimpleIoc.Default.GetInstance<IFileService>().Save("", ".fukabori",
+                n =>
+                {
                     Enqueite.Save(n);
-                });            
+                });
+            }
+            catch (Exception ex)
+            {
+                SimpleIoc.Default.GetInstance<IShowMessageService>().Show("ファイルのセーブに失敗しました" + ex.Message);
+            }
         }
         #region Save Command
         /// <summary>
@@ -62,8 +70,15 @@ namespace FukaboriWpf.ViewModel
 
         private async Task Load()
         {
-            this.Enqueite = await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".fukabori",
-                n => Task.Run<Enqueite>(() => Enqueite.Load(n)));
+            try
+            {
+                this.Enqueite = await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".fukabori",
+                    n => Task.Run<Enqueite>(() => Enqueite.Load(n)));
+            }
+            catch(Exception ex)
+            {
+                SimpleIoc.Default.GetInstance<IShowMessageService>().Show("ファイルのロードに失敗しました。"+ex.Message);
+            }
             ChangeEnqueite?.Invoke(this, EventArgs.Empty);
         }
         #region Load Command
@@ -80,9 +95,16 @@ namespace FukaboriWpf.ViewModel
 
         private async Task LoadQuestions()
         {
-            await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".tsv",
+            try
+            {
+                await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".tsv",
                 n => Task.Run(() => Enqueite.QuestionLoad(new System.IO.StreamReader(n) )));
             ChangeEnqueite?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                SimpleIoc.Default.GetInstance<IShowMessageService>().Show("質問の読み込みに失敗しました。" + ex.Message);
+            }
         }
         #region LoadQuestions Command
         /// <summary>
@@ -98,9 +120,16 @@ namespace FukaboriWpf.ViewModel
 
         private async Task DataLoad()
         {
-            await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".tsv",
+            try
+            {
+                await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".tsv",
               n => Task.Run(() => Enqueite.DataLoad(new System.IO.StreamReader(n))));
-            ChangeEnqueite?.Invoke(this, EventArgs.Empty);
+                ChangeEnqueite?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                SimpleIoc.Default.GetInstance<IShowMessageService>().Show("回答の読み込みに失敗しました。" + ex.Message);
+            }
         }
         #region DataLoad Command
         /// <summary>

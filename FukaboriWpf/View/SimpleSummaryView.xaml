@@ -158,7 +158,6 @@
                                                         <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="60" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                             <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Margin="3">
                                                                 <TextBlock Text="{Binding TokkaRate,StringFormat=F3}" ></TextBlock>
-                                                                <TextBlock Text="%" ></TextBlock>
                                                             </StackPanel>
                                                         </Border>
                                                     </StackPanel>
