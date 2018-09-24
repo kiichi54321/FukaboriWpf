@@ -28,7 +28,6 @@ namespace FukaboriWpf.Control
             InitializeComponent();
             ListBox.SelectionChanged += ListBox_SelectionChanged;
             SearchTextBox.TextChanged += SearchTextBox_TextChanged;
-            this.DataContextChanged += QuestionListControl_DataContextChanged;
             this.Loaded += QuestionListControl_Loaded;
         }
 
@@ -42,14 +41,9 @@ namespace FukaboriWpf.Control
 
         private void QuestionListControl_ChangeEnqueite(object sender, EventArgs e)
         {
+            Enqueite.Current.PropertyChanged += QuestionListControl_PropertyChanged;
+            Enqueite.Current.QuestionListChanged += QuestionList_CollectionChanged;
             this.ListBox.ItemsSource = FilterQuestions(this.SearchTextBox.Text);
-        }
-
-        private void QuestionListControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            this.ListBox.ItemsSource = FilterQuestions(this.SearchTextBox.Text);
-            ((Enqueite)DataContext).PropertyChanged += QuestionListControl_PropertyChanged;
-            ((Enqueite)DataContext).QuestionListChanged += QuestionList_CollectionChanged;
         }
 
         private void QuestionList_CollectionChanged(object sender, EventArgs e)
@@ -95,9 +89,22 @@ namespace FukaboriWpf.Control
 
         // Using a DependencyProperty as the backing store for SelectedQuestion.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedQuestionProperty =
-            DependencyProperty.Register("SelectedQuestion", typeof(Question), typeof(QuestionListControl), new PropertyMetadata(null));
+            DependencyProperty.Register("SelectedQuestion", typeof(Question), typeof(QuestionListControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(SelectedQuestionChangedCallback)));
 
+        public static Question GetSelectedQuestion(DependencyObject dependencyObject)
+        {
+            return (Question)dependencyObject.GetValue(SelectedQuestionProperty);
+        }
 
+        public static void SetSelectedQuestion(DependencyObject dependencyObject,object obj)
+        {
+            dependencyObject.SetValue(SelectedQuestionProperty, obj);
+        }
+
+        private static void SelectedQuestionChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
 
         public IEnumerable<Question> SelectedQuestions
         {
@@ -107,13 +114,23 @@ namespace FukaboriWpf.Control
 
         // Using a DependencyProperty as the backing store for SelectedQuestions.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedQuestionsProperty =
-            DependencyProperty.Register("SelectedQuestions", typeof(IEnumerable<Question>), typeof(QuestionListControl), new PropertyMetadata(Enumerable.Empty<Question>()));
+            DependencyProperty.Register("SelectedQuestions", typeof(IEnumerable<Question>), typeof(QuestionListControl), new FrameworkPropertyMetadata(Enumerable.Empty<Question>(),new PropertyChangedCallback(SelectedQuestionsChangedCallback)));
+
+        public static IEnumerable<Question> GetSelectedQuestions(DependencyObject dependencyObject)
+        {
+            return (IEnumerable<Question>)dependencyObject.GetValue(SelectedQuestionsProperty);
+        }
 
 
+
+        private static void SelectedQuestionsChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
 
         IEnumerable<Question> QuestionList
         {
-            get { return ((Enqueite)DataContext).QuestionList; }
+            get { return SimpleIoc.Default.GetInstance<MainViewModel>()?.Enqueite.QuestionList; }
         }
 
         IEnumerable<Question> FilterQuestions(string searchText)

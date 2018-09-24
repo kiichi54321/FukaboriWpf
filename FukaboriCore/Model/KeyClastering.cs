@@ -8,6 +8,9 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
 using System.Runtime.Serialization;
+using GalaSoft.MvvmLight.Ioc;
+using FukaboriCore.Service;
+using Newtonsoft.Json;
 
 namespace FukaboriCore.Model
 {
@@ -801,6 +804,23 @@ namespace FukaboriCore.Model
             }
             return list3;
         }
+
+
+        private void Clip()
+        {
+            SimpleIoc.Default.GetInstance<ISetClipBoardService>().SetTextWithMessage(JsonConvert.SerializeObject(this.Clusters));
+        }
+        #region Clip Command
+        /// <summary>
+        /// Gets the Clip.
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public RelayCommand ClipCommand
+        {
+            get { return _ClipCommand ?? (_ClipCommand = new RelayCommand(() => { Clip(); })); }
+        }
+        private RelayCommand _ClipCommand;
+        #endregion
 
 
         public struct ClusterVec

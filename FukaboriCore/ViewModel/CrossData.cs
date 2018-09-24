@@ -4,33 +4,14 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using FukaboriCore.ViewModel;
 using FukaboriCore.Model;
+using GalaSoft.MvvmLight.Command;
 
 namespace FukaboriCore.ViewModel
 {
-    public class CrossDataStock
-    {
-        public List<CrossData> Data { get; set; }
 
-        public void Save(System.IO.Stream stream)
-        {
-            using (var writer = new System.IO.StreamWriter(stream))
-            {
-                writer.Write(JsonConvert.SerializeObject(this));
-            }
-        }
-        public static CrossDataStock Load(System.IO.Stream stream)
-        {
-            using (var reader = new System.IO.StreamReader(stream))
-            {
-                return JsonConvert.DeserializeObject<CrossDataStock>(reader.ReadToEnd());
-            }
-        }
-    }
 
-    
     public class CrossData:MyLib.Interface.ITsv
     {
         public Question 横Question { get; set; }
@@ -72,6 +53,23 @@ namespace FukaboriCore.ViewModel
 
             return tsv.ToString();
         }
+
+
+        private void Clip()
+        {
+            GalaSoft.MvvmLight.Ioc.SimpleIoc.Default.GetInstance<FukaboriCore.Service.ISetClipBoardService>().SetTextWithMessage(ToTsv());
+        }
+        #region Clip Command
+        /// <summary>
+        /// Gets the Clip.
+        /// </summary>
+        public RelayCommand ClipCommand
+        {
+            get { return _ClipCommand ?? (_ClipCommand = new RelayCommand(() => { Clip(); })); }
+        }
+        private RelayCommand _ClipCommand;
+        #endregion
+
 
         Dictionary<AnswerGroup, DataRow> dic = new Dictionary<AnswerGroup, DataRow>();
         
@@ -240,14 +238,11 @@ namespace FukaboriCore.ViewModel
          }
 
          bool visibility2 = true;
-
          public bool Visibility2
          {
              get { return visibility2; }
              set { visibility2 = value; }
          }
-        
-
 
         #region INotifyPropertyChanged メンバー
 

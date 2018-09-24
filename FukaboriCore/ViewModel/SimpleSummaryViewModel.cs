@@ -23,7 +23,21 @@ namespace FukaboriCore.ViewModel
 
         private void Submit(IEnumerable<Question> questions)
         {
-            DataList = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines).ToList();
+            if (TokkakeisuFlag)
+            {
+                var  target = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines);
+                var all = PropertyData.CreatePropertyData(questions, Enqueite.Current.AllAnswerLine);
+                var all_dic = all.SelectMany(n => n.KeyCountDic).ToDictionary(n => n.Key, n => n.Value);
+                foreach (var item in target.SelectMany(n=>n.KeyCountDic))
+                {
+                    item.Value.計算Tokka(all_dic[item.Key]);
+                }
+                DataList = target.ToList();
+            }
+            else
+            {
+                DataList = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines).ToList();
+            }
         }
         #region Submit Command
         /// <summary>
@@ -35,6 +49,9 @@ namespace FukaboriCore.ViewModel
         }
         private RelayCommand<IEnumerable<Question>> _SubmitCommand;
         #endregion
+
+        public bool TokkakeisuFlag { get { return _TokkakeisuFlag; } set { Set(ref _TokkakeisuFlag, value); } }
+        private bool _TokkakeisuFlag = false;
 
         public void CreatePropertyData(IEnumerable<Question> question)
         {

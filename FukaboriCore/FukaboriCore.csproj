@@ -88,6 +88,7 @@
     <Compile Include="Service\SetClipBoardService.cs" />
     <Compile Include="Service\ShowMessageService.cs" />
     <Compile Include="ViewModel\CrossData.cs" />
+    <Compile Include="ViewModel\CrossDataViewModel.cs" />
     <Compile Include="ViewModel\DataCoordinator.cs" />
     <Compile Include="ViewModel\DataMarge.cs" />
     <Compile Include="Model\Data\DataBase.cs" />

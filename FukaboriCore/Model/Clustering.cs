@@ -262,21 +262,14 @@ namespace FukaboriCore.Model
     
     public class PropertyData : MySilverlightLibrary.DataVisualization.IData
     {
-
-
-        
-        public string Name { get; set; }
-        
-        public double Average { get; set; }
-        
+        public string Name { get; set; }        
+        public double Average { get; set; }        
         public double Std { get; set; }
         Dictionary<AnswerGroup, KeyCount> keyCountDic = new Dictionary<AnswerGroup, KeyCount>();
         private Question question;
         public Question Question { get { return question; } set { SetQuestion(value); } }
         
         public double? MaxValue2 { get; set; }
-
-
 
         public string ImageUrl { get; set; }
         public IEnumerable<ImageData> ImageDataList
@@ -400,21 +393,6 @@ namespace FukaboriCore.Model
                 item.計算();
             }
 
-            //foreach (var item in question)
-            //{
-            //    PropertyData pd = new PropertyData() { Name = item.ViewText, Question = item };
-            //    pd.SetQuestion(item);
-            //    list.Add(pd);
-            //    foreach (var line in lines)
-            //    {
-            //        var a = item.GetValue(line);
-            //        if (a != null)
-            //        {
-            //            pd.Add(a);
-            //        }
-            //    }
-            //    pd.計算();
-            //}
             return list;
         }
 
@@ -486,16 +464,28 @@ namespace FukaboriCore.Model
     }
     
     public class KeyCount : MySilverlightLibrary.DataVisualization.IData
-    {
-        
-        public string Key { get; set; }
-        
-        public double Value { get; set; }
-        
-        public int Count { get; set; }
-        
+    {        
+        public string Key { get; set; }        
+        public double Value { get; set; }        
+        public int Count { get; set; }        
         public double Rate { get; set; }
 
+        public bool ExtendVisibility { get; set; } = false;
+
+        public int AllCount { get; set; }
+        public double AllRate { get; set; }
+        public double TokkaRate { get; set; }
+
+        public void 計算Tokka(KeyCount keyCount)
+        {
+            ExtendVisibility = true;
+            AllCount = keyCount.Count;
+            AllRate = keyCount.Rate;
+            if (AllRate > 0)
+            {
+                TokkaRate = Rate / AllRate;
+            }
+        }
 
         #region IData メンバー
 

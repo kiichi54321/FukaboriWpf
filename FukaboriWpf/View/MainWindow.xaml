@@ -9,7 +9,7 @@
         xmlns:media="clr-namespace:System.Media;assembly=System"
         mc:Ignorable="d"
         DataContext="{Binding Main,Source={StaticResource Locator}}"
-        Title="MainWindow" Height="650" Width="1025" >
+        Title="ふかぼりくん" Height="650" Width="1025" >
     <Grid>
         <Grid x:Name="LayoutRoot" Background="White">
             <Grid.ColumnDefinitions>
@@ -52,6 +52,9 @@
                 </TabItem>
                 <TabItem Header="データの調整">
                     <view:DataCoordinateView></view:DataCoordinateView>
+                </TabItem>
+                <TabItem Header="クロス集計">
+                    <view:CrossTableView></view:CrossTableView>
                 </TabItem>
                 <TabItem Header="グループ化集計">
                     <view:GroupSummaryView/>

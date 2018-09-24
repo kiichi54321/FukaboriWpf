@@ -22,6 +22,7 @@
                 </Border>
                 <StackPanel VerticalAlignment="Center" Margin="5">
                     <Button Content="作成" Height="30" Width="200" CommandParameter="{Binding ElementName=questionListControl,Path=SelectedQuestions}" Command="{Binding SubmitCommand}"></Button>
+                    <CheckBox IsChecked="{Binding TokkakeisuFlag,Mode=TwoWay}" Margin="3">特化係数を出す</CheckBox>
                     <TextBlock Text="表示幅"></TextBlock>
                     <Slider Name="simpleSumNameSilder" Maximum="400" Minimum="20" Value="130"></Slider>
                 </StackPanel>
@@ -42,7 +43,7 @@
                             <Border Width="50" BorderBrush="Black" BorderThickness="1">
                             <Button Content="分散" Name="分散ソートボタン" Command="{Binding StdSortCommand}"></Button>
                             </Border>
-                            <Border Width="100" Visibility="{Binding ImageVisibility}">
+                            <Border Width="100" Visibility="{Binding ImageVisibility,Converter={StaticResource BoolToVisibility}}">
                                 <TextBlock Text="Image" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                             </Border>
                         </StackPanel>
@@ -143,6 +144,24 @@
                                                             <TextBlock Text="%" ></TextBlock>
                                                         </StackPanel>
                                                     </Border>
+                                                    <StackPanel Orientation="Horizontal" Visibility="{Binding ExtendVisibility,Converter={StaticResource BoolToVisibility}}">
+                                                        <Border Width="5"></Border>
+                                                        <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="60" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                            <TextBlock Text="{Binding AllCount}"  Margin="3" HorizontalAlignment="Right" Foreground="Silver"></TextBlock>
+                                                        </Border>
+                                                        <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="60" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Margin="3" >
+                                                                <TextBlock Text="{Binding AllRate,StringFormat=F2}" Foreground="Silver"></TextBlock>
+                                                                <TextBlock Text="%"  Foreground="Silver"></TextBlock>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Border BorderThickness="1" Background="White" BorderBrush="Black" Width="60" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Margin="3">
+                                                                <TextBlock Text="{Binding TokkaRate,StringFormat=F3}" ></TextBlock>
+                                                                <TextBlock Text="%" ></TextBlock>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
 
 
                                                 </StackPanel>
