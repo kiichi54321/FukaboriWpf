@@ -1,13 +1,9 @@
----
-name: Bug report
-about: Create a report to help us improve
-
----
-
 **バグの内容**
+
 A clear and concise description of what the bug is.
 
 **バグ再現の手順**
+
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
