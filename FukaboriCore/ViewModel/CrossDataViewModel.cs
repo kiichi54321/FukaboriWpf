@@ -29,6 +29,11 @@ namespace FukaboriCore.ViewModel
         public Question SelectedQuestion_1 { get { return _SelectedQuestion_1; } set { Set(ref _SelectedQuestion_1, value); } }
         private Question _SelectedQuestion_1 = null;
 
+
+        public QuestionList SelectedQuestions_2 { get { return _SelectedQuestions_2; } set { Set(ref _SelectedQuestions_2, value); } }
+        private QuestionList _SelectedQuestions_2 = new QuestionList();
+
+
         public void Submit(Question question,IEnumerable<Question> questions)
         {
             List<CrossData> list = new List<CrossData>();

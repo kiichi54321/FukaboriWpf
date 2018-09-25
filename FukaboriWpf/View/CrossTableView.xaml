@@ -23,11 +23,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock  Name="textBlock2" Text="グループ化変数" VerticalAlignment="Center" />
             <TextBlock Grid.Column="2" Name="textBlock3" Text="対象変数" VerticalAlignment="Center" />
-            <MyControl:QuestionListControl Grid.Column="1" x:Name="SelectedQuestionsList1" SelectedQuestion="{Binding SelectedQuestion_1,Mode=OneWay}"></MyControl:QuestionListControl>
-            <MyControl:QuestionListControl Grid.Column="3" x:Name="SelectedQuestionsList2" SelectionMode="Multiple" SelectedQuestion="{Binding SelectedQuestions_2,Mode=OneWay}"></MyControl:QuestionListControl>
+            <MyControl:QuestionListControl Grid.Column="1" x:Name="SelectedQuestionsList1" SelectedQuestion="{Binding SelectedQuestion_1,Mode=TwoWay}"></MyControl:QuestionListControl>
+            <MyControl:QuestionListControl Grid.Column="3" x:Name="SelectedQuestionsList2" SelectionMode="Multiple" SelectedQuestionList="{Binding SelectedQuestions_2,Mode=TwoWay}"></MyControl:QuestionListControl>
             <StackPanel Grid.Column="4" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="作成"  Name="button3"  Click="button3_Click" CommandParameter="{Binding ElementName=SelectedQuestionsList,Path=SelectedQuestions}"  Width="100" Height="40" HorizontalAlignment="Left" />
+                    <Button Content="作成"  Name="button3"  Click="button3_Click" CommandParameter="{Binding ElementName=SelectedQuestionsList2,Path=SelectedQuestionList}"  Width="100" Height="40" HorizontalAlignment="Left" />
                 </StackPanel>
                 <Button Content="カイ二乗値でソート" Width="135" HorizontalAlignment="Left" Name="カイ二乗値Button" Command="{Binding カイ二乗SortCommand}"></Button>
                 <Button Content="リセット" Width="135" HorizontalAlignment="Left"  Name="crossTableResetButton" Click="crossTableResetButton_Click"></Button>

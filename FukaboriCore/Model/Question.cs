@@ -834,6 +834,23 @@ namespace FukaboriCore.Model
         }
     }
 
+    /// <summary>
+    /// QuestionListコントロール用の入れ物
+    /// </summary>
+    public class QuestionList : List<Question>
+    {
+        public QuestionList()
+            :base()
+        {
+
+        }
+        public QuestionList(IEnumerable<Question> enumerable)
+            :base()
+        {
+            this.AddRange(enumerable);
+        }
+    }
+
     public class QuestionChangeMessage: MessageBase
     {
     }

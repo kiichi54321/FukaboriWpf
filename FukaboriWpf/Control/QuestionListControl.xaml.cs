@@ -72,7 +72,7 @@ namespace FukaboriWpf.Control
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.SelectedQuestion = (Question)ListBox.SelectedItem;
-            this.SelectedQuestions = ListBox.SelectedItems.Cast<Question>();
+            this.SelectedQuestionList = new QuestionList( ListBox.SelectedItems.Cast<Question>());
         }
 
         public SelectionMode SelectionMode
@@ -106,21 +106,25 @@ namespace FukaboriWpf.Control
             
         }
 
-        public IEnumerable<Question> SelectedQuestions
+        public QuestionList SelectedQuestionList
         {
-            get { return (IEnumerable<Question>)GetValue(SelectedQuestionsProperty); }
-            set { SetValue(SelectedQuestionsProperty, value); }
+            get { return (QuestionList)GetValue(SelectedQuestionListProperty); }
+            set { SetValue(SelectedQuestionListProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for SelectedQuestions.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedQuestionsProperty =
-            DependencyProperty.Register("SelectedQuestions", typeof(IEnumerable<Question>), typeof(QuestionListControl), new FrameworkPropertyMetadata(Enumerable.Empty<Question>(),new PropertyChangedCallback(SelectedQuestionsChangedCallback)));
+        public static readonly DependencyProperty SelectedQuestionListProperty =
+            DependencyProperty.Register("SelectedQuestionList", typeof(QuestionList), typeof(QuestionListControl), new FrameworkPropertyMetadata(new PropertyChangedCallback(SelectedQuestionsChangedCallback)));
 
-        public static IEnumerable<Question> GetSelectedQuestions(DependencyObject dependencyObject)
+        public static IEnumerable<Question> GetSelectedQuestionList(DependencyObject dependencyObject)
         {
-            return (IEnumerable<Question>)dependencyObject.GetValue(SelectedQuestionsProperty);
+            return (IEnumerable<Question>)dependencyObject.GetValue(SelectedQuestionListProperty);
         }
 
+        public static void SetSelectedQuestionList(DependencyObject dependencyObject,object value)
+        {
+            dependencyObject.SetValue(SelectedQuestionListProperty, value);
+        }
 
 
         private static void SelectedQuestionsChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)

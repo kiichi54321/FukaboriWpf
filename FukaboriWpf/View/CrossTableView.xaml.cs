@@ -48,7 +48,7 @@ namespace FukaboriWpf.View
         private void button3_Click(object sender, RoutedEventArgs e)
         {
             var CrossDataViewModel =(FukaboriCore.ViewModel.CrossDataViewModel)this.DataContext;
-            CrossDataViewModel.Submit(SelectedQuestionsList1.SelectedQuestion, SelectedQuestionsList2.SelectedQuestions);
+            CrossDataViewModel.Submit(SelectedQuestionsList1.SelectedQuestion, SelectedQuestionsList2.SelectedQuestionList);
         }
     }
 }
