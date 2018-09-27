@@ -105,6 +105,7 @@ namespace FukaboriCore.Model
     
         public ObservableCollection<QuestionClusterManage> Result { get; set; } = new ObservableCollection<QuestionClusterManage>();
         QuestionClusterManage currentClusterResult = new QuestionClusterManage();
+        [Newtonsoft.Json.JsonIgnore]
         public QuestionClusterManage CurrentClusterResult
         {
             get
@@ -1044,7 +1045,9 @@ namespace FukaboriCore.Model
         public Question Question { get; set; }
         
         public double[] Vector { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public QuestionCluster Cluster { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public QuestionClusterManage Manage { get; set; }
         
         public KeyClusteringData Data { get; set; }
