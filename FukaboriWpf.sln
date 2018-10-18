@@ -9,6 +9,28 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FukaboriCore", "FukaboriCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{EDBD6397-709E-4C2D-A8C2-8925B9159971}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FukaboriWeb", "FukaboriWeb\", "{7F4F0924-7D5C-49DB-96CD-5C2871F211BD}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52706"
+		Debug.AspNetCompiler.PhysicalPath = "FukaboriWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52706\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52706"
+		Release.AspNetCompiler.PhysicalPath = "FukaboriWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52706\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52706"
+		SlnRelativePath = "FukaboriWeb\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +49,10 @@ Global
 		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDBD6397-709E-4C2D-A8C2-8925B9159971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F4F0924-7D5C-49DB-96CD-5C2871F211BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F4F0924-7D5C-49DB-96CD-5C2871F211BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F4F0924-7D5C-49DB-96CD-5C2871F211BD}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F4F0924-7D5C-49DB-96CD-5C2871F211BD}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
