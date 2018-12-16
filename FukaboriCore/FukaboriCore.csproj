@@ -93,6 +93,7 @@
     <Compile Include="ViewModel\DataMarge.cs" />
     <Compile Include="Model\Data\DataBase.cs" />
     <Compile Include="Model\Enqueite.cs" />
+    <Compile Include="ViewModel\DataOutputViewModel.cs" />
     <Compile Include="ViewModel\GroupQuestionSum.cs" />
     <Compile Include="Model\KeyClastering.cs" />
     <Compile Include="Model\KeyWordSummary.cs" />

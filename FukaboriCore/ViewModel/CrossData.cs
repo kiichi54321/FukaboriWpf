@@ -24,8 +24,8 @@ namespace FukaboriCore.ViewModel
 
         public double 自由度 { get; set; }
 
-        public string QuestionText { get; set; }
-        public string QuestionText2 { get { return this.縦Question.ViewText; } }
+        public string QuestionText => this.横Question.ViewText;
+        public string QuestionText2 => this.縦Question.ViewText;
         public List<string> AnswerText
         {
             get
@@ -41,6 +41,8 @@ namespace FukaboriCore.ViewModel
 
             }
         }
+
+        public int AllCount => this.RowDic.SelectMany(n => n.Value.Cells).Sum(n => n.Count);
 
         public string ToTsv()
         {
@@ -98,18 +100,18 @@ namespace FukaboriCore.ViewModel
 
             foreach (var item in lines)
             {
-                var targetValue = 横Question.GetValue(item);
-                var groupValue = 縦Question.GetValue(item);
-                if (targetValue != null && groupValue != null)
+                foreach (var targetValue in 横Question.GetValueList(item))
                 {
-                    AddCount(groupValue, targetValue);
+                    foreach (var groupValue in 縦Question.GetValueList(item))
+                    {
+                        AddCount(groupValue, targetValue);
+                    }
                 }
             }
             this.計算();
         }
 
-        
-
+        MyLib.Statistics.Correlation correlation = new MyLib.Statistics.Correlation();
 
         public void AddCount(AnswerGroup group, AnswerGroup target)
         {
@@ -117,16 +119,26 @@ namespace FukaboriCore.ViewModel
             {
                 dic[group].Add(target);
             }
-            //double g, t;
-            //if (double.TryParse(group, out g) && double.TryParse(target, out t))
-            {
-                correlation.Add(group.Value, target.Value);
-            }
-
+            correlation.Add(group.Value, target.Value);
         }
 
-        MyLib.Statistics.Correlation correlation = new MyLib.Statistics.Correlation();
+        public void Compare(CrossData targetCrossData)
+        {
+            var self_all_count = (double)this.AllCount;
+            var target_all_count = (double)targetCrossData.AllCount;
+            foreach (var item in this.RowDic)
+            {
+                var targetRow = targetCrossData.RowDic[item.Key];
 
+                foreach (var (self,target) in item.Value.Cells.Zip(targetRow.Cells, (n,m)=> ( n,m )))
+                {
+                    if (target.Count > 0)
+                    {
+                        self.特化係数 = (self.Count/ (double)self_all_count) / (target.Count/ (double)target_all_count);
+                    }
+                }
+            }
+        }
 
         public void 計算()
         {
@@ -149,14 +161,6 @@ namespace FukaboriCore.ViewModel
                 }
                 sumList.Add(sum);
             }
-
-            //for (int l = 0; l < Rows.Count; l++)
-            //{
-            //    for (int i = 0; i < AnswerText.Count; i++)
-            //    {
-            //        Rows[l].Cells[i].縦Rate = Rows[l].Cells[i].Count / (double)sumList[i];
-            //    }
-            //}
 
             List<List<double>> matrix = new List<List<double>>();
             foreach (var item in Rows)
@@ -181,10 +185,7 @@ namespace FukaboriCore.ViewModel
                 dic.Add(item, sumList[c]);
                 c++;
             }
-            //if (this.横Question.Reverse)
-            //{
-            //    sumList = sumList.ToArray().Reverse().ToList();
-            //}
+
             SumRow.計算2(dic);
             foreach (var item in SumRow.Cells)
             {
@@ -209,6 +210,8 @@ namespace FukaboriCore.ViewModel
         public double 特化係数 { get; set; }
         
         public string ValueText { get; set; }
+
+        public bool Visibility特化係数 => this.特化係数 > 0;
 
         ColorType bgColor = ColorType.BackColor;
          
@@ -318,11 +321,6 @@ namespace FukaboriCore.ViewModel
             Std = Math.Sqrt(std / sum);
 
             Cells = new List<Cell>();
-
-            //if (this.Parent.横Question.Reverse)
-            //{
-            //    list = list.Reverse();
-            //}
 
             foreach (var item in dic)
             {

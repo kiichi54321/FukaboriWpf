@@ -150,6 +150,12 @@ namespace FukaboriWpf.Control
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SearchTextBox.Text = "";
+            ListBox.UnselectAll();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ListBox.SelectAll();
         }
     }
 }

@@ -20,22 +20,16 @@ namespace FukaboriCore.Model
         }
     }
 
-
-    
     public class AnswerGroup : QuestionAnswer
-    {
-        
+    {        
         public System.Collections.ObjectModel.ObservableCollection<QuestionAnswer> Answeres { get; set; }
-
         private bool isActive = true;
-
         
         public bool IsActive
         {
             get { return isActive; }
             set { isActive = value; }
         }
-
 
         public AnswerGroup()
         { }
@@ -69,14 +63,30 @@ namespace FukaboriCore.Model
             {
                 return false;
             }
-            var answer = this.Question.GetOriginalValue(val);
-            if (Answeres.Any(n => n.TextValue == answer.TextValue))
+
+            if (this.AnswerType == AnswerType.タグ)
             {
-                return true;
+                foreach(var item in val.Split(',').Select(n=>n.Trim()))
+                {
+                    var answer = this.Question.GetOriginalValue(val);
+                    if (Answeres.Any(n => n.TextValue == answer.TextValue))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
             else
             {
-                return false;
+                var answer = this.Question.GetOriginalValue(val);
+                if (Answeres.Any(n => n.TextValue == answer.TextValue))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 

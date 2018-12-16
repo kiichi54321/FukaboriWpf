@@ -48,7 +48,15 @@ namespace FukaboriCore.Model
                 answer = value;
             }
         }
-        public string ViewText { get { return Key + ":" + Text; } }
+
+        public string ViewText
+        {
+            get
+            {
+                if (Key == Text) return Key;
+                return Key + ":" + Text;
+            }
+        }
         private string type = string.Empty;
         
         public string Type
@@ -88,6 +96,11 @@ namespace FukaboriCore.Model
             else if (type == "ラベル")
             {
                 AnswerType = AnswerType.ラベル;
+                AnswerType2 = AnswerType2.離散;
+            }
+            else if (type == "タグ")
+            {
+                AnswerType = AnswerType.タグ;
                 AnswerType2 = AnswerType2.離散;
             }
             else
@@ -155,14 +168,6 @@ namespace FukaboriCore.Model
             }
         }
 
-        //bool reverse = false;
-        // 
-        //public bool Reverse
-        //{
-        //    get { return reverse; }
-        //    set { reverse = value; }
-        //}
-
         System.Collections.ObjectModel.ObservableCollection<AnswerGroup> answerGroup = new System.Collections.ObjectModel.ObservableCollection<AnswerGroup>();
         
         public System.Collections.ObjectModel.ObservableCollection<AnswerGroup> AnswerGroup
@@ -180,6 +185,10 @@ namespace FukaboriCore.Model
             }
         }
 
+        /// <summary>
+        /// データから質問を生成する（数値用）
+        /// </summary>
+        /// <param name="list2"></param>
         public void CreateQuestionAnswer(IEnumerable<double> list2)
         {
             int order = 1;
@@ -211,12 +220,40 @@ namespace FukaboriCore.Model
                 }
             }
         }
-        
 
+        public void CreateQuestionAnswer(IEnumerable<string> list2)
+        {
+            int order = 1;
+            Dictionary<string, AnswerGroup> dic = new Dictionary<string, AnswerGroup>();
+            foreach (var item in list2.GroupBy(n=>n).ToDictionary(n=>n.Key,n=>n.Count()).OrderByDescending(n=>n.Value).Select(n=>n.Key))
+            {
+                var qa = new QuestionAnswer()
+                {
+                    AnswerType = this.AnswerType,
+                    AnswerType2 = this.AnswerType2,
+                    Question = this,
+                    TextValue = item.ToString()
+                };
+                var key = item;
+                if (dic.ContainsKey(key))
+                {
+                    dic[key].Add(qa);
+                }
+                else
+                {
+                    var g = new AnswerGroup(qa);
+                    g.TextValue = key;
+                    g.Order = order;
+                    g.Value = order;
+                    this.AnswerGroup.Add(g);
+                    dic.Add(key, g);
+                    order++;
+                }
+            }
+        }
 
         public void CreateQuestionAnswer(IEnumerable<MyLib.IO.TSVLine> lines)
         {
-
             List<string> list = new List<string>();
             foreach (var item in lines)
             {
@@ -232,122 +269,6 @@ namespace FukaboriCore.Model
                 }
             }
             CreateQuestionAnswer(list2); 
-
-        //    int order = 1;
-        ////    if (this.Answers == null || this.Answers.Count == 0)
-        //    {
-        //        Dictionary<string, AnswerGroup> dic = new Dictionary<string, Model.AnswerGroup>();
-        //        foreach (var item in list2.OrderBy(n => n))
-        //        {
-        //            var qa = new QuestionAnswer()
-        //            {
-        //                AnswerType = this.AnswerType,
-        //                AnswerType2 = this.AnswerType2,
-        //                Value = item,
-        //                Question = this,
-        //                TextValue = item.ToString()
-        //            };
-        //            var key = item.ToString("F1");
-        //            if (dic.ContainsKey(key))
-        //            {
-        //                dic[key].Add(qa);
-        //            }
-        //            else
-        //            {
-        //                var g = new AnswerGroup(qa);
-        //                g.TextValue = key;
-        //                g.Order = order;
-        //                g.Value = double.Parse(key);
-        //                this.AnswerGroup.Add(g);
-        //                dic.Add(key, g);
-        //                order++;
-        //            }
-        //        }
-        //    }
-            //else
-            //{
-            //    Dictionary<Between, AnswerGroup> dic2 = new Dictionary<Between, Model.AnswerGroup>();
-            //    List<double> list3 = new List<double>();
-            //    foreach (var item in this.Answers)
-            //    {
-            //        double v;
-            //        if (double.TryParse(item.Split(':').First(), out v))
-            //        {
-            //            list3.Add(v);
-
-            //        }
-            //    }
-            //    double tmp = list3.OrderBy(n => n).First();
-            //    dic2.Add(new Between() { End = tmp }, new AnswerGroup()
-            //    {
-            //        AnswerType = this.AnswerType,
-            //        AnswerType2 = this.AnswerType2,
-            //        Question = this,
-            //        Value = tmp,
-            //        TextValue = tmp +"未満",
-            //        Order = order
-            //    });
-            //    order++;
-            //    foreach (var item in list3.OrderBy(n => n).Skip(1))
-            //    {
-            //        {
-            //            dic2.Add(new Between() { Start = tmp, End = item }, new AnswerGroup()
-            //            {
-            //                AnswerType = this.AnswerType,
-            //                AnswerType2 = this.AnswerType2,
-            //                Question = this,
-            //                Value = tmp,
-            //                TextValue = tmp.ToString()+"以上"+ item.ToString()+"未満",
-            //                Order = order
-            //            });
-            //        }
-            //        tmp = item;
-            //        order++;
-            //    }
-            //    tmp =  list3.OrderBy(n=>n).Last();
-            //    dic2.Add(new Between() { Start =  tmp}, new AnswerGroup()
-            //    {
-            //        AnswerType = this.AnswerType,
-            //        AnswerType2 = this.AnswerType2,
-            //        Question = this,
-            //        Value = tmp,
-            //        TextValue = tmp + "以上",
-            //        Order = order
-            //    });
-            //    tmp = list3.OrderBy(n => n).First();
-            //    foreach (var item in dic2)
-            //    {
-            //        this.AnswerGroup.Add(item.Value);
-            //    }
-
-            //    foreach (var item in list2.OrderBy(n => n))
-            //    {
-            //        var qa = new QuestionAnswer()
-            //        {
-            //            AnswerType = this.AnswerType,
-            //            AnswerType2 = this.AnswerType2,
-            //            Value = item,
-            //            Question = this,
-            //            TextValue = item.ToString()
-            //        };
-            //        foreach (var item3 in dic2)
-            //        {
-            //            if (item3.Key.Check(item))
-            //            {
-            //                item3.Value.Add(qa);
-            //                break;
-            //            }
-            //        }
-            //    }
-            //    if (dic2.First().Value.Answeres.Count == 0)
-            //    {
-            //        this.AnswerGroup.Remove(dic2.First().Value);
-            //    }
-            //    if (dic2.Last().Value.Answeres.Count == 0)
-            //    {
-            //        this.AnswerGroup.Remove(dic2.Last().Value);
-            //    }
-            //}
         }
 
         public class Between
@@ -448,21 +369,13 @@ namespace FukaboriCore.Model
                     }
                 }
             }
-            if (AnswerType == AnswerType.ラベル)
+            if (AnswerType == AnswerType.ラベル || AnswerType == AnswerType.タグ)
             {
                 qa.TextValue = value;
                 qa.Value = double.NaN;
                 return qa;
             }
-            //if (AnswerType == Model.AnswerType.離散 || AnswerType == Model.AnswerType.順序)
-            //{
-
-
-            //}
-            //else 
             return qa;
-
-
         }
 
         List<QuestionAnswer> GetOriginalValue()
@@ -505,8 +418,6 @@ namespace FukaboriCore.Model
                         {
                             qa.Value = int.Parse(d[0]);
                             qa.GroupValue = int.Parse(d[2]);
-                            //qa.Value = int.Parse(d[0]);
-                            //qa.OrignalValue = int.Parse(d[2]);
                         }
                         else
                         {
@@ -542,6 +453,19 @@ namespace FukaboriCore.Model
         {
             return GetAnswerGroup(line.GetValue(this.Key, null));
         }
+
+        public IEnumerable<AnswerGroup> GetValueList(MyLib.IO.TSVLine line)
+        {
+            foreach(var item in line.GetValue(this.Key, "").Split(',').Select(n=>n.Trim()))
+            {
+                var group = GetAnswerGroup(item);
+                if(group != null)
+                {
+                    yield return group;
+                }
+            }
+        }
+
 
         public void Init()
         {
@@ -723,7 +647,7 @@ namespace FukaboriCore.Model
 
     public enum AnswerType
     {
-        離散, 順序, 数値, 文字列, 不明,ラベル
+        離散, 順序, 数値, 文字列, 不明, ラベル, タグ
     }
     public enum AnswerType2
     {

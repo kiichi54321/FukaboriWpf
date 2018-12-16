@@ -65,6 +65,65 @@ namespace FukaboriCore.Model
             {
                 item.CreateQuestionAnswer(dataFile.Lines);
             }
+
+            if(QuestionList.Any()==false)
+            {
+                GenereteQuestions(dataFile);
+            }
+        }
+
+        /// <summary>
+        /// データの内容から、質問を組み立てる。
+        /// </summary>
+        /// <param name="fileBase"></param>
+        public void GenereteQuestions(MyLib.IO.TSVFileBase fileBase)
+        {
+            foreach (var header in dataFile.Header)
+            {
+                var list = dataFile.Lines.Select(n => n.GetValue(header)).Where(n=>n.Length > 0);
+                var count = list.Count();
+                var doubleCount = list.Where(n =>  double.TryParse(n, out var value)).Count();
+
+                if (count == doubleCount && doubleCount > 0)
+                {
+                    var q = new Question()
+                    {
+                        AnswerType = AnswerType.数値,
+                        AnswerType2 = AnswerType2.連続値,
+                        Key = header,
+                        Text = header
+                    };
+                    q.CreateQuestionAnswer(list.Select(n => double.Parse(n)));
+                    QuestionManage.Add(header, q);
+                    continue;
+                }
+                var tsvCount = list.Where(n => n.Split(',').Length > 1).Count();
+                if (tsvCount > 0)
+                {
+                    var q = new Question()
+                    {
+                        AnswerType = AnswerType.タグ,
+                        AnswerType2 = AnswerType2.離散,
+                        Key = header,
+                        Text = header
+                    };
+                    q.CreateQuestionAnswer(list.SelectMany(n => n.Split(',').Select(m=>m.Trim())));
+                    QuestionManage.Add(header, q);
+                    continue;
+                }
+                else
+                {
+                    var q = new Question()
+                    {
+                        AnswerType = AnswerType.ラベル,
+                        AnswerType2 = AnswerType2.離散,
+                        Key = header,
+                        Text = header
+                    };
+                    q.CreateQuestionAnswer(list.SelectMany(n => n.Split(',')));
+                    QuestionManage.Add(header, q);
+                }
+            }
         }
 
         ObservableCollection<ClusteringData> clusteringDataList = new ObservableCollection<ClusteringData>();
@@ -75,21 +134,6 @@ namespace FukaboriCore.Model
             set { clusteringDataList = value; }
         }
 
-        //DataMarge _dataMarge;
-
-        //public DataMarge DataMarge
-        //{
-        //    get
-        //    {
-        //        if (_dataMarge == null)
-        //        {
-        //            _dataMarge = new DataMarge();
-        //            _dataMarge.Enqueite = this;
-        //            _dataMarge.Init();
-        //        }
-        //        return _dataMarge;
-        //    }
-        //}
 
         [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<MyLib.IO.TSVLine> AllAnswerLine
@@ -177,13 +221,11 @@ namespace FukaboriCore.Model
             var targetQuestion = questionManage.GetQuestion(targetKey);
             var groupQuestion = questionManage.GetQuestion(groupKey);
             //  cd.AnswerText = targetQuestion.Answers;
-            cd.QuestionText = targetQuestion.ViewText;
+//            cd.QuestionText = targetQuestion.ViewText;
             cd.横Question = targetQuestion;
             cd.縦Question = groupQuestion;
 
             cd.Create(targetQuestion, groupQuestion, this.AnswerLines);
-
-
             return cd;
         }
 
@@ -214,12 +256,21 @@ namespace FukaboriCore.Model
         }
 
 
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public List<Question> QuestionList
         {
             get
             {
                 return questionManage.List.ToList();
+            }
+        }
+
+        [JsonIgnore]
+        public List<AnswerGroup> AllAnswerGroupList
+        {
+            get
+            {
+                return questionManage.List.SelectMany(n=>n.AnswerGroup).ToList();
             }
         }
 
@@ -233,7 +284,6 @@ namespace FukaboriCore.Model
                 RaisePropertyChanged("QuestionList");
             }
         }
-
 
         [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<Question> FreeTextQuestionList
@@ -297,9 +347,6 @@ namespace FukaboriCore.Model
             drawInData.Clear();
         }
 
-
-
-        
         public QuestionManage QuestionManage
         {
             get { return questionManage; }

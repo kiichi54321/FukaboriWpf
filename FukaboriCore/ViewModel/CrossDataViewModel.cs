@@ -33,6 +33,8 @@ namespace FukaboriCore.ViewModel
         public QuestionList SelectedQuestions_2 { get { return _SelectedQuestions_2; } set { Set(ref _SelectedQuestions_2, value); } }
         private QuestionList _SelectedQuestions_2 = new QuestionList();
 
+        public bool TokkakeisuFlag { get { return _TokkakeisuFlag; } set { Set(ref _TokkakeisuFlag, value); } }
+        private bool _TokkakeisuFlag = false;
 
         public void Submit(Question question,IEnumerable<Question> questions)
         {
@@ -42,20 +44,17 @@ namespace FukaboriCore.ViewModel
             {
                 CrossData crossData = new CrossData();
                 crossData.Create(item_1, question, Enqueite.Current.AnswerLines);
+                if(TokkakeisuFlag)
+                {
+                    CrossData allCrossData = new CrossData();
+                    allCrossData.Create(item_1, question, Enqueite.Current.AllAnswerLine);
+                    crossData.Compare(allCrossData);
+                }
+
                 list.Add(crossData);
             }
             DataList = list;
         }
-        //#region Submit Command
-        ///// <summary>
-        ///// Gets the Submit.
-        ///// </summary>
-        //public RelayCommand<IEnumerable<Question>> SubmitCommand
-        //{
-        //    get { return _SubmitCommand ?? (_SubmitCommand = new RelayCommand<IEnumerable<Question>>((n) => {// Submit(n); })); }
-        //}
-        //private RelayCommand<IEnumerable<Question>> _SubmitCommand;
-        //#endregion
 
         private void カイ二乗Sort()
         {

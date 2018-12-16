@@ -29,6 +29,8 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Content="作成"  Name="button3"  Click="button3_Click" CommandParameter="{Binding ElementName=SelectedQuestionsList2,Path=SelectedQuestionList}"  Width="100" Height="40" HorizontalAlignment="Left" />
                 </StackPanel>
+                <CheckBox IsChecked="{Binding TokkakeisuFlag,Mode=TwoWay}" Margin="3">特化係数を出す</CheckBox>
+
                 <Button Content="カイ二乗値でソート" Width="135" HorizontalAlignment="Left" Name="カイ二乗値Button" Command="{Binding カイ二乗SortCommand}"></Button>
                 <Button Content="リセット" Width="135" HorizontalAlignment="Left"  Name="crossTableResetButton" Click="crossTableResetButton_Click"></Button>
 
@@ -105,6 +107,10 @@
                                                                             <TextBlock Text="("  />
                                                                             <TextBlock Text="{Binding 横Rate,StringFormat=F1}"></TextBlock>
                                                                             <TextBlock Text="%)" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Visibility="{Binding Visibility特化係数,Converter={StaticResource BoolToVisibility}}" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                                            <TextBlock Text="特化係数:" Foreground="Gray"></TextBlock>
+                                                                            <TextBlock Text="{Binding 特化係数,StringFormat=F2}" Foreground="Gray" ></TextBlock>
                                                                         </StackPanel>
                                                                     </StackPanel>
                                                                 </Border>

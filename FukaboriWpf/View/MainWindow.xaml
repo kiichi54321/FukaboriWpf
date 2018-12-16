@@ -62,6 +62,9 @@
                 <TabItem Header="変数のクラスタリング">
                     <view:KeyClusteringView DataContext="{Binding Enqueite.KeyClastering,Mode=OneWay}"/>
                 </TabItem>
+                <TabItem Header="出力">
+                    <view:DataOutputView></view:DataOutputView>
+                </TabItem>
             </TabControl>
             
             <ToggleButton Content="絞り込み条件" Name="conditonButton" Grid.Column="1" Margin="5" IsChecked="False" />

@@ -136,17 +136,17 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <Border BorderBrush="Silver" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                    <Border BorderBrush="Silver" Background="White" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                         <TextBlock Text="{Binding Count}"  HorizontalAlignment="Right"></TextBlock>
                                                     </Border>
 
-                                                    <Border BorderBrush="Silver" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                    <Border BorderBrush="Silver" Background="White" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                         <TextBlock Text="{Binding Avg,StringFormat=F3}" HorizontalAlignment="Right"></TextBlock>
                                                     </Border>
-                                                    <Border BorderBrush="Silver" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                    <Border BorderBrush="Silver" Background="White" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                         <TextBlock Text="{Binding Std,StringFormat=F3}" HorizontalAlignment="Right"></TextBlock>
                                                     </Border>
-                                                    <Border BorderBrush="Silver" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                    <Border BorderBrush="Silver" Background="White" BorderThickness="1" Width="50" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                         <TextBlock Text="{Binding 偏差値,StringFormat=F1}" HorizontalAlignment="Right"></TextBlock>
                                                     </Border>
                                                     <Border BorderBrush="Silver" BorderThickness="1" Width="10"></Border>
@@ -158,7 +158,7 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border BorderBrush="Silver" BorderThickness="1" Width="70" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                                                <Border BorderBrush="Silver"  Background="White" BorderThickness="1" Width="70" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                                                     <StackPanel>
                                                                         <TextBlock Text="{Binding Count}"  HorizontalAlignment="Right"></TextBlock>
                                                                         <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right">

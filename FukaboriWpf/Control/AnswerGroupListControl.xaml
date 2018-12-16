@@ -1,14 +1,11 @@
-﻿<UserControl x:Class="FukaboriWpf.Control.QuestionListControl"
+﻿<UserControl x:Class="FukaboriWpf.Control.AnswerGroupListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FukaboriWpf.Control"
-             xmlns:model="clr-namespace:FukaboriCore.Model;assembly=FukaboriCore"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" 
-                          
-             >
+             d:DesignHeight="450" d:DesignWidth="800">
     <Border BorderBrush="Silver" BorderThickness="1">
         <Grid Margin="2">
             <Grid.RowDefinitions>
@@ -29,5 +26,4 @@
             <ListBox Name="ListBox" Grid.Row="1" DisplayMemberPath="ViewText" ></ListBox>
         </Grid>
     </Border>
-    
 </UserControl>

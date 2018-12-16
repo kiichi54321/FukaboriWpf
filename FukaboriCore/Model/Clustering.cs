@@ -384,8 +384,10 @@ namespace FukaboriCore.Model
             {
                 foreach (var q in list)
                 {
-                    var a = q.Question.GetValue(line);
-                    if (a != null ) q.Add(a);
+                    foreach (var item in q.Question.GetValueList(line))
+                    {
+                        q.Add(item);
+                    }
                 }
             }
             foreach (var item in list)

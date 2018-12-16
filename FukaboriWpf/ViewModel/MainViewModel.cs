@@ -72,12 +72,16 @@ namespace FukaboriWpf.ViewModel
         {
             try
             {
-                this.Enqueite = await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".fukabori",
+                var enqueite = await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".fukabori",
                     n => Task.Run<Enqueite>(() => Enqueite.Load(n)));
+                if (enqueite != null)
+                {
+                    this.Enqueite = enqueite;
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                SimpleIoc.Default.GetInstance<IShowMessageService>().Show("ファイルのロードに失敗しました。"+ex.Message);
+                SimpleIoc.Default.GetInstance<IShowMessageService>().Show("ファイルのロードに失敗しました。" + ex.Message);
             }
             ChangeEnqueite?.Invoke(this, EventArgs.Empty);
         }

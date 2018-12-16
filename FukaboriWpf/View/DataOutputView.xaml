@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="FukaboriWpf.View.DataOutputView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:MyControl="clr-namespace:FukaboriWpf.Control"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FukaboriWpf.View"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:FukaboriCore.ViewModel;assembly=FukaboriCore"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <UserControl.DataContext>
+        <vm:DataOutputViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Margin="5" Orientation="Horizontal">
+                <Button Command="{Binding SubmitCommand}" Content="Tsv作成" />
+                <Button Command="{Binding SubmitJsonCommand}" Content="Json作成" />
+            </StackPanel>
+            <MyControl:QuestionListControl Grid.Row="1"
+                                           SelectedQuestionList="{Binding SelectedQuestionList, Mode=TwoWay}"
+                                           SelectionMode="Multiple" />
+        </Grid>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox  Text="{Binding Text, Mode=OneWay}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+            <StackPanel Grid.Row="1" Margin="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Command="{Binding ClipCommand}" Content="Clip"/>
+                <Button Command="{Binding FileSaveCommand}" Content="Save"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

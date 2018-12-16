@@ -115,73 +115,6 @@ namespace FukaboriCore.Model
             set { learnDicText = value; RaisePropertyChanged("LearnDicText"); }
         }
 
-        //public void CreateKeyWords(Question q, MyLib.IO.TSVFileBase file, Action<int> progress, Action endAction)
-        //{
-        //    if (CheckKeitaiso(q, file) == true) return;
-        //    MyLib.WebAPI.Yahoo.KeitaisoAPI api = new MyLib.WebAPI.Yahoo.KeitaisoAPI();
-        //    //       MyLib.WebAPI.Yahoo.YahooAPI.Appid = this.Appid;
-
-        //    var lineCount = 0;
-        //    var allLine = file.Lines.Count;
-
-        //    System.ComponentModel.BackgroundWorker bw = new System.ComponentModel.BackgroundWorker() { WorkerReportsProgress = true };
-        //    bw.DoWork += (a, b) =>
-        //    {
-        //        foreach (var item in file.Lines)
-        //        {
-        //            var g = q.GetValue(item);
-        //            if (g == null) continue;
-        //            var text = g.TextValue.Trim();
-        //            if (text.Length > 0)
-        //            {
-        //                api.Keyphrase(text, (n) =>
-        //                {
-        //                    AddExtendColumn(n.Results, n.Tag as MyLib.IO.TSVLine, q.Key);
-        //                    lock (this)
-        //                    {
-        //                        lineCount++;
-        //                        bw.ReportProgress(lineCount * 100 / allLine);
-        //                    }
-        //                }, item);
-        //            }
-        //            else
-        //            {
-        //                lock (this)
-        //                {
-        //                    lineCount++;
-        //                }
-        //                item.AddExtendColumn(q.Key + KeyWordsFotter, string.Empty);
-        //            }
-        //        }
-        //        while (allLine > lineCount)
-        //        {
-        //            System.Threading.Thread.Sleep(100);
-        //        }
-        //    };
-        //    bw.RunWorkerCompleted += (a, b) => { endAction(); };
-        //    bw.ProgressChanged += (a, b) => { progress(b.ProgressPercentage); };
-        //    bw.RunWorkerAsync();
-        //    //System.Threading.Tasks.Task.Factory.StartNew(() =>
-        //    //    {
-
-        //    //        foreach (var item in file.Lines)
-        //    //        {
-        //    //            api.Keyphrase(q.GetValue(item).TextValue, (n) =>
-        //    //            {
-        //    //                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-        //    //                foreach (var word in n)
-        //    //                {
-        //    //                    sb.Append(word.Keyphrase).Append(":").Append(word.Score).Append(",");
-        //    //                }
-        //    //                item.AddExtendColumn(q.Key + KeyWordsFotter, sb.ToString());
-        //    //            });
-        //    //            lineCount++;
-        //    //            Progress = lineCount * 100 / allLine;
-        //    //        }
-        //    //    }).ContinueWith(n=> endAction());
-
-        //}
-
         void AddExtendColumn(IEnumerable<string> result, MyLib.IO.TSVLine line, string key)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -191,6 +124,7 @@ namespace FukaboriCore.Model
             }
             line.AddExtendColumn(key + KeyWordsFotter, sb.ToString());
         }
+
         Question freeAnswerQuestion;
         public void CreateData(Question freeAnswerQuestion, Question targetQusetion, IEnumerable<MyLib.IO.TSVLine> lines)
         {

@@ -18,8 +18,7 @@ namespace FukaboriCore.Model
 
         public void Add(string name, string value)
         {
-            answerDic.Add(name, value);
-          
+            answerDic.Add(name, value);          
         }
 
         public string GetData(string name)

@@ -51,7 +51,7 @@ namespace FukaboriCore.Model
         {
             get
             {
-                if (AnswerType == AnswerType.ラベル || AnswerType == AnswerType.文字列)
+                if (AnswerType == AnswerType.ラベル || AnswerType == AnswerType.文字列 || AnswerType == AnswerType.タグ)
                 {
                     return TextValue;
                 }
@@ -62,13 +62,6 @@ namespace FukaboriCore.Model
             }
         }
 
-        //System.Collections.ObjectModel.ObservableCollection<QuestionAnswer> children = new System.Collections.ObjectModel.ObservableCollection<QuestionAnswer>();
-
-        //public System.Collections.ObjectModel.ObservableCollection<QuestionAnswer> Children
-        //{
-        //    get { return children; }
-        //    set { children = value; }
-        //}
         [Newtonsoft.Json.JsonIgnore]
         public string GroupKey
         {
