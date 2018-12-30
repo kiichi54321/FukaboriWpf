@@ -29,15 +29,12 @@ namespace MyLib.Analyze
             set { clusterDataList = value; }
         }
 
-        
-
         private int length;
 
         public K_MeansForTask(int l)
             : base()
         {
             length = l;
-
         }
 
         public K_MeansForTask()
@@ -49,7 +46,6 @@ namespace MyLib.Analyze
         {
             length = l;
         }
-
 
         int tryCount = 5;
 
@@ -90,18 +86,12 @@ namespace MyLib.Analyze
                 {
                     list.Add(new KeyValuePair<double, List<Cluster>>(kk, tmpClusterList));
                 }
-                //kk, tmpClusterList);
                 if (ReportProgress != null)
                 {
                     this.ReportProgress(this, new Event.Args<int>(list.Count * 100 / tryCount));
-                }
-   
+                } 
             }
 
-            //MyLib.Task.Parallel.ForEach(Enumerable.Range(1, tryCount), (n) =>
-            //{
-
-            //});
             if (this.Cancellation)
             {
                 return;
@@ -109,9 +99,6 @@ namespace MyLib.Analyze
             var list2 = list.ToList();
             clusterDataList = list2.OrderBy(n => n.Key).First().Value;
         }
-
-
-
 
         public class Cluster
         {
@@ -237,210 +224,6 @@ namespace MyLib.Analyze
 
         int clusterCount = 2;
 
-        #region ごみ
-        //private Dictionary<int, ClusterBox> clusterDic = new Dictionary<int, ClusterBox>();
-        //public int[] selectCluster;
-
-        //public struct ClusterBox
-        //{
-        //    public int[] MapCluster;
-        //    public double Entropy;
-        //    public double diffEntropy;
-        //    public int ClusterCount;
-        //    public double compareEntropy;
-
-        //    public void SetDiffEntropy(double d)
-        //    {
-        //        diffEntropy = d;
-        //    }
-        //}
-
-
-
-
-        //public K_Means(List<MapNeuron> mapList)
-        //{
-        //    this.mapList = mapList;
-        //    if (mapList.Count > 0)
-        //    {
-        //        length = mapList[0].Neuron.WeightsLength;
-        //    }
-        //}
-
-        //public void CreateClusterDic(int maxClusterNum)
-        //{
-        //    clusterDic.Clear();
-        //    double max = 0;
-
-        //    for (int i = 2; i <= maxClusterNum; i++)
-        //    {
-        //        ClusterBox cBox = new ClusterBox();
-        //        cBox.ClusterCount = i;
-        //        cBox.MapCluster = Run(i);
-        //        cBox.Entropy = GetEntropy(cBox.MapCluster);
-        //        cBox.diffEntropy = cBox.Entropy - max;
-        //        double p = (double)1 / (double)i;
-        //        double e = (p * Math.Log(p, 2) * i)*-1;
-        //        cBox.compareEntropy = cBox.Entropy/ e;
-        //        max = Math.Max(max, cBox.Entropy);
-        //        clusterDic.Add(i, cBox);
-        //    }
-
-
-        //}
-
-        //public ClusterBox GetClusterBox(int clusterNum)
-        //{
-        //    if (clusterDic.ContainsKey(clusterNum))
-        //    {
-        //        return clusterDic[clusterNum];
-        //    }
-        //    else
-        //    {
-        //        return new ClusterBox();
-        //    }
-        //}
-
-        //private double GetEntropy(int[] clusterList)
-        //{
-        //    Dictionary<int, MyLib.CountClass> dic = new Dictionary<int, MyLib.CountClass>();
-
-        //    for (int i = 0; i < clusterList.Length; i++)
-        //    {
-        //        if (dic.ContainsKey(clusterList[i]))
-        //        {
-        //            dic[clusterList[i]].Add(mapList[i].InputCollection.Count);
-        //        }
-        //        else
-        //        {
-        //            MyLib.CountClass cc = new MyLib.CountClass();
-        //            cc.Add(mapList[i].InputCollection.Count);
-        //            dic.Add(clusterList[i], cc);
-        //        }
-        //    }
-        //    //foreach (int c in clusterList)
-        //    //{
-        //    //    if (dic.ContainsKey(c))
-        //    //    {
-        //    //        dic[c].Add();
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        MyLib.CountClass cc = new MyLib.CountClass();
-        //    //        cc.Add();
-        //    //        dic.Add(c, cc);
-        //    //    }
-        //    //}
-        //    int sum = 0;
-        //    foreach (int c in dic.Keys)
-        //    {
-        //        sum += dic[c].Count;
-        //    }
-        //    double entropy = 0;
-        //    foreach (int c in dic.Keys)
-        //    {
-        //        double p = (double)dic[c].Count/(double)sum;
-        //        if (p > 0)
-        //        {
-        //            entropy = entropy + p * Math.Log(p, 2);
-        //        }
-        //    }
-        //    return entropy*-1;
-        //}
-        //public void SetSelectCluster(int num)
-        //{
-        //    if (clusterDic.ContainsKey(num))
-        //    {
-        //        selectCluster = clusterDic[num].MapCluster;
-        //    }
-        //    else
-        //    {
-        //        selectCluster = Run(num);
-        //    }
-        //}
-        //public int[] Run(int clusterCount)
-        //{
-
-        //    clusterCenterList = new List<Neuron>();
-        //    Random random = new Random();
-        //    for (int i = 0; i < clusterCount; i++)
-        //    {
-        //        int tmp = mapList.Count * i / clusterCount;
-        //        int tmp2 = mapList.Count * (i + 1) / clusterCount;
-        //        int tmp3 = (tmp + tmp2) / 2;
-        //        Neuron n = new Neuron(length);
-        //        n.Tag = new List<double[]>();
-        //        n.SetWeight((double[])mapList[tmp3].Neuron.Weights.Clone());
-        //        clusterCenterList.Add(n);
-
-        //    }
-        //    double sum = 1;
-        //    while (sum > 0.01)
-        //    {
-
-        //        foreach (Neuron neuron in clusterCenterList)
-        //        {
-        //            ((List<double[]>)neuron.Tag).Clear();
-        //        }
-        //        foreach (MapNeuron mapNeuron in mapList)
-        //        {
-        //            double min = 10000;
-        //            Neuron minNeuron = null;
-        //            foreach (Neuron neuron in clusterCenterList)
-        //            {
-        //                double dis = MyLib.MathLib.GetDistance(mapNeuron.Neuron.Weights, neuron.Weights);
-        //                if (dis < min)
-        //                {
-        //                    min = dis;
-        //                    minNeuron = neuron;
-        //                }
-        //            }
-        //            if (minNeuron != null)
-        //            {
-        //                ((List<double[]>)minNeuron.Tag).Add(mapNeuron.Neuron.Weights);
-        //            }
-        //        }
-
-        //        sum = 0;
-        //        foreach (Neuron neuron in clusterCenterList)
-        //        {
-        //            double[] avg = MyLib.MathLib.GetAverage((List<double[]>)neuron.Tag);
-        //            double d = MyLib.MathLib.GetDistance(neuron.Weights, avg);
-        //            sum = sum + d;
-        //            neuron.SetWeight(avg);
-        //        }
-        //    }
-
-        //    int count = 0;
-
-        //    List<int> list = new List<int>();
-        //    foreach (MapNeuron mapNeuron in mapList)
-        //    {
-        //        double min = 10000;
-        //        Neuron minNeuron = null;
-        //        int c = 0;
-        //        int cc = 0;
-        //        foreach (Neuron neuron in clusterCenterList)
-        //        {
-        //            double dis = MyLib.MathLib.GetDistance(mapNeuron.Neuron.Weights, neuron.Weights);
-        //            if (dis < min)
-        //            {
-        //                min = dis;
-        //                minNeuron = neuron;
-        //                cc = c;
-        //            }
-        //            c++;
-        //        }
-        //        if (minNeuron != null)
-        //        {
-        //            list.Add(cc);
-        //        }
-        //    }
-        //    return list.ToArray();
-        //}
-
-        #endregion
-
         public void AddData(double[] data,object tag)
         {
             if (data.Length == length)
@@ -497,37 +280,12 @@ namespace MyLib.Analyze
             最小距離を使う
         }
 
-        /// <summary>
-        /// データに割り当てられるクラスターを探します。見つからなかったとき、データが不正のときはNullを返します。
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public Cluster SearchCluster(double[] data)
+        private List<Cluster> InitFirstValue(int clusterCount)
         {
-            return SearchCluster(data, clusterDataList);
-        }
-        Random random = new Random();
-        /// <summary>
-        /// ランダムに割り当てて、クラスタを計算し、評価関数を返します。
-        /// </summary>
-        /// <param name="clusterCount"></param>
-        /// <param name="clusterList"></param>
-        /// <param name="maxLoop"></param>
-        /// <returns></returns>
-        private double AnalyzeK_Means(int clusterCount, out List<Cluster> clusterList)
-        {
-            clusterList = new List<Cluster>();
-            for (int i = 0; i < clusterCount; i++)
-            {
-                Cluster cluster = new Cluster(length);
-                clusterList.Add(cluster);
-            }
-
+            List<Cluster> clusterList = Enumerable.Range(0,clusterCount).Select(n=> new Cluster(length)).ToList();
             if (rType == RandamType.一つのデータ)
             {
-
                 var shuffleList = inputDataList.OrderBy(n => Guid.NewGuid()).Select(n => n);
-
 
                 int c = 0;
                 foreach (var item in shuffleList)
@@ -569,11 +327,6 @@ namespace MyLib.Analyze
             }
             if (rType == RandamType.複数の平均)
             {
-                //for (int i = 0; i < Math.Max(clusterCount,inputDataList.Count/3); i++)
-                //{
-                //    clusterList[i%clusterCount].AddData(shuffleList[i]);                
-                //}
-
                 foreach (var item in inputDataList)
                 {
                     int id = random.Next(clusterCount);
@@ -638,7 +391,29 @@ namespace MyLib.Analyze
                 item.SetNewPoint();
             }
 
+            return clusterList;
+        }
 
+        /// <summary>
+        /// データに割り当てられるクラスターを探します。見つからなかったとき、データが不正のときはNullを返します。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public Cluster SearchCluster(double[] data)
+        {
+            return SearchCluster(data, clusterDataList);
+        }
+        Random random = new Random();
+        /// <summary>
+        /// ランダムに割り当てて、クラスタを計算し、評価関数を返します。
+        /// </summary>
+        /// <param name="clusterCount"></param>
+        /// <param name="clusterList"></param>
+        /// <param name="maxLoop"></param>
+        /// <returns></returns>
+        private double AnalyzeK_Means(int clusterCount, out List<Cluster> clusterList)
+        {
+            clusterList = InitFirstValue(clusterCount);
 
             double distance = 100;
             int count = 0;
@@ -704,16 +479,16 @@ namespace MyLib.Analyze
             }
         }
 
-        public List<Cluster> Run(int clusterCount, int tryCount)
+        public async Task<IEnumerable<Cluster>> Run(int clusterCount, int tryCount)
         {
             clusterDataList.Clear();
             this.clusterCount = clusterCount;
             this.tryCount = tryCount;
             if (this.InputDataList.Count > 0)
             {
-                K_Means_DoWork();
+                await System.Threading.Tasks.Task.Run(() => K_Means_DoWork());
             }
-            return ClusterDataList;
+            return ClusterDataList.OrderBy(n=>n.Data.Sum());
         }
 
 

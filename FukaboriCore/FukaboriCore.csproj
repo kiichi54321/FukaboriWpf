@@ -84,9 +84,11 @@
     <Compile Include="Model\CellBase.cs" />
     <Compile Include="Model\Clustering.cs" />
     <Compile Include="Model\ColorType.cs" />
+    <Compile Include="Model\PropertyData.cs" />
     <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\SetClipBoardService.cs" />
     <Compile Include="Service\ShowMessageService.cs" />
+    <Compile Include="ViewModel\ClusteringViewModel.cs" />
     <Compile Include="ViewModel\CrossData.cs" />
     <Compile Include="ViewModel\CrossDataViewModel.cs" />
     <Compile Include="ViewModel\DataCoordinator.cs" />

@@ -154,6 +154,9 @@
     <Compile Include="State\State.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\ClusteringViewModel.xaml.cs">
+      <DependentUpon>ClusteringViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CrossTableView.xaml.cs">
       <DependentUpon>CrossTableView.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\QuestionListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClusteringViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
