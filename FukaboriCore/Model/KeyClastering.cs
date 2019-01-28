@@ -145,7 +145,7 @@ namespace FukaboriCore.Model
                 kMeans.AddData(item.Soukan.Select(n => n.Value).ToArray(), Enqueite.QuestionManage.GetQuestion(item.QuestionKey));
             }
             isBusy = true;
-            var cluster_list = await Task.Run<List<MyLib.Analyze.K_MeansForTask.Cluster>>(() => kMeans.Run(ClusterNum, TryCount));
+            var cluster_list = await Task.Run<IEnumerable<MyLib.Analyze.K_MeansForTask.Cluster>>(() => kMeans.Run(ClusterNum, TryCount));
 
             int i = 0;
             foreach (var item in cluster_list)

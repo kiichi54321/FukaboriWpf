@@ -12,6 +12,7 @@ namespace FukaboriCore.Service
         void Show(string message);
         void Show(string message, string caption);
         Task<bool> ShowAsync(string message, string caption);
+        Task<bool> ShowAsync(string message, string caption, MessageBoxType messageBoxType);
     }
     public class ShowMessageService : IShowMessageService
     {
@@ -38,8 +39,50 @@ namespace FukaboriCore.Service
                     return false;
                 }
             });
-
-
         }
+
+        public Task<bool> ShowAsync(string message, string caption, MessageBoxType messageBoxType)
+        {
+            MessageBoxButton messageBoxButton = MessageBoxButton.OK;
+            switch (messageBoxType)
+            {
+                case MessageBoxType.OK:
+                    messageBoxButton = MessageBoxButton.OK;
+                    break;
+                case MessageBoxType.OKCancel:
+                    messageBoxButton = MessageBoxButton.OKCancel;
+                    break;
+                case MessageBoxType.YesNo:
+                    messageBoxButton = MessageBoxButton.YesNo;
+                    break;
+                case MessageBoxType.YesNoCancel:
+                    messageBoxButton = MessageBoxButton.YesNoCancel;
+                    break;
+                default:
+                    break;
+            }
+
+
+            return Task.Run<bool>(() => {
+                var r = MessageBox.Show(message, caption,messageBoxButton);
+                if (r == MessageBoxResult.OK || r == MessageBoxResult.Yes)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+        }
+
+    }
+
+    public enum MessageBoxType
+    {
+        OK,
+        OKCancel,
+        YesNo,
+        YesNoCancel,
     }
 }

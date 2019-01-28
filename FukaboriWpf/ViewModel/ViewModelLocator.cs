@@ -48,6 +48,7 @@ namespace FukaboriWpf.ViewModel
             SimpleIoc.Default.Register<SimpleSummaryViewModel>();
             SimpleIoc.Default.Register<GroupQuestionSumViewModel>();
             SimpleIoc.Default.Register<CrossDataViewModel>();
+            SimpleIoc.Default.Register<ClusteringViewModel>();
 
         }
 
@@ -62,6 +63,8 @@ namespace FukaboriWpf.ViewModel
         public KeyWordSummary KeyWordSummary => ServiceLocator.Current.GetInstance<KeyWordSummary>();
 
         public CrossDataViewModel CrossData => ServiceLocator.Current.GetInstance<CrossDataViewModel>();
+
+        public ClusteringViewModel Clustering => ServiceLocator.Current.GetInstance<ClusteringViewModel>();
 
         public static void Cleanup()
         {

@@ -12,6 +12,10 @@ namespace FukaboriCore.Model
         public string Name { get; set; }
         public double Average { get; set; }
         public double Std { get; set; }
+        public double Quantile_25 { get; set; }
+        public double Quantile_50 { get; set; }
+        public double Quantile_75 { get; set; }
+
         Dictionary<AnswerGroup, KeyCount> keyCountDic = new Dictionary<AnswerGroup, KeyCount>();
         private Question question;
         public Question Question { get { return question; } set { SetQuestion(value); } }
@@ -108,6 +112,9 @@ namespace FukaboriCore.Model
             MyLib.Statistics.AvgStd avg = new MyLib.Statistics.AvgStd(data.Where(n => n != double.NaN));
             this.Average = avg.Avg;
             this.Std = avg.Std;
+            this.Quantile_25 = avg.Quartile(1);
+            this.Quantile_50 = avg.Quartile(2);
+            this.Quantile_75 = avg.Quartile(3);
 
             var sum = keyCountDic.Sum(n => n.Value.Count);
             foreach (var item in keyCountDic)

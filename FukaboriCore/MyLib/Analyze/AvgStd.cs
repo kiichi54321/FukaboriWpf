@@ -150,6 +150,16 @@ namespace MyLib.Statistics
             return max;
         }
 
+        public double Quartile(int num)
+        {
+            var sorted_list = this.dataList.OrderBy(n => n).ToArray();
+            if (sorted_list.Length > 0)
+            {
+                return sorted_list[sorted_list.Length * num / 4];
+            }
+            return double.NaN;
+        }
+
         public double ジニ係数
         {
             get

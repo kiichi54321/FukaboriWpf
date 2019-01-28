@@ -51,8 +51,8 @@ namespace FukaboriCore.Model
         {
             get
             {
-                if (AnswerType == AnswerType.ラベル || AnswerType == AnswerType.文字列 || AnswerType == AnswerType.タグ)
-                {
+                if(IsTextValue())
+                { 
                     return TextValue;
                 }
                 else
@@ -61,6 +61,8 @@ namespace FukaboriCore.Model
                 }
             }
         }
+
+        public bool IsTextValue() => (AnswerType == AnswerType.ラベル || AnswerType == AnswerType.文字列 || AnswerType == AnswerType.タグ);
 
         [Newtonsoft.Json.JsonIgnore]
         public string GroupKey

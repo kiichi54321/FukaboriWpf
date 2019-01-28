@@ -30,7 +30,7 @@
     <PublisherName>ito kiichi</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -146,6 +146,9 @@
     <Compile Include="Control\AnswerGroupListControl.xaml.cs">
       <DependentUpon>AnswerGroupListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\BoxPlotControl.xaml.cs">
+      <DependentUpon>BoxPlotControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\ChangeVisibilityButton.cs" />
     <Compile Include="Control\QuestionListControl.xaml.cs">
       <DependentUpon>QuestionListControl.xaml</DependentUpon>
@@ -154,8 +157,8 @@
     <Compile Include="State\State.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\ClusteringViewModel.xaml.cs">
-      <DependentUpon>ClusteringViewModel.xaml</DependentUpon>
+    <Compile Include="View\ClusteringView.xaml.cs">
+      <DependentUpon>ClusteringView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CrossTableView.xaml.cs">
       <DependentUpon>CrossTableView.xaml</DependentUpon>
@@ -182,6 +185,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Control\BoxPlotControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Control\MdsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -190,7 +197,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ClusteringViewModel.xaml">
+    <Page Include="View\ClusteringView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
