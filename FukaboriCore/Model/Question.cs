@@ -181,7 +181,7 @@ namespace FukaboriCore.Model
         {
             get
             {
-                return answerGroup.Where(n => n.IsActive == true);
+                return answerGroup.Where(n => n.IsActive);
             }
         }
 

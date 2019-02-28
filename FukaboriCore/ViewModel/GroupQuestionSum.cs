@@ -68,7 +68,7 @@ namespace FukaboriCore.Model
             this.Std = data.GetStd();
 
             AnswerCell = new List<Cell>();
-            foreach (var item in countDic.OrderBy(n => n.Key.Order))
+            foreach (var item in countDic.OrderBy(n => n.Key.Order).Where(n=>n.Key.IsActive))
             {
                 AnswerCell.Add(new Cell() { Count = item.Value, 横Rate = item.Value * 100 / (double)this.Count });
             }

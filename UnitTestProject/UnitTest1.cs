@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FukaboriCore.Model;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace UnitTestProject
 {
@@ -27,4 +28,14 @@ namespace UnitTestProject
             System.Console.WriteLine(enqueite.ToJson());
         }
     }
+
+    public static class ListExnted
+    {
+        public static List<T> AddItem<T>(this List<T> list,T item)
+        {
+            list.Add(item);
+            return list;
+        }
+    }
+
 }

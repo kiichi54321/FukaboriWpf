@@ -27,7 +27,13 @@ namespace FukaboriCore.Model
         
         public bool IsActive
         {
-            get { return isActive; }
+            get {
+                if (this.Answeres.Any())
+                {
+                    return isActive;
+                }
+                return false;
+            }
             set { isActive = value; }
         }
 
