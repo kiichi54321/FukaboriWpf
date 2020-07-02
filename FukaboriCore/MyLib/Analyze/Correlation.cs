@@ -24,15 +24,22 @@ namespace MyLib.Statistics
 
         public double Result()
         {
-            var x_avg = list.Select(n => n.X).Average();
-            var y_avg = list.Select(n => n.Y).Average();
+            if (list.Any())
+            {
+                var x_avg = list.Select(n => n.X).Average();
+                var y_avg = list.Select(n => n.Y).Average();
 
-            var x_std = Math.Sqrt(list.Select(n => Math.Pow(n.X - x_avg, 2)).Average());
-            var y_std = Math.Sqrt(list.Select(n => Math.Pow(n.Y - y_avg, 2)).Average());
+                var x_std = Math.Sqrt(list.Select(n => Math.Pow(n.X - x_avg, 2)).Average());
+                var y_std = Math.Sqrt(list.Select(n => Math.Pow(n.Y - y_avg, 2)).Average());
 
-            var xy = list.Select(n => (n.X - x_avg) * (n.Y - y_avg)).Average();
+                var xy = list.Select(n => (n.X - x_avg) * (n.Y - y_avg)).Average();
 
-            return xy / (x_std * y_std);
+                return xy / (x_std * y_std);
+            }
+            else
+            {
+                return double.NaN;
+            }
         }
 
 

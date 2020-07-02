@@ -65,10 +65,21 @@ namespace FukaboriCore.Model
             {
                 item.CreateQuestionAnswer(dataFile.Lines);
             }
-
+            
             if(QuestionList.Any()==false)
             {
                 GenereteQuestions(dataFile);
+            }
+            else
+            {
+                //回答なしを追加する。
+                foreach (var item in QuestionList.Where(n=>n.AnswerType == AnswerType.離散))
+                {
+                    foreach (var line in dataFile.Lines)
+                    {
+                        item.GetValue(line);
+                    }
+                }
             }
         }
 

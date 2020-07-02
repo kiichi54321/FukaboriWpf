@@ -16,25 +16,32 @@
         <Grid Grid.Row="0" Name="grid1" Height="300">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="300" />
                 <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="300" />
                 <ColumnDefinition Width="145*" />
             </Grid.ColumnDefinitions>
             <TextBlock  Name="textBlock2" Text="グループ化変数" VerticalAlignment="Center" />
             <TextBlock Grid.Column="2" Name="textBlock3" Text="対象変数" VerticalAlignment="Center" />
             <MyControl:QuestionListControl Grid.Column="1" x:Name="SelectedQuestionsList1" SelectedQuestion="{Binding SelectedQuestion_1,Mode=TwoWay}"></MyControl:QuestionListControl>
             <MyControl:QuestionListControl Grid.Column="3" x:Name="SelectedQuestionsList2" SelectionMode="Multiple" SelectedQuestionList="{Binding SelectedQuestions_2,Mode=TwoWay}"></MyControl:QuestionListControl>
-            <StackPanel Grid.Column="4" VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="作成"  Name="button3"  Click="button3_Click" CommandParameter="{Binding ElementName=SelectedQuestionsList2,Path=SelectedQuestionList}"  Width="100" Height="40" HorizontalAlignment="Left" />
+            <GroupBox Header="設定" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10" Width="300">
+                <StackPanel>
+                    <Button Content="作成"  Name="button3" Margin="2" Click="button3_Click" CommandParameter="{Binding ElementName=SelectedQuestionsList2,Path=SelectedQuestionList}"  Height="60" FontSize="24" />
+                    <Button Content="リセット" Margin="2" Name="crossTableResetButton" Click="crossTableResetButton_Click"></Button>
+                    <CheckBox IsChecked="{Binding TokkakeisuFlag,Mode=TwoWay}" Margin="3">特化係数を出す</CheckBox>
+                    <CheckBox IsChecked="{Binding IgnoreEmptyFlag,Mode=TwoWay}" Margin="3">回答なしを計算から外す</CheckBox>
+                    <GroupBox Header="割合の表示" Margin="2">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding ShowTotalRate,Mode=TwoWay}" Margin="3">全体</CheckBox>
+                            <CheckBox IsChecked="{Binding ShowRowRate,Mode=TwoWay}" Margin="3">横軸</CheckBox>
+                            <CheckBox IsChecked="{Binding ShowColumnRate,Mode=TwoWay}" Margin="3">縦軸</CheckBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <Button Content="カイ二乗値でソート" Width="135" HorizontalAlignment="Left" Name="カイ二乗値Button" Command="{Binding カイ二乗SortCommand}"></Button>
+
                 </StackPanel>
-                <CheckBox IsChecked="{Binding TokkakeisuFlag,Mode=TwoWay}" Margin="3">特化係数を出す</CheckBox>
-
-                <Button Content="カイ二乗値でソート" Width="135" HorizontalAlignment="Left" Name="カイ二乗値Button" Command="{Binding カイ二乗SortCommand}"></Button>
-                <Button Content="リセット" Width="135" HorizontalAlignment="Left"  Name="crossTableResetButton" Click="crossTableResetButton_Click"></Button>
-
-            </StackPanel>
+            </GroupBox>
         </Grid>
         <MyControl:ChangeVisibilityButton VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Height="20" Content="-" TargetElement="{Binding ElementName=grid1}" ></MyControl:ChangeVisibilityButton>
         <ScrollViewer Grid.Row="1" Name="scrollViewer1" HorizontalScrollBarVisibility="Auto" >
@@ -63,7 +70,7 @@
                                         <ItemsControl ItemsSource="{Binding AnswerText}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border BorderBrush="Silver" Width="100" BorderThickness="1">
+                                                    <Border BorderBrush="Silver" Width="120" BorderThickness="1">
                                                         <TextBlock Text="{Binding}" Margin="2"></TextBlock>
                                                     </Border>
                                                 </DataTemplate>
@@ -100,12 +107,22 @@
                                                     <ItemsControl ItemsSource="{Binding Cells}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border Name="CellBorder" BorderBrush="Silver" Width="100" BorderThickness="1" MouseLeftButtonDown="CellBorder_MouseLeftButtonDown" Tag="{Binding}">
-                                                                    <StackPanel Visibility="{Binding Visibility,Converter={StaticResource BoolToVisibility}}" Margin="2">
+                                                                <Border Name="CellBorder" BorderBrush="Silver" Width="120" BorderThickness="1" MouseLeftButtonDown="CellBorder_MouseLeftButtonDown" Tag="{Binding}">
+                                                                    <StackPanel Visibility="{Binding Visibility,Converter={StaticResource BoolToVisibility}}" Margin="4">
                                                                         <TextBlock Text="{Binding Count}" HorizontalAlignment="Right"></TextBlock>
-                                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowRowRate,Converter={StaticResource bool2VisibilityConverter}}">
                                                                             <TextBlock Text="("  />
                                                                             <TextBlock Text="{Binding 横Rate,StringFormat=F1}"></TextBlock>
+                                                                            <TextBlock Text="%)" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowColumnRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                            <TextBlock Text="("  />
+                                                                            <TextBlock Text="{Binding 縦Rate,StringFormat=F1}"></TextBlock>
+                                                                            <TextBlock Text="%)" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowTotalRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                            <TextBlock Text="("  />
+                                                                            <TextBlock Text="{Binding TotalRate,StringFormat=F1}"></TextBlock>
                                                                             <TextBlock Text="%)" />
                                                                         </StackPanel>
                                                                         <StackPanel Visibility="{Binding Visibility特化係数,Converter={StaticResource BoolToVisibility}}" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -132,7 +149,27 @@
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
                                                                 <Border Width="50" BorderBrush="Silver" BorderThickness="1"  MouseLeftButtonDown="CellBorder_MouseLeftButtonDown" Tag="{Binding}">
-                                                                    <TextBlock Text="{Binding ValueText}" HorizontalAlignment="Right" Margin="2"></TextBlock>
+                                                                    <StackPanel>
+                                                                        <TextBlock Text="{Binding ValueText}" HorizontalAlignment="Right" Margin="2"></TextBlock>
+                                                                        <StackPanel Visibility="{Binding VisibilityRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowRowRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                                <TextBlock Text="("  />
+                                                                                <TextBlock Text="{Binding 横Rate,StringFormat=F1}"></TextBlock>
+                                                                                <TextBlock Text="%)" />
+                                                                            </StackPanel>
+                                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowColumnRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                                <TextBlock Text="("  />
+                                                                                <TextBlock Text="{Binding 縦Rate,StringFormat=F1}"></TextBlock>
+                                                                                <TextBlock Text="%)" />
+                                                                            </StackPanel>
+                                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowTotalRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                                <TextBlock Text="("  />
+                                                                                <TextBlock Text="{Binding TotalRate,StringFormat=F1}"></TextBlock>
+                                                                                <TextBlock Text="%)" />
+                                                                            </StackPanel>
+                                                                        </StackPanel>
+                                                                    </StackPanel>
+
                                                                 </Border>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
@@ -150,12 +187,22 @@
                                             <ItemsControl ItemsSource="{Binding Cells}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Border BorderBrush="Silver" Width="100" BorderThickness="1"  MouseLeftButtonDown="CellBorder_MouseLeftButtonDown" Tag="{Binding}">
-                                                            <StackPanel Visibility="{Binding Visibility2,Converter={StaticResource BoolToVisibility}}" Margin="2">
+                                                        <Border BorderBrush="Silver" Width="120" BorderThickness="1"  MouseLeftButtonDown="CellBorder_MouseLeftButtonDown" Tag="{Binding}">
+                                                            <StackPanel Visibility="{Binding Visibility2,Converter={StaticResource BoolToVisibility}}" Margin="4">
                                                                 <TextBlock Text="{Binding Count}" HorizontalAlignment="Right"></TextBlock>
-                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                                    <TextBlock Text="(" />
-                                                                    <TextBlock Text="{Binding 横Rate,StringFormat=F1}" ></TextBlock>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowRowRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                    <TextBlock Text="("  />
+                                                                    <TextBlock Text="{Binding 横Rate,StringFormat=F1}"></TextBlock>
+                                                                    <TextBlock Text="%)" />
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowColumnRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                    <TextBlock Text="("  />
+                                                                    <TextBlock Text="{Binding 縦Rate,StringFormat=F1}"></TextBlock>
+                                                                    <TextBlock Text="%)" />
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Source={StaticResource Locator},Path=CrossData.ShowTotalRate,Converter={StaticResource bool2VisibilityConverter}}">
+                                                                    <TextBlock Text="("  />
+                                                                    <TextBlock Text="{Binding TotalRate,StringFormat=F1}"></TextBlock>
                                                                     <TextBlock Text="%)" />
                                                                 </StackPanel>
                                                             </StackPanel>

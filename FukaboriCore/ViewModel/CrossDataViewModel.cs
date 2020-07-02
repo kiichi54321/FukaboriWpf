@@ -36,6 +36,18 @@ namespace FukaboriCore.ViewModel
         public bool TokkakeisuFlag { get { return _TokkakeisuFlag; } set { Set(ref _TokkakeisuFlag, value); } }
         private bool _TokkakeisuFlag = false;
 
+        public bool IgnoreEmptyFlag { get { return _IgnoreEmptyFlag; } set { Set(ref _IgnoreEmptyFlag, value); } }
+        private bool _IgnoreEmptyFlag = false;
+
+        public bool ShowTotalRate { get { return _ShowTotalRate; } set { Set(ref _ShowTotalRate, value); } }
+        private bool _ShowTotalRate = false;
+
+        public bool ShowRowRate { get { return _ShowRowRate; } set { Set(ref _ShowRowRate, value); } }
+        private bool _ShowRowRate = true;
+
+        public bool ShowColumnRate { get { return _ShowColumnRate; } set { Set(ref _ShowColumnRate, value); } }
+        private bool _ShowColumnRate = false;
+
         public void Submit(Question question,IEnumerable<Question> questions)
         {
             List<CrossData> list = new List<CrossData>();
@@ -43,7 +55,7 @@ namespace FukaboriCore.ViewModel
             foreach (var item_1 in questions)
             {
                 CrossData crossData = new CrossData();
-                crossData.Create(item_1, question, Enqueite.Current.AnswerLines);
+                crossData.Create(item_1, question, Enqueite.Current.AnswerLines,IgnoreEmptyFlag);
                 if(TokkakeisuFlag)
                 {
                     CrossData allCrossData = new CrossData();

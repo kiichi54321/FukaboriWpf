@@ -62,7 +62,7 @@ namespace FukaboriWpf.ViewModel
         /// </summary>
         public RelayCommand SaveCommand
         {
-            get { return _SaveCommand ?? (_SaveCommand = new RelayCommand(async () => {await Save(); })); }
+            get { return _SaveCommand ?? (_SaveCommand = new RelayCommand(async () => { await Save(); })); }
         }
         private RelayCommand _SaveCommand;
         #endregion
@@ -102,8 +102,8 @@ namespace FukaboriWpf.ViewModel
             try
             {
                 await SimpleIoc.Default.GetInstance<IFileService>().Load("", ".tsv",
-                n => Task.Run(() => Enqueite.QuestionLoad(new System.IO.StreamReader(n) )));
-            ChangeEnqueite?.Invoke(this, EventArgs.Empty);
+                n => Task.Run(() => Enqueite.QuestionLoad(new System.IO.StreamReader(n))));
+                ChangeEnqueite?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {

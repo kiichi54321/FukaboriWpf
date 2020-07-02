@@ -123,7 +123,7 @@ namespace FukaboriCore.Model
             }
         }
 
-        public static IEnumerable<PropertyData> CreatePropertyData(IEnumerable<Question> question, IEnumerable<MyLib.IO.TSVLine> lines)
+        public static IEnumerable<PropertyData> CreatePropertyData(IEnumerable<Question> question, IEnumerable<MyLib.IO.TSVLine> lines,bool ignoreEmpty = false)
         {
             List<PropertyData> list = question.Select(n => new PropertyData() { Name = n.ViewText, Question = n }).ToList();
 
@@ -133,6 +133,10 @@ namespace FukaboriCore.Model
                 {
                     foreach (var item in q.Question.GetValueList(line))
                     {
+                        if (ignoreEmpty && double.IsNaN(item.Value))
+                        {
+                            continue;
+                        }
                         q.Add(item);
                     }
                 }

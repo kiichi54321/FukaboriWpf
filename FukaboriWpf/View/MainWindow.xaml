@@ -9,7 +9,7 @@
         xmlns:media="clr-namespace:System.Media;assembly=System"
         mc:Ignorable="d"
         DataContext="{Binding Main,Source={StaticResource Locator}}"
-        Title="ふかぼりくん" Height="650" Width="1025" >
+        Title="ふかぼりくん" Height="850" Width="1200" >
     <Grid>
         <Grid x:Name="LayoutRoot" Background="White">
             <Grid.ColumnDefinitions>

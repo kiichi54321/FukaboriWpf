@@ -221,11 +221,30 @@ namespace FukaboriCore.Model
             }
         }
 
+        /// <summary>
+        /// 回答の種類の数でソートタイプを変える。
+        /// </summary>
+        int AnswerKindThresholdCount = 8;
+
         public void CreateQuestionAnswer(IEnumerable<string> list2)
         {
             int order = 1;
             Dictionary<string, AnswerGroup> dic = new Dictionary<string, AnswerGroup>();
-            foreach (var item in list2.GroupBy(n=>n).ToDictionary(n=>n.Key,n=>n.Count()).OrderByDescending(n=>n.Value).Select(n=>n.Key))
+
+            IEnumerable<string> list;
+
+            if (list2.Distinct().Count() > AnswerKindThresholdCount)
+            {
+                // 回答の種類が多いときは、頻度が多いもの順。
+                list = list2.GroupBy(n => n).ToDictionary(n => n.Key, n => n.Count()).OrderByDescending(n => n.Value).Select(n => n.Key);
+            }
+            else
+            {
+                // 回答の種類が少ないときは、文字でソート。
+                list = list2.GroupBy(n => n).ToDictionary(n => n.Key, n => n.Count()).OrderBy(n => n.Key).Select(n => n.Key);
+            }
+
+            foreach (var item in list)
             {
                 var qa = new QuestionAnswer()
                 {
@@ -598,7 +617,15 @@ namespace FukaboriCore.Model
             }
             else if (text.Length == 0)
             {
+                if(answerGroupDic.ContainsKey(double.NaN.ToString()))
+                {
+                    return answerGroupDic[double.NaN.ToString()];
+                }
                 answerGroupDic.Add(text, new AnswerGroup(new QuestionAnswer() { Question = this, AnswerType = this.AnswerType, AnswerType2 = this.AnswerType2, TextValue = "(回答なし)" , Value = double.NaN}));
+                if(AnswerGroup.Where(n=>n.TextValue == answerGroupDic[text].TextValue).Any() == false)
+                {
+                    AnswerGroup.Add(answerGroupDic[text]);
+                }
                 return answerGroupDic[text];
             }
             else
@@ -655,7 +682,6 @@ namespace FukaboriCore.Model
     }
 
 
-    
     public class QuestionManage
     {
         Dictionary<string, Question> dic = new Dictionary<string, Question>();

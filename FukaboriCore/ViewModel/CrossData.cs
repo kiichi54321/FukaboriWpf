@@ -12,7 +12,7 @@ namespace FukaboriCore.ViewModel
 {
 
 
-    public class CrossData:MyLib.Interface.ITsv
+    public class CrossData : MyLib.Interface.ITsv
     {
         public Question 横Question { get; set; }
 
@@ -42,7 +42,7 @@ namespace FukaboriCore.ViewModel
             }
         }
 
-        public int AllCount => this.RowDic.SelectMany(n => n.Value.Cells).Sum(n => n.Count);
+        public int AllCount { get; set; }
 
         public string ToTsv()
         {
@@ -74,16 +74,16 @@ namespace FukaboriCore.ViewModel
 
 
         Dictionary<AnswerGroup, DataRow> dic = new Dictionary<AnswerGroup, DataRow>();
-        
+
         public Dictionary<AnswerGroup, DataRow> RowDic
         {
             get { return dic; }
             set { dic = value; }
         }
-        
+
         public DataRow SumRow { get; set; }
 
-        public void Create(Question 横Question, Question 縦Question, IEnumerable<MyLib.IO.TSVLine> lines)
+        public void Create(Question 横Question, Question 縦Question, IEnumerable<MyLib.IO.TSVLine> lines, bool ignoreEmpty = false)
         {
             this.横Question = 横Question;
             this.縦Question = 縦Question;
@@ -97,17 +97,26 @@ namespace FukaboriCore.ViewModel
                 dic.Add(item, row);
                 c++;
             }
-
+            var all_count = 0;
             foreach (var item in lines)
             {
                 foreach (var targetValue in 横Question.GetValueList(item))
                 {
                     foreach (var groupValue in 縦Question.GetValueList(item))
                     {
+                        if (ignoreEmpty)
+                        {
+                            if (double.IsNaN(targetValue.Value) || double.IsNaN(groupValue.Value))
+                            {
+                                continue;
+                            }
+                        }
                         AddCount(groupValue, targetValue);
+                        all_count++;
                     }
                 }
             }
+            AllCount = all_count;
             this.計算();
         }
 
@@ -119,7 +128,12 @@ namespace FukaboriCore.ViewModel
             {
                 dic[group].Add(target);
             }
-            correlation.Add(group.Value, target.Value);
+            else
+            { }
+            if (double.IsNaN(group.Value) == false && double.IsNaN(target.Value))
+            {
+                correlation.Add(group.Value, target.Value);
+            }
         }
 
         public void Compare(CrossData targetCrossData)
@@ -130,11 +144,11 @@ namespace FukaboriCore.ViewModel
             {
                 var targetRow = targetCrossData.RowDic[item.Key];
 
-                foreach (var (self,target) in item.Value.Cells.Zip(targetRow.Cells, (n,m)=> ( n,m )))
+                foreach (var (self, target) in item.Value.Cells.Zip(targetRow.Cells, (n, m) => (n, m)))
                 {
                     if (target.Count > 0)
                     {
-                        self.特化係数 = (self.Count/ (double)self_all_count) / (target.Count/ (double)target_all_count);
+                        self.特化係数 = (self.Count / (double)self_all_count) / (target.Count / (double)target_all_count);
                     }
                 }
             }
@@ -142,9 +156,10 @@ namespace FukaboriCore.ViewModel
 
         public void 計算()
         {
+            var all_count = this.AllCount;
             foreach (var item in Rows)
             {
-                item.計算();
+                item.計算(all_count);
             }
             List<int> sumList = new List<int>();
             for (int i = 0; i < AnswerText.Count; i++)
@@ -157,9 +172,17 @@ namespace FukaboriCore.ViewModel
 
                 for (int l = 0; l < Rows.Count; l++)
                 {
-                    Rows[l].Cells[i].縦Rate = Rows[l].Cells[i].Count / (double)sum;
+                    Rows[l].Cells[i].縦Rate = Rows[l].Cells[i].Count * 100 / (double)sum;
                 }
                 sumList.Add(sum);
+            }
+
+            for (int i = 0; i < AnswerText.Count; i++)
+            {
+                for (int l = 0; l < Rows.Count; l++)
+                {
+                    Rows[l].Cells[i].TotalRate = Rows[l].Cells[i].Count * 100 / (double)all_count;
+                }
             }
 
             List<List<double>> matrix = new List<List<double>>();
@@ -170,8 +193,11 @@ namespace FukaboriCore.ViewModel
                 {
                     r.Add(cell.Count);
                 }
+                item.SumCells.First().縦Rate = item.SumCells.First().Count * 100 / (double)all_count;
+
                 matrix.Add(r);
             }
+
             var kai = MyLib.Statistics.ChiSquareTest.Calculation(matrix);
             this.カイ２乗値 = kai.TestValue;
             this.自由度 = kai.自由度;
@@ -180,16 +206,17 @@ namespace FukaboriCore.ViewModel
 
             Dictionary<AnswerGroup, int> dic = new Dictionary<AnswerGroup, int>();
             int c = 0;
-            foreach (var item in 横Question.AnswerGroupIsActive.Where(n=>n.Answeres.Count>0))
+            foreach (var item in 横Question.AnswerGroupIsActive.Where(n => n.Answeres.Count > 0).OrderBy(n => n.Value))
             {
                 dic.Add(item, sumList[c]);
                 c++;
             }
 
-            SumRow.計算2(dic);
+            SumRow.計算2(dic, all_count);
             foreach (var item in SumRow.Cells)
             {
                 if (item.Count == 0) item.Visibility2 = false;
+                item.縦Rate = 100;
             }
 
             this.相関係数 = correlation.Result();
@@ -197,24 +224,27 @@ namespace FukaboriCore.ViewModel
 
     }
 
-    
+
     public class Cell : System.ComponentModel.INotifyPropertyChanged
     {
-        
+
         public int Count { get; set; }
-        
+
         public double 横Rate { get; set; }
-        
+
+        public double TotalRate { get; set; }
         public double 縦Rate { get; set; }
-        
+
         public double 特化係数 { get; set; }
-        
+
         public string ValueText { get; set; }
 
         public bool Visibility特化係数 => this.特化係数 > 0;
 
+        public bool VisibilityRate { get; set; } = true;
+
         ColorType bgColor = ColorType.BackColor;
-         
+
         public ColorType BGColor
         {
             get { return bgColor; }
@@ -225,27 +255,27 @@ namespace FukaboriCore.ViewModel
             }
         }
 
-         public bool Visibility
-         {
-             get
-             {
-                 if (double.IsNaN(横Rate) || double.IsNaN(縦Rate))
-                 {
-                     return false;
-                 }
-                 else
-                 {
-                     return true;
-                 }
-             }
-         }
+        public bool Visibility
+        {
+            get
+            {
+                if (double.IsNaN(横Rate) || double.IsNaN(縦Rate))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
 
-         bool visibility2 = true;
-         public bool Visibility2
-         {
-             get { return visibility2; }
-             set { visibility2 = value; }
-         }
+        bool visibility2 = true;
+        public bool Visibility2
+        {
+            get { return visibility2; }
+            set { visibility2 = value; }
+        }
 
         #region INotifyPropertyChanged メンバー
 
@@ -260,10 +290,10 @@ namespace FukaboriCore.ViewModel
         #endregion
     }
 
-    
+
     public class DataRow : System.ComponentModel.INotifyPropertyChanged
     {
-        
+
         public string Header { get; set; }
         public double Avg { get; set; }
         public double Std { get; set; }
@@ -271,9 +301,9 @@ namespace FukaboriCore.ViewModel
         public CrossData Parent { get; set; }
 
         Dictionary<AnswerGroup, int> dic = new Dictionary<AnswerGroup, int>();
-        
+
         public List<Cell> Cells { get; set; }
-        
+
         public List<Cell> SumCells { get; set; }
 
         #region INotifyPropertyChanged メンバー
@@ -297,23 +327,23 @@ namespace FukaboriCore.ViewModel
             }
         }
 
-        public void 計算2(Dictionary<AnswerGroup, int> dic)
+        public void 計算2(Dictionary<AnswerGroup, int> dic, int total_count)
         {
             int sum = 0;
             int sum2 = 0;
             int c = 1;
-            foreach (var item in dic)
+            foreach (var item in dic.Where(n => double.IsNaN(n.Key.Value) == false))
             {
                 sum += item.Value;
                 sum2 += (int)(item.Value * item.Key.Value);
                 c++;
             }
             Avg = sum2 / (double)sum;
-            Sum = sum;
+            Sum = dic.Sum(n => n.Value);
 
             double std = 0;
             c = 1;
-            foreach (var item in dic)
+            foreach (var item in dic.Where(n => double.IsNaN(n.Key.Value) == false))
             {
                 std += item.Value * Math.Pow(item.Key.Value - Avg, 2);
                 c++;
@@ -322,22 +352,27 @@ namespace FukaboriCore.ViewModel
 
             Cells = new List<Cell>();
 
-            foreach (var item in dic)
+            foreach (var item in dic.OrderBy(n => n.Key.Value))
             {
-                Cells.Add(new Cell() { Count = item.Value, 横Rate = item.Value * 100 / (double)sum });
+                Cells.Add(new Cell()
+                {
+                    Count = item.Value,
+                    横Rate = item.Value * 100 / (double)Sum,
+                    TotalRate = item.Value * 100 / (double)total_count
+                });
             }
             SumCells = new List<Cell>();
             if (sum > 0)
             {
-                SumCells.Add(new Cell() { ValueText = Sum.ToString() });
-                SumCells.Add(new Cell() { ValueText = Avg.ToString("F2") });
-                SumCells.Add(new Cell() { ValueText = Std.ToString("F2") });
+                SumCells.Add(new Cell() { ValueText = Sum.ToString(),Count = Sum,  横Rate = 100, TotalRate = sum * 100 / (double)total_count });
+                SumCells.Add(new Cell() { ValueText = Avg.ToString("F2"), VisibilityRate = false });
+                SumCells.Add(new Cell() { ValueText = Std.ToString("F2"), VisibilityRate = false });
             }
             else
             {
-                SumCells.Add(new Cell() { });
-                SumCells.Add(new Cell() { });
-                SumCells.Add(new Cell() { });
+                SumCells.Add(new Cell() { VisibilityRate = false });
+                SumCells.Add(new Cell() { VisibilityRate = false });
+                SumCells.Add(new Cell() { VisibilityRate = false });
 
             }
 
@@ -358,11 +393,9 @@ namespace FukaboriCore.ViewModel
             }
         }
 
-        public void 計算()
+        public void 計算(int all_count)
         {
-
-            this.計算2(dic);
-
+            this.計算2(dic, all_count);
         }
 
         public void ToTsv(MyLib.IO.TsvBuilder tsvBuilder)
@@ -377,7 +410,7 @@ namespace FukaboriCore.ViewModel
                 cell.MoveNext();
                 tsv.Add(item, cell.Current.Count);
                 tsv.Add(item + "_Rate", cell.Current.横Rate);
-               
+
             }
             tsv.Add("Sum", row.Sum);
             tsv.Add("Avg", row.Avg);

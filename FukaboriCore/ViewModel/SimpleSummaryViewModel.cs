@@ -25,8 +25,8 @@ namespace FukaboriCore.ViewModel
         {
             if (TokkakeisuFlag)
             {
-                var  target = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines);
-                var all = PropertyData.CreatePropertyData(questions, Enqueite.Current.AllAnswerLine);
+                var  target = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines, IgnoreEmptyFlag);
+                var all = PropertyData.CreatePropertyData(questions, Enqueite.Current.AllAnswerLine, IgnoreEmptyFlag);
                 var all_dic = all.SelectMany(n => n.KeyCountDic).ToDictionary(n => n.Key, n => n.Value);
                 foreach (var item in target.SelectMany(n=>n.KeyCountDic))
                 {
@@ -36,7 +36,7 @@ namespace FukaboriCore.ViewModel
             }
             else
             {
-                DataList = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines).ToList();
+                DataList = PropertyData.CreatePropertyData(questions, Enqueite.Current.AnswerLines,IgnoreEmptyFlag).ToList();
             }
         }
         #region Submit Command
@@ -52,6 +52,10 @@ namespace FukaboriCore.ViewModel
 
         public bool TokkakeisuFlag { get { return _TokkakeisuFlag; } set { Set(ref _TokkakeisuFlag, value); } }
         private bool _TokkakeisuFlag = false;
+
+        public bool IgnoreEmptyFlag { get { return _IgnoreEmptyFlag; } set { Set(ref _IgnoreEmptyFlag, value); } }
+        private bool _IgnoreEmptyFlag = false;
+
 
         public void CreatePropertyData(IEnumerable<Question> question)
         {
